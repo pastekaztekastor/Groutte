@@ -1,0 +1,130 @@
+# Nouvel An à la Groutte : cahier des charges
+
+L'appli de préparation du séjour : inscription, présences, couchages, repas, budget, tournois, souvenirs. Elle remplace Discord pour le groupe. Elle est construite sur `Squelette-PWA` (voir son README pour la technique).
+
+Le brouillon d'origine, avec toutes les questions et réponses, est dans `README.brouillon.md`.
+
+## Infos générales
+
+|              |                                                                        |
+| ------------ | ---------------------------------------------------------------------- |
+| Dates        | du 28/12/2026 au 03/01/2027                                            |
+| Lieu         | un gîte de 10 couchages, et une salle (voir Questions ouvertes)        |
+| Participants | la liste se fait au fil des inscriptions, jusqu'à une date limite      |
+| Budget       | un prévisionnel : dépenses de l'année précédente + dépenses estimables |
+
+## Principes
+
+- **C'est d'abord un outil de préparation.** Il servira avant, pendant et après le séjour, et évoluera.
+- **Deux niveaux de droits seulement : participant et staff.**
+  - Les staffs de départ sont dans `config.json`. Ensuite, un staff peut nommer un autre staff.
+  - Les **rôles** (clés, SAM, cuisine, budget, média...) sont de simples étiquettes affichées dans le carnet d'adresses. Ils ne donnent aucun droit.
+- **Inscription libre.** À l'installation, on crée un compte ou on se connecte à un compte existant.
+  - Chaque compte a son code à 4 chiffres. Après 5 erreurs, il est bloqué quelques minutes.
+  - Un staff peut remettre un code à zéro.
+  - Les comptes sont dans un fichier JSON de `data/`, qu'on peut aussi modifier à la main.
+- **Quand une règle n'est pas encore tranchée, c'est un réglage du staff** : répartition de la salle, mode de remboursement, LLM.
+- **Le réseau au gîte est inconnu.** Le mode hors ligne (un Raspberry Pi avec un hotspot wifi) est reporté. S'il devient nécessaire, une page Staff expliquera comment le mettre en place.
+- **Hors de l'outil** : le nettoyage de fin de séjour.
+
+## Le modèle de présence (commun à Gîte, Repas et Budget)
+
+- Chaque personne saisit une **arrivée** et un **départ**, chacun sous la forme *date + créneau*.
+- Il y a 4 créneaux :
+
+  | Créneau | Ce qu'il compte |
+  | ------- | --------------- |
+  | Matin   | petit-déjeuner  |
+  | Midi    | déjeuner        |
+  | Soir    | dîner           |
+  | Nuit    | nuitée          |
+
+- Il n'y a pas d'après-midi. Un texte d'aide explique comment choisir.
+- On en déduit, pour chacun, **ses nuits et ses repas**. Les nuits servent au prix du gîte et aux couchages. Les repas sont la partie la plus souple.
+
+## Les pages
+
+Chaque page a sa fiche dans `cdc/<groupe>/`, décrite avec précision : but, qui voit et qui agit, écran, actions, données, règles et calculs, notifications, cas limites, questions ouvertes. Pour une nouvelle page, copier `cdc/_modele.md`.
+
+| Groupe     | Page                                                  | Priorité |
+| ---------- | ----------------------------------------------------- | -------- |
+| Compte     | [Inscription et connexion](cdc/compte/inscription.md) | 1        |
+| Compte     | [Ma fiche](cdc/compte/ma-fiche.md)                    | 1        |
+| Compte     | [Me rembourser](cdc/compte/me-rembourser.md)          | 1        |
+| Compte     | [Notifications](cdc/compte/notifications.md)          | 1        |
+| Compte     | [Carnet d'adresses](cdc/compte/carnet.md)             | 1        |
+| Communauté | [Forum](cdc/communaute/forum.md)                      | 2        |
+| Communauté | [Messages](cdc/communaute/messages.md)                | 4        |
+| Gîte       | [Ma réservation](cdc/gite/ma-reservation.md)          | 2        |
+| Gîte       | [Présence](cdc/gite/presence.md)                      | 2        |
+| Gîte       | [Lits](cdc/gite/lits.md)                              | 2        |
+| Gîte       | [Literie](cdc/gite/literie.md)                        | 3        |
+| Gîte       | [SAM](cdc/gite/sam.md)                                | 3        |
+| Gîte       | [Clés](cdc/gite/cles.md)                              | 5        |
+| Repas      | [Événements repas](cdc/repas/repas.md)                | 3        |
+| Tournois   | [Jeux](cdc/tournois/jeux.md)                          | 4        |
+| Tournois   | [Planning](cdc/tournois/planning.md)                  | 4        |
+| Tournois   | [Règlements](cdc/tournois/reglements.md)              | 4        |
+| Tournois   | [Leaderboard](cdc/tournois/leaderboard.md)            | 4        |
+| Budget     | [Dépenses](cdc/budget/depenses.md)                    | 2        |
+| Budget     | [Créances gîte et salle](cdc/budget/creances.md)      | 2        |
+| Budget     | [Mes comptes](cdc/budget/mes-comptes.md)              | 2        |
+| Budget     | [Flux](cdc/budget/flux.md)                            | 3        |
+| Budget     | [Comment ça marche](cdc/budget/comment-ca-marche.md)  | 2        |
+| Drop box   | [Photos et vidéos](cdc/dropbox/photos-videos.md)      | 4        |
+| Drop box   | [Musique](cdc/dropbox/musique.md)                     | 4        |
+| Drop box   | [POV du tournoi](cdc/dropbox/pov-tournoi.md)          | 4        |
+| Staff      | [Gîte et salle](cdc/staff/gite-salle.md)              | 2        |
+| Staff      | [Prévisionnel](cdc/staff/previsionnel.md)             | 3        |
+| Staff      | [Réglages compta](cdc/staff/reglages-compta.md)       | 2        |
+| Staff      | [Réglages gîte](cdc/staff/reglages-gite.md)           | 2        |
+| Staff      | [Suivi des dépenses](cdc/staff/suivi-depenses.md)     | 3        |
+| Staff      | [Annonces](cdc/staff/annonces.md)                     | 3        |
+| Staff      | [Comptes](cdc/staff/comptes.md)                       | 1        |
+| Staff      | [Checklist d'avancement](cdc/staff/checklist.md)      | 5        |
+| Staff      | [Hors ligne](cdc/staff/hors-ligne.md)                 | 5        |
+
+## Priorités
+
+1. **Le socle** :
+   - inscription et code par compte ;
+   - rôle staff ;
+   - fiche perso ;
+   - carnet d'adresses.
+2. **L'essentiel** :
+   - Forum ;
+   - Ma réservation, Présence, Lits ;
+   - Budget avec saisie à la main : dépenses, créances, mes comptes ;
+   - Staff : gîte et salle, réglages compta.
+3. **Ensuite** :
+   - lecture des tickets par LLM ;
+   - graphe des flux ;
+   - prévisionnel ;
+   - Repas ;
+   - Literie ;
+   - SAM ;
+   - annonces ciblées.
+4. **Puis** : Tournois, Drop box, Messages.
+5. **Reporté** : clés, checklist staff, hors ligne.
+
+## Données à fournir
+
+Les dépenses de l'année précédente, à fournir deux fois :
+- d'abord pour vérifier que l'outil sait toutes les gérer ;
+- puis comme jeu de données de démonstration.
+
+## Questions ouvertes
+
+- **La salle** : de quoi s'agit-il exactement ?
+- **Le réveillon** : comment le financer et l'organiser ?
+- **Les repas de tous les jours** : comment se répartissent les courses ?
+  - Proposition : les concernés sont les présents aux repas, au prorata de leur nombre de repas.
+- **Le LLM** : quel fournisseur, et qui paie la clé ?
+- **Les dates** :
+  - la date limite d'inscription ;
+  - la date de paiement du gîte et de la salle ;
+  - le budget maximum accepté par le groupe.
+- **Le consentement photo** : quel effet concret ? Une simple information, ou des fichiers masqués ?
+- **« Tournois ? » dans la fiche perso** : que doit-elle contenir ?
+- **Les allers-retours** : une personne peut-elle avoir plusieurs séjours (partir, puis revenir) ?
+- **Messages** : seulement entre deux personnes, ou aussi des groupes ?

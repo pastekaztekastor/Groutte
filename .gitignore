@@ -1,0 +1,12 @@
+# Données de l'appli (comptes, médias, clés des notifications) : jamais dans git
+data/
+
+# Python
+__pycache__/
+*.pyc
+
+# Éditeurs et système
+.vscode/
+.idea/
+*.swp
+.DS_Store
