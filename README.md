@@ -128,3 +128,14 @@ Les dépenses de l'année précédente, à fournir deux fois :
 - **« Tournois ? » dans la fiche perso** : que doit-elle contenir ?
 - **Les allers-retours** : une personne peut-elle avoir plusieurs séjours (partir, puis revenir) ?
 - **Messages** : seulement entre deux personnes, ou aussi des groupes ?
+
+## Git
+
+Le dépôt suit le **Trunk Based Development** : `main` est le tronc, et il doit toujours marcher.
+
+- **Petits commits fréquents**, directement sur `main` ou sur une branche courte (quelques heures, un jour au plus) qu'on fusionne vite.
+- **Pas de branche longue** : ni `develop`, ni branche de version.
+- **Une page pas finie arrive quand même dans `main`**, mais cachée derrière un réglage (par exemple une option dans `config.json`) tant qu'elle n'est pas prête.
+- **Avant chaque commit**, on vérifie la syntaxe : `python3 -m py_compile *.py` et `node --check static/js/*.js` dans `Squelette-PWA/`.
+- **Messages de commit en français**, qui disent ce qui change.
+- **`data/` ne va jamais dans git** (voir `.gitignore`) : ce sont les vraies données, à sauvegarder à part.
