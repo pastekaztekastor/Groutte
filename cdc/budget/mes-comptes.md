@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Créances gîte et salle](../budget/creances.md) · [Menu](../../README.md#les-pages)
+[Précédent : Lits](../gite/lits.md) · [Menu](../../README.md#les-pages)
 <!-- /nav -->
 
 # Budget > Mes comptes
@@ -159,5 +159,5 @@ Mes comptes
 - Aucune.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Flux](../budget/flux.md)
+[Menu](../../README.md#les-pages) · [Suivant : Créances gîte et salle](../budget/creances.md)
 <!-- /nav -->

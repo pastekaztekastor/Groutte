@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : POV du tournoi](../dropbox/pov-tournoi.md) · [Menu](../../README.md#les-pages)
+[Précédent : Comment ça marche](../budget/comment-ca-marche.md) · [Menu](../../README.md#les-pages)
 <!-- /nav -->
 
 # Staff > Gîte et salle
@@ -44,5 +44,5 @@
 - À décrire.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Prévisionnel](../staff/previsionnel.md)
+[Menu](../../README.md#les-pages) · [Suivant : Réglages compta](../staff/reglages-compta.md)
 <!-- /nav -->

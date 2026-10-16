@@ -44,5 +44,5 @@
 - À décrire.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Suivi des dépenses](../staff/suivi-depenses.md)
+[Menu](../../README.md#les-pages) · [Suivant : Literie](../gite/literie.md)
 <!-- /nav -->

@@ -44,5 +44,5 @@
 - À décrire.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages)
+[Menu](../../README.md#les-pages) · [Suivant : Validation des dépenses](../staff/validation-depenses.md)
 <!-- /nav -->

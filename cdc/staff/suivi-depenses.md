@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Réglages gîte](../staff/reglages-gite.md) · [Menu](../../README.md#les-pages)
+[Précédent : Prévisionnel](../staff/previsionnel.md) · [Menu](../../README.md#les-pages)
 <!-- /nav -->
 
 # Staff > Suivi des dépenses

@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Clés](../gite/cles.md) · [Menu](../../README.md#les-pages)
+[Précédent : SAM](../gite/sam.md) · [Menu](../../README.md#les-pages)
 <!-- /nav -->
 
 # Repas > Événements repas
@@ -45,5 +45,5 @@
 - Les repas de tous les jours : les courses sont-elles payées par les présents aux repas, au prorata de leur nombre de repas ?
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Jeux](../tournois/jeux.md)
+[Menu](../../README.md#les-pages) · [Suivant : Flux](../budget/flux.md)
 <!-- /nav -->

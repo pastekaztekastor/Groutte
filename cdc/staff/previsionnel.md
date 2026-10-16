@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Gîte et salle](../staff/gite-salle.md) · [Menu](../../README.md#les-pages)
+[Précédent : Flux](../budget/flux.md) · [Menu](../../README.md#les-pages)
 <!-- /nav -->
 
 # Staff > Prévisionnel
@@ -44,5 +44,5 @@
 - À décrire.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Réglages compta](../staff/reglages-compta.md)
+[Menu](../../README.md#les-pages) · [Suivant : Suivi des dépenses](../staff/suivi-depenses.md)
 <!-- /nav -->

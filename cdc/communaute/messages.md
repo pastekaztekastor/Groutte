@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Forum](../communaute/forum.md) · [Menu](../../README.md#les-pages)
+[Précédent : Annonces](../staff/annonces.md) · [Menu](../../README.md#les-pages)
 <!-- /nav -->
 
 # Communauté > Messages
@@ -45,5 +45,5 @@
 - Seulement entre deux personnes, ou aussi des groupes ?
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Ma réservation](../gite/ma-reservation.md)
+[Menu](../../README.md#les-pages) · [Suivant : Jeux](../tournois/jeux.md)
 <!-- /nav -->

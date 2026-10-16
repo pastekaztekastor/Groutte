@@ -44,5 +44,5 @@
 - À décrire.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Clés](../gite/cles.md)
+[Menu](../../README.md#les-pages) · [Suivant : Événements repas](../repas/repas.md)
 <!-- /nav -->

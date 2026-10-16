@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Comptes](../staff/comptes.md) · [Menu](../../README.md#les-pages)
+[Précédent : Clés](../gite/cles.md) · [Menu](../../README.md#les-pages)
 <!-- /nav -->
 
 # Staff > Checklist d'avancement

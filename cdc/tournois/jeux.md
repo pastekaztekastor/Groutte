@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Événements repas](../repas/repas.md) · [Menu](../../README.md#les-pages)
+[Précédent : Messages](../communaute/messages.md) · [Menu](../../README.md#les-pages)
 <!-- /nav -->
 
 # Tournois > Jeux

@@ -1,5 +1,5 @@
 <!-- nav -->
-[Menu](../../README.md#les-pages)
+[Précédent : Comptes](../staff/comptes.md) · [Menu](../../README.md#les-pages)
 <!-- /nav -->
 
 # Compte > Inscription et connexion

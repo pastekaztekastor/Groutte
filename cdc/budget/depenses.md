@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Leaderboard](../tournois/leaderboard.md) · [Menu](../../README.md#les-pages)
+[Précédent : Créances gîte et salle](../budget/creances.md) · [Menu](../../README.md#les-pages)
 <!-- /nav -->
 
 # Budget > Dépenses
@@ -18,7 +18,7 @@
 - **Chaque participant** saisit ses dépenses, puis les modifie tant qu'elles sont en brouillon. Les membres du staff font de même, en tant que participants.
 - **Dans la liste, chacun voit ses propres dépenses.**
 - **Les personnes concernées** voient aussi le détail et le ticket des dépenses qu'elles paient, depuis [Mes comptes](mes-comptes.md).
-- **Le staff** valide ou refuse les dépenses en attente, sur une page dédiée. Il y voit toutes les pièces jointes.
+- **Le staff** valide ou refuse les dépenses en attente, sur une page dédiée : [Validation des dépenses](../staff/validation-depenses.md). Il y voit toutes les pièces jointes.
 - **Un staff ne valide jamais sa propre dépense** : c'est un autre staff qui s'en charge.
   - S'il n'y a qu'un seul staff, il valide ses propres dépenses. Dans les faits, ce sera le webmaster : celui qui a la main sur le serveur, et qui est staff dans l'appli.
 
@@ -127,7 +127,7 @@ Brouillon ──envoyer──> En attente ──staff valide──> Validée
 
 ## Notifications
 <!-- Qui reçoit quoi, et quand. -->
-- **Le staff**, quand une dépense est envoyée. La notification ouvre la page de validation.
+- **Le staff**, quand une dépense est envoyée. La notification ouvre [Validation des dépenses](../staff/validation-depenses.md).
 - **L'auteur**, quand sa dépense est validée ou refusée.
 - **Les personnes concernées**, quand une dépense est validée : « Ton solde a changé : tu dois maintenant X € ». La notification ouvre Mes comptes.
 - **L'auteur**, à chaque remboursement reçu, avec le montant restant à recevoir. Cette notification est envoyée par Mes comptes.
@@ -151,5 +151,5 @@ L'envoi est refusé si :
 - Aucune.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Créances gîte et salle](../budget/creances.md)
+[Menu](../../README.md#les-pages) · [Suivant : Comment ça marche](../budget/comment-ca-marche.md)
 <!-- /nav -->

@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Mes comptes](../budget/mes-comptes.md) · [Menu](../../README.md#les-pages)
+[Précédent : Événements repas](../repas/repas.md) · [Menu](../../README.md#les-pages)
 <!-- /nav -->
 
 # Budget > Flux
@@ -110,5 +110,5 @@ De haut en bas :
 - Aucune.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Comment ça marche](../budget/comment-ca-marche.md)
+[Menu](../../README.md#les-pages) · [Suivant : Prévisionnel](../staff/previsionnel.md)
 <!-- /nav -->

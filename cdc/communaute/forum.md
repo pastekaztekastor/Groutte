@@ -121,5 +121,5 @@ Toutes les actions de NextSession :
 - Aucune.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Messages](../communaute/messages.md)
+[Menu](../../README.md#les-pages) · [Suivant : Ma réservation](../gite/ma-reservation.md)
 <!-- /nav -->

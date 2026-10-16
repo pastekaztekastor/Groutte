@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Lits](../gite/lits.md) · [Menu](../../README.md#les-pages)
+[Précédent : Réglages gîte](../staff/reglages-gite.md) · [Menu](../../README.md#les-pages)
 <!-- /nav -->
 
 # Gîte > Literie

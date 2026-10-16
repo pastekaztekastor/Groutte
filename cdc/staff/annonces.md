@@ -44,5 +44,5 @@
 - À décrire.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Comptes](../staff/comptes.md)
+[Menu](../../README.md#les-pages) · [Suivant : Messages](../communaute/messages.md)
 <!-- /nav -->

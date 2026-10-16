@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : SAM](../gite/sam.md) · [Menu](../../README.md#les-pages)
+[Précédent : POV du tournoi](../dropbox/pov-tournoi.md) · [Menu](../../README.md#les-pages)
 <!-- /nav -->
 
 # Gîte > Clés
@@ -44,5 +44,5 @@
 - À décrire.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Événements repas](../repas/repas.md)
+[Menu](../../README.md#les-pages) · [Suivant : Checklist d'avancement](../staff/checklist.md)
 <!-- /nav -->

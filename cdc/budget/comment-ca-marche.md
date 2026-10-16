@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Flux](../budget/flux.md) · [Menu](../../README.md#les-pages)
+[Précédent : Dépenses](../budget/depenses.md) · [Menu](../../README.md#les-pages)
 <!-- /nav -->
 
 # Budget > Comment ça marche
@@ -101,5 +101,5 @@ Comment ça marche
 - Aucune.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Photos et vidéos](../dropbox/photos-videos.md)
+[Menu](../../README.md#les-pages) · [Suivant : Gîte et salle](../staff/gite-salle.md)
 <!-- /nav -->

@@ -44,5 +44,5 @@
 - À décrire.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Gîte et salle](../staff/gite-salle.md)
+[Menu](../../README.md#les-pages) · [Suivant : Clés](../gite/cles.md)
 <!-- /nav -->

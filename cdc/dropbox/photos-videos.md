@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Comment ça marche](../budget/comment-ca-marche.md) · [Menu](../../README.md#les-pages)
+[Précédent : Leaderboard](../tournois/leaderboard.md) · [Menu](../../README.md#les-pages)
 <!-- /nav -->
 
 # Drop box > Photos et vidéos

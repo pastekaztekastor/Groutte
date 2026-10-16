@@ -106,7 +106,7 @@ Chaque page a sa fiche dans `cdc/<groupe>/`, décrite avec précision : but, qui
 | Compte     | [Ma fiche](cdc/compte/ma-fiche.md)                    | 1        |
 | Compte     | [Me rembourser](cdc/compte/me-rembourser.md)          | 1        |
 | Compte     | [Notifications](cdc/compte/notifications.md)          | 1        |
-| Compte     | [Carnet d'adresses](cdc/compte/carnet.md)             | 1        | 
+| Compte     | [Carnet d'adresses](cdc/compte/carnet.md)             | 1        |
 | Communauté | [Forum](cdc/communaute/forum.md)                      | 2        |
 | Gîte       | [Ma réservation](cdc/gite/ma-reservation.md)          | 2        |
 | Gîte       | [Présence](cdc/gite/presence.md)                      | 2        |
@@ -136,6 +136,7 @@ Chaque page a sa fiche dans `cdc/<groupe>/`, décrite avec précision : but, qui
 | Gîte       | [Clés](cdc/gite/cles.md)                              | 5        |
 | Staff      | [Checklist d'avancement](cdc/staff/checklist.md)      | 5        |
 | Staff      | [Hors ligne](cdc/staff/hors-ligne.md)                 | 5        |
+| Staff      | [Validation des dépenses](cdc/staff/validation-depenses.md) | 2  |
 
 ## Priorités
 

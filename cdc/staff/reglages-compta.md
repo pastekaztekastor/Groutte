@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Prévisionnel](../staff/previsionnel.md) · [Menu](../../README.md#les-pages)
+[Précédent : Gîte et salle](../staff/gite-salle.md) · [Menu](../../README.md#les-pages)
 <!-- /nav -->
 
 # Staff > Réglages compta

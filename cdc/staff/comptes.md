@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Annonces](../staff/annonces.md) · [Menu](../../README.md#les-pages)
+[Menu](../../README.md#les-pages)
 <!-- /nav -->
 
 # Staff > Comptes
@@ -155,5 +155,5 @@ Et aussi :
 - **Les messages privés d'un membre muet** : tu as dit « la Communauté », j'y ai donc inclus les messages privés. Peut-il quand même écrire au staff pour discuter de sa sanction ?
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Checklist d'avancement](../staff/checklist.md)
+[Menu](../../README.md#les-pages) · [Suivant : Inscription et connexion](../compte/inscription.md)
 <!-- /nav -->

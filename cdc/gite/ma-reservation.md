@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Messages](../communaute/messages.md) · [Menu](../../README.md#les-pages)
+[Précédent : Forum](../communaute/forum.md) · [Menu](../../README.md#les-pages)
 <!-- /nav -->
 
 # Gîte > Ma réservation
