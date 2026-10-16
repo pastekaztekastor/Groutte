@@ -1,22 +1,35 @@
-import { estStaff } from "./commun.js";
+import { app, estStaff, nombreNouveautes } from "./commun.js";
 import { vueReglages, vueNotifications, vueAppli, vueAnnonce } from "./reglages.js";
 import { resumeNotifications } from "./notifs.js";
 import { estInstallee } from "./installation.js";
 import { vueFiche, resumeFiche } from "./fiche.js";
 import { vueRembourser, resumeRembourser } from "./rembourser.js";
-import { vueCarnet, vueContact, titreContact, resumeCarnet } from "./carnet.js";
+import { vueCarnet, vueContact as vueFicheContact, titreContact, resumeCarnet } from "./carnet.js";
 import { vueStaffComptes } from "./staff.js";
+import { vueForum, ouvrirCreation, rafraichirSujet } from "./forum.js";
+import { vueContact } from "./contact.js";
+import { vuePresence, resumePresence } from "./presence.js";
+import { vueLits, resumeLits, ouvrirPlan } from "./lits.js";
+import { vueRepas, resumeRepas } from "./repas.js";
+import { vueComptes, vueRembourserA, resumeComptes, aConfirmerComptes } from "./mes-comptes.js";
+import { vueCreances, vuePayer, titrePayer, resumeCreances, aConfirmer } from "./creances.js";
+import { vueDepenses, vueSaisie, vueDepense, titreDepense, resumeDepenses, nouvelleDepense } from "./depenses.js";
+import { vueFaq } from "./faq.js";
+import { vueGiteSalle, resumeGiteSalle } from "./gite-salle.js";
+import { vueReglagesCompta, resumeReglagesCompta } from "./reglages-compta.js";
+import { vueValidation, vueValidationDepense, titreValidation, resumeValidation, enAttente } from "./validation.js";
 
 /* Les écrans de l'appli (ecran), ce que montre le panneau (groupesPanneau), ce qui se relit tout seul (A_RAFRAICHIR).
    Le reste (main.js, panneau.js) est générique.
 
-   Jalon 1 : le socle. Compte (Ma fiche, Me rembourser, Notifications, Carnet d'adresses, Réglages) et
-   Staff (Comptes, Annonce). Les autres groupes (Communauté, Gîte, Repas, Tournois, Budget, Drop box) viendront
-   avec les jalons suivants. */
+   Jalon 1 : le socle (Mon compte, Staff > Comptes et Annonce). Jalon 2 : Communauté (Forum, Contacter le staff),
+   Gîte (Présence, Lits), Repas (Mes repas), Budget (Mes comptes, Créances, Dépenses, Comment ça marche), et pour le
+   staff Gîte et salle, Réglages compta, Validation des dépenses. */
 
 /* Ce qu'affiche une adresse « #rubrique/argument ». Renvoie :
    - titre       : le grand titre de la page, ou le titre de la barre du haut pour un écran poussé ;
    - retour      : [lien, libellé] pour un écran poussé (barre avec flèche). « Annuler » : écran d'écriture ;
+                   lien vide : on revient d'où l'on vient ;
    - action      : [icône, libellé, fonction] : la bulle ronde en bas à droite sur téléphone, en haut à droite sinon ;
    - avecEnvoi   : l'écran finit par une zone d'envoi collée en bas (zone-message.js) ;
    - lu          : la clé de nouveautés que cet écran marque comme lue ;
@@ -25,21 +38,79 @@ export function ecran(rubrique, argument) {
   if (rubrique === "fiche") return { titre: "Ma fiche", vue: vueFiche };
   if (rubrique === "rembourser") return { titre: "Me rembourser", vue: vueRembourser };
   if (rubrique === "carnet" || rubrique === "") {
-    if (argument) return { titre: titreContact(argument), retour: ["#carnet", "Carnet"], vue: () => vueContact(argument) };
+    if (argument) return { titre: titreContact(argument), retour: ["", "Retour"], vue: () => vueFicheContact(argument) };
     return { titre: "Carnet d'adresses", vue: vueCarnet };
   }
   if (rubrique === "reglages") return { titre: "Réglages", vue: vueReglages };
   if (rubrique === "notifications") return { titre: "Notifications", vue: vueNotifications };
   if (rubrique === "appli") return { titre: "Installer l'appli", retour: ["#reglages", "Réglages"], vue: vueAppli };
-  if (rubrique === "staff" && estStaff()) return { titre: "Comptes", vue: vueStaffComptes };
-  if (rubrique === "annonce" && estStaff()) return { titre: "Annonce", vue: vueAnnonce };
+
+  // Communauté
+  if (rubrique === "forum") {
+    if (argument === "nouveau") return { titre: "Nouveau post", retour: ["#forum", "Annuler"], vue: () => vueForum("nouveau") };
+    if (argument) {
+      const titre = app.etat.forum.find(s => s.id === argument)?.titre || "Post";
+      return { titre, retour: ["#forum", "Forum"], avecEnvoi: true, lu: "forum/" + argument, vue: () => vueForum(argument) };
+    }
+    return { titre: "Forum", action: ["fa-ecrire", "Nouveau post", ouvrirCreation], vue: () => vueForum("") };
+  }
+  if (rubrique === "contact") return { titre: "Contacter le staff", vue: vueContact };
+
+  // Gîte et repas
+  if (rubrique === "presence") return { titre: "Présence", vue: vuePresence };
+  if (rubrique === "lits") return { titre: "Lits", action: app.etat.gite.lits.length ? ["fa-plan", "Plan du gîte", ouvrirPlan] : null, vue: vueLits };
+  if (rubrique === "repas") return { titre: "Mes repas", vue: vueRepas };
+
+  // Budget
+  if (rubrique === "comptes") return { titre: "Mes comptes", vue: vueComptes };
+  if (rubrique === "rembourser-a" && argument) return { titre: `Rembourser ${argument}`, retour: ["#comptes", "Mes comptes"], vue: () => vueRembourserA(argument) };
+  if (rubrique === "creances") return { titre: "Créances gîte et salle", vue: vueCreances };
+  if (rubrique === "payer") return { titre: titrePayer(argument), retour: ["#creances", "Créances"], vue: () => vuePayer(argument) };
+  if (rubrique === "depenses") {
+    if (argument === "nouvelle") return { titre: "Nouvelle dépense", retour: ["#depenses", "Annuler"], vue: () => vueSaisie(null) };
+    if (argument) return { titre: titreDepense(argument), retour: ["", "Retour"], vue: () => vueDepense(argument) };
+    return { titre: "Dépenses", action: ["fa-ajouter", "Nouvelle dépense", nouvelleDepense], vue: vueDepenses };
+  }
+  if (rubrique === "faq") return { titre: "Comment ça marche", vue: () => vueFaq(argument) };
+
+  // Staff
+  if (estStaff()) {
+    if (rubrique === "staff") return { titre: "Comptes", vue: vueStaffComptes };
+    if (rubrique === "annonce") return { titre: "Annonce", vue: vueAnnonce };
+    if (rubrique === "gite-salle") return { titre: "Gîte et salle", vue: vueGiteSalle };
+    if (rubrique === "reglages-compta") return { titre: "Réglages compta", vue: vueReglagesCompta };
+    if (rubrique === "validation") {
+      if (argument) return { titre: titreValidation(argument), retour: ["#validation", "Validation"], vue: () => vueValidationDepense(argument) };
+      return { titre: "Validation des dépenses", vue: vueValidation };
+    }
+  }
   return ecran("carnet", "");
 }
 
 /* Le panneau latéral : des groupes (titre, classe de couleur des icônes dans style.css) d'entrées
    { lien, icone, titre, resume, nouveau }. Une entrée false est ignorée (ex. réservée au staff). */
 export function groupesPanneau() {
+  const forum = nombreNouveautes("forum");
+  const aValider = enAttente().filter(d => d.auteur !== app.moi).length;
+  const tardifs = app.etat.gite.tardifs?.length || 0;
   return [
+    { titre: "Communauté", classe: "groupe-1", entrees: [
+      { lien: "#forum", icone: "fa-forum", titre: "Forum", resume: forum ? `${forum} fil${forum > 1 ? "s" : ""} avec du nouveau` : "Règles, FAQ, tâches et le reste", nouveau: forum },
+      { lien: "#contact", icone: "fa-contact", titre: "Contacter le staff", resume: "Discord, hébergeurs, staff" },
+    ] },
+    { titre: "Gîte", classe: "groupe-2", entrees: [
+      { lien: "#presence", icone: "fa-presence", titre: "Présence", resume: resumePresence() },
+      { lien: "#lits", icone: "fa-lit", titre: "Lits", resume: resumeLits() },
+    ] },
+    { titre: "Repas", classe: "groupe-4", entrees: [
+      { lien: "#repas", icone: "fa-repas", titre: "Mes repas", resume: resumeRepas() },
+    ] },
+    { titre: "Budget", classe: "groupe-3", entrees: [
+      { lien: "#comptes", icone: "fa-comptes", titre: "Mes comptes", resume: resumeComptes(), nouveau: aConfirmerComptes() },
+      { lien: "#creances", icone: "fa-creances", titre: "Créances gîte et salle", resume: resumeCreances(), nouveau: aConfirmer() },
+      { lien: "#depenses", icone: "fa-depenses", titre: "Dépenses", resume: resumeDepenses() },
+      { lien: "#faq", icone: "fa-aide", titre: "Comment ça marche", resume: "Les règles d'argent" },
+    ] },
     { titre: "Mon compte", classe: "groupe-compte", entrees: [
       { lien: "#fiche", icone: "fa-fiche", titre: "Ma fiche", resume: resumeFiche() },
       { lien: "#rembourser", icone: "fa-rembourser", titre: "Me rembourser", resume: resumeRembourser() },
@@ -50,11 +121,13 @@ export function groupesPanneau() {
     ] },
     { titre: "Staff", classe: "groupe-admin", entrees: [
       estStaff() && { lien: "#staff", icone: "fa-staff", titre: "Comptes", resume: "Droits, codes, rôles, journal" },
+      estStaff() && { lien: "#gite-salle", icone: "fa-gite", titre: "Gîte et salle", resume: resumeGiteSalle(), nouveau: tardifs },
+      estStaff() && { lien: "#reglages-compta", icone: "fa-categories", titre: "Réglages compta", resume: resumeReglagesCompta() },
+      estStaff() && { lien: "#validation", icone: "fa-valider", titre: "Validation des dépenses", resume: resumeValidation(), nouveau: aValider },
       estStaff() && { lien: "#annonce", icone: "fa-annonces", titre: "Annonce", resume: "Notifier tout le monde" },
     ] },
   ];
 }
 
 /* Relus toutes les 30 s et au retour sur l'appli, en plus de l'état général : les détails chargés à part. */
-export const A_RAFRAICHIR = [];
-
+export const A_RAFRAICHIR = [rafraichirSujet];

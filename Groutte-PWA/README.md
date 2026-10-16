@@ -6,6 +6,8 @@ C'est une petite appli de groupe, mobile first et installable. Elle a les notifi
 
 **Jalon 1 (le socle)** : inscription et connexion, Ma fiche, Me rembourser, Notifications, Carnet d'adresses, Staff > Comptes, `roles.json`. Le module d'exemple Notes du squelette a été retiré : pour un nouveau module, s'inspirer de `comptes.py`, `staff.py` et de leurs pages (section 6), ou de `notes.py` dans `../Squelette-PWA/`.
 
+**Jalon 2 (l'essentiel)** : Forum (repris de NextSession), Contacter le staff, Présence, Lits, Mes repas, Mes comptes, Créances gîte et salle, Dépenses, Comment ça marche ; pour le staff, Gîte et salle, Réglages compta, Validation des dépenses. Tout l'argent est calculé par `compta.py` (section 14).
+
 ```
 python3 app.py                 # http://127.0.0.1:8000
 PORT=9124 python3 app.py       # autre port
@@ -39,12 +41,26 @@ Comptes de départ dans `config.json` (premier démarrage seulement) : Alice (st
 | `acces.py` | Connexion avec le code de chaque compte, inscription, code provisoire, jetons, blocage après 5 essais. |
 | `comptes.py` | Ma fiche, rôles libres, changer son code, Me rembourser (IBAN vérifié...), photo, notifications, annonce du staff. |
 | `staff.py` | Staff > Comptes : droit staff, code à zéro, rôles, muet, nom, désactivation, journal (`data/journal-staff.json`). |
+| `forum.py` | Communauté > Forum, repris de NextSession : posts, commentaires en arbre, votes, réactions, suivi des fils, modération par le staff (`data/forum.json`). |
+| `flairs.json`, `reactions.json` | Les flairs du forum (certains réservés au staff) et les réactions en texte. Modifiés par le webmaster, versionnés. |
+| `sejour.py` | Les dates du séjour (`config.json > sejour`) et le modèle de présence : créneaux, nuits, repas, heures des repas. |
+| `presence.py` | Gîte > Présence : arrivée et départ de chacun (`data/presences.json`). Prévient les hébergeurs, les créanciers d'un retardataire, le staff si la capacité est dépassée. |
+| `lits.py` | Gîte > Lits : les réservations nuit par nuit (`data/lits.json`), retirées quand les dates ou les lits changent. |
+| `repas.py` | Repas > Mes repas : les repas décochés (`data/repas.json`). |
+| `gite_salle.py` | Staff > Gîte et salle (`data/gite-salle.json`) : montants, hébergeurs, dates limites, exemptions, ouverture des paiements (avec l'instantané des nuits), lits, plan, inscriptions tardives. |
+| `compta.py` | **Le calcul de l'argent**, sans rien enregistrer : parts du gîte et de la salle, retardataires, parts des dépenses, grand livre, soldes, dettes (direct ou minimum de virements). |
+| `creances.py` | Budget > Créances : paiements à l'hébergeur, confirmations, reports, rappels datés (`data/creances.json`). |
+| `depenses.py` | Budget > Dépenses et Staff > Validation : brouillon, envoi, validation (parts figées) ou refus (`data/depenses.json`). |
+| `mes_comptes.py` | Budget > Mes comptes : remboursements, grâces, relances, confirmation d'office (`data/remboursements.json`). |
+| `reglages_compta.py` | Staff > Réglages compta : catégories (`data/categories.json`), mode de remboursement et clôture (`data/reglages-compta.json`). |
+| `taches.py` | Les rappels datés, vérifiés au chargement de l'état au plus toutes les 5 minutes (`data/taches.json`). |
+| `euros.py` | Montants en centimes : écriture en euros (notifications), lecture d'un montant reçu. |
 | `notifications.py` | Web Push (VAPID et chiffrement RFC 8291), `notifier()`, mentions `@Nom`. |
 | `lus.py` | Ce que chacun a vu, pour les pastilles « nouveau ». Chaque module déclare un `@compteur`. |
 | `medias.py` | Fichiers envoyés, rangés sous des noms aléatoires dans `data/medias/`, avec un aperçu léger. |
 | `etat.py` | **Ce que voit chaque compte.** Chaque module y ajoute sa partie. |
 | `environnement.py` | Production, test (`test.`) ou local (localhost, 127.x, 192.168.x, 10.x, .local), d'après l'adresse. Hors production, le nom et l'icône de l'appli, le titre, le bandeau et les notifications le disent. |
-| `config.json` | Titre, comptes de départ, régimes proposés, thèmes, catégories de notifications. |
+| `config.json` | Titre, comptes de départ, régimes proposés, thèmes, catégories de notifications, dates du séjour (`sejour`), heures des repas (`heures_repas`), lien du Discord de gestion (`discord_gestion`). |
 | `roles.json` | Les rôles du carnet et leur type (`libre`, `staff`, `automatique`). Modifié par le webmaster, versionné. |
 | `static/index.html` | La coquille : barre du haut, `<main id="vue">`, panneau, fenêtres, visionneuse. |
 | `static/tokens.css` | Les jetons de design (couleurs, espacements, tailles, arrondis), en clair et en sombre. |
@@ -60,6 +76,14 @@ Comptes de départ dans `config.json` (premier démarrage seulement) : Alice (st
 | `static/js/qrcode.js` | qrcode-generator 1.4.4 (MIT), pour le QR code de virement. |
 | `static/js/carnet.js` | Carnet d'adresses : répertoire par lettre, filtres par rôle, fiche contact façon iPhone. |
 | `static/js/staff.js` | Staff > Comptes : choix des membres, actions, code provisoire, journal. |
+| `static/js/forum.js`, `reactions.js` | Le forum de NextSession : liste, nouveau post, un post et ses commentaires, réactions. |
+| `static/js/contact.js` | Contacter le staff : le Discord de gestion, les hébergeurs et le staff (en attendant les messages privés). |
+| `static/js/sejour.js` | Le modèle de présence côté page : créneaux, nuits, repas pris, présents à un créneau. |
+| `static/js/presence.js`, `lits.js`, `repas.js` | Présence, Lits (et le plan), Mes repas. |
+| `static/js/mes-comptes.js`, `creances.js` | Mes comptes, Créances ; `pagePaiement()` sert à Payer comme à Rembourser. |
+| `static/js/depenses.js`, `validation.js` | Dépenses (liste, saisie, détail) et Staff > Validation, qui reprend le détail. |
+| `static/js/faq.js`, `static/faq.json` | Comment ça marche : le texte de la FAQ du budget (modifié par le webmaster), les réglages lus en direct. |
+| `static/js/gite-salle.js`, `reglages-compta.js` | Staff > Gîte et salle, Staff > Réglages compta. |
 | `static/js/reglages.js` | Photo, thème, mode, changer son code, Installer l'appli, Annonce, déconnexion. |
 | `static/js/notifs.js` | Activer les notifications sur l'appareil, choisir ce qu'on reçoit. |
 | `static/js/installation.js` | Écrans d'arrivée : guide d'installation (iPhone ou Android), puis activation des notifications. |
@@ -234,7 +258,7 @@ Pour chaque nouvelle page du cahier des charges. Le modèle complet (Notes) est 
    - URL : le sous-domaine ;
    - startup file : `passenger_wsgi.py`, entry point : `application`.
 3. En FTP (FileZilla, « FTP explicite sur TLS »), envoie dans ce dossier :
-   - les `.py`, `config.json`, `requirements.txt` et `static/` ;
+   - les `.py`, les `.json` du dossier (`config.json`, `roles.json`, `flairs.json`, `reactions.json`), `requirements.txt` et `static/` ;
    - `data/` seulement au premier déploiement. **Ne l'écrase jamais ensuite.**
 4. Setup Python App :
    - ajoute `requirements.txt` puis clique « Run Pip Install » (pour les notifications) ;
@@ -303,3 +327,17 @@ Le guide pas à pas complet est dans `../Nextsession/DEPLOIEMENT.md`.
 6. Ta palette : `DEGRADES` dans `commun.js`, `.groupe-*` dans `style.css`, `themes` dans `config.json`.
 7. Remplace le module Notes par les tiens (section 6). Fait pour la Groutte : Notes est retiré.
 8. Écris un `TODO.md` et tiens ce README à jour à chaque changement.
+
+---
+
+## 14. L'argent (jalon 2)
+
+- **Tout se compte en centimes** (des entiers), et ne s'écrit en euros qu'à l'affichage (`euros.py`, `paiement.js`). Les centimes en trop d'une division vont au payeur, ou à l'hébergeur pour le gîte et la salle (`compta.repartir`).
+- **Rien n'est enregistré par le calcul.** `Compta(config)` lit une fois tous les fichiers, puis calcule à la demande (résultats gardés le temps de la requête). L'état et les actions partent d'un seul `Compta` : la page ne voit jamais deux calculs différents.
+- **Le gîte et la salle se font en deux temps.** Avant l'ouverture des paiements, les parts suivent les présences en direct. À l'ouverture, `gite_salle.py` enregistre l'instantané des nuits de chacun : un changement de montant, d'exemption ou de répartition recalcule les parts sur cet instantané ; des nuits en plus font un retardataire (`Compta.retards`), des nuits en moins ne changent rien.
+- **Le grand livre** (`Compta.obligations`) : parts des dépenses validées, reports, avoirs (trop-payés), manques (après la clôture) et dettes des retardataires. Un remboursement confirmé (ou une grâce) de A à B compte comme une dette de B envers A.
+- **Les dettes** : `dettes_directes()` (par paire, sans compensation, sauf le tampon des retardataires) ou `dettes_minimum()` (le plus gros débiteur paie le plus gros créancier). `dettes()` donne celles du mode actif.
+- **Les parts d'une dépense sont figées à la validation** (`depenses.valider` les enregistre). Avant, `Compta.parts_depense` donne l'aperçu affiché au staff.
+- **Les rappels datés** (paiements du gîte, confirmation d'office d'un remboursement) partent au chargement de l'état, sous le verrou, au plus toutes les 5 minutes (`taches.py`). Chaque envoi est noté pour ne jamais partir deux fois.
+- **La clôture des comptes** arrive avec Suivi des dépenses (jalon 3) : `reglages-compta.json > cloture` est déjà respecté partout (plus de dépense, plus de changement de présence, les restes deviennent des manques).
+- **Piège** : dans une action, `nom` est toujours le compte qui agit. Le nom d'une catégorie s'envoie donc sous `libelle`.

@@ -1,5 +1,5 @@
 import { app, el, avatar, compte, themes, couleurTheme, modeAffichage, changerMode, deconnecter, envoyer, televerser, reduireImage,
-  notifier, saisie, oublier, afficher, nouveauCode } from "./commun.js";
+  notifier, saisie, oublier, afficher, nouveauCode, estStaff, modeModeration, changerModeModeration } from "./commun.js";
 import { blocNotifications, desactiverAppareil } from "./notifs.js";
 
 /* Réglages du compte, façon Réglages de l'iPhone : photo, thème, mode clair ou sombre, code ; et les pages
@@ -60,6 +60,12 @@ export function vueReglages() {
     el("div", { class: "liste-groupee" },
       el("div", { class: "ligne" }, el("span", { class: "ligne-texte" }, "Thème"), choixTheme(m)),
       el("div", { class: "ligne" }, el("span", { class: "ligne-texte" }, "Mode"), choixMode())),
+    estStaff() && [el("h2", {}, "Staff"), el("div", { class: "liste-groupee" }, (() => {
+      const coche = el("input", { type: "checkbox", role: "switch", checked: modeModeration() });
+      coche.onchange = () => { changerModeModeration(coche.checked); afficher(); };
+      return el("label", { class: "ligne" }, el("span", { class: "ligne-texte" }, "Mode modération",
+        el("span", { class: "doux petit" }, "Les outils de modération du forum, sur cet appareil")), coche);
+    })())],
     el("h2", {}, "Sécurité"),
     el("div", { class: "liste-groupee" },
       el("button", { type: "button", class: "ligne entree", onclick: () => nouveauCode(m.nom, "Choisis ton nouveau code.", true) },

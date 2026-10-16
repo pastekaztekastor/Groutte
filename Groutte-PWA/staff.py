@@ -15,7 +15,7 @@ from stockage import JOURNAL, ecrire_json, lire_json, maintenant
 JOURNAL_MAX = 500
 
 
-def noter(d, action, qui, detail=""):
+def noter(d, action, qui="", detail=""):
     journal = lire_json(JOURNAL, [])
     journal.insert(0, {"quand": maintenant(), "par": d.nom, "action": action, "qui": qui, "detail": detail})
     ecrire_json(JOURNAL, journal[:JOURNAL_MAX])
@@ -43,8 +43,9 @@ def plusieurs_comptes(d, comptes):
 
 
 def est_hebergeur(nom):
-    """Hébergeur du gîte ou de la salle (Staff > Gîte et salle, jalon suivant) : pas encore désigné."""
-    return False
+    """Hébergeur du gîte ou de la salle (Staff > Gîte et salle) : il reste staff pendant tout l'événement."""
+    import gite_salle   # import ici : gite_salle importe ce module
+    return gite_salle.est_hebergeur(nom)
 
 
 # --- Actions de groupe ----------------------------------------------------------------------------

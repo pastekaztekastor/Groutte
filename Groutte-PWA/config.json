@@ -6,8 +6,24 @@
     "prefixe_notifications": "La Groutte",
     "contact_notifications": "mailto:staff@la-groutte.champemont.fr",
     "categories_notifications": {
+        "forum": "Forum",
+        "depenses": "Dépenses",
+        "comptes": "Mes comptes",
         "gite": "Gîte"
     },
+    "_aide_sejour": "Dates du séjour (AAAA-MM-JJ) : le premier et le dernier jour. Elles bornent Présence, Lits et Mes repas.",
+    "sejour": {
+        "debut": "2026-12-28",
+        "fin": "2027-01-03"
+    },
+    "_aide_heures_repas": "Heure où chaque repas commence : on ne peut plus le cocher ou le décocher dans Mes repas après.",
+    "heures_repas": {
+        "matin": "08:00",
+        "midi": "12:00",
+        "soir": "19:00"
+    },
+    "_aide_discord_gestion": "Lien d'invitation du Discord de gestion, sur Contacter le staff. Vide : pas de bouton.",
+    "discord_gestion": "",
     "taille_max_fichier_mo": 20,
     "_aide_comptes": "Comptes de départ, lus au premier démarrage seulement (quand data/comptes.json n'existe pas encore). staff : true pour les staffs de départ. code : un code provisoire à 4 chiffres, à changer à la première connexion (sans code, la personne choisit le sien à sa première connexion). Ensuite, c'est l'appli qui décide (Staff > Comptes). À remplacer par les vrais staffs avant le premier déploiement.",
     "comptes": [

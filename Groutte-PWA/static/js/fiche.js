@@ -47,6 +47,24 @@ function tete(m) {
     el("p", { class: "doux petit" }, "Ton nom ne se change pas ici : demande au staff s'il y a une faute."));
 }
 
+/* Les catégories de dépenses (Réglages compta) : obligatoires sans case, facultatives avec un interrupteur.
+   Une catégorie supprimée que j'avais cochée reste affichée, pour que je voie pourquoi j'ai payé. */
+function partage(m) {
+  const { categories, supprimees } = app.etat.categories;
+  const cochees = m.categories || [];
+  const changer = (id, actif) => envoyer("profil", {
+    categories: actif ? [...cochees, id] : cochees.filter(x => x !== id),
+  });
+  return el("div", { class: "liste-groupee" },
+    categories.filter(c => c.type !== "speciale").map(c => c.type === "obligatoire"
+      ? el("div", { class: "ligne" }, el("span", { class: "ligne-texte" }, c.nom), el("span", { class: "ligne-valeur" }, "Tu participes d'office"))
+      : [interrupteur(c.nom, cochees.includes(c.id), actif => changer(c.id, actif)),
+        c.sam && !cochees.includes(c.id) && el("div", { class: "ligne encart-sam" }, el("span", { class: "ligne-texte petit" },
+          "Tu ne bois pas ? Propose-toi SAM pour un soir, et merci d'avance : grâce à toi, tout le monde rentre en sécurité."))]),
+    supprimees.filter(c => c.type === "facultative" && cochees.includes(c.id)).map(c => el("div", { class: "ligne" },
+      el("span", { class: "ligne-texte" }, c.nom, el("span", { class: "doux petit" }, "Catégorie supprimée : tu y participais")))));
+}
+
 export function vueFiche() {
   const m = compte(app.moi);
   const regimes = app.etat.regimes;
@@ -68,6 +86,10 @@ export function vueFiche() {
     el("div", { class: "liste-groupee" },
       champ(m, "discord", "Discord", { maxlength: 40, autocomplete: "off", spellcheck: "false" }),
       champ(m, "telephone", "Téléphone", { maxlength: 20, type: "tel", autocomplete: "tel" })),
+
+    el("h2", {}, "Ce que je partage"),
+    partage(m),
+    el("p", { class: "doux petit note" }, "Une coche ne vaut que pour les dépenses validées ensuite. ", el("a", { href: "#faq/categories" }, "Comment ça marche ?")),
 
     el("h2", {}, "Alimentation"),
     el("div", { class: "liste-groupee" },

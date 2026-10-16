@@ -55,6 +55,8 @@ def modifier_profil(d):
         if not isinstance(corps["photo_ok"], bool):
             raise Refus("consentement invalide")
         profil["photo_ok"] = corps["photo_ok"]
+    if "categories" in corps:
+        profil["categories"] = categories_cochees(corps["categories"], profil.get("categories", []))
     if "regimes" in corps:
         regimes = corps["regimes"]
         proposes = regimes_proposes(d.config)
@@ -62,6 +64,20 @@ def modifier_profil(d):
             raise Refus("régime inconnu")
         profil["regimes"] = [r for r in proposes if r in regimes]
     ecrire_json(PROFILS, profils)
+
+
+def categories_cochees(demandees, actuelles):
+    """Les catégories facultatives que je coche (Ce que je partage). Une catégorie supprimée garde sa coche : elle
+    reste affichée, pour que chacun voie pourquoi il a payé."""
+    import reglages_compta   # import ici : reglages_compta importe (de loin) ce module
+    if not isinstance(demandees, list):
+        raise Refus("catégories invalides")
+    categories = reglages_compta.lire_categories()["categories"]
+    proposees = {c["id"] for c in categories if c["type"] == "facultative" and not c["supprimee"]}
+    if any(ident not in proposees for ident in demandees):
+        raise Refus("catégorie inconnue")
+    gardees = [i for i in actuelles if any(c["id"] == i and c["supprimee"] for c in categories)]
+    return list(dict.fromkeys(gardees + demandees))
 
 
 @route("/api/roles/miens")

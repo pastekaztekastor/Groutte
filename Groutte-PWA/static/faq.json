@@ -1,0 +1,315 @@
+{
+  "_aide": "Budget > Comment ça marche : la FAQ du budget, la référence des règles d'argent. Modifiée par le webmaster, versionnée dans git. Chaque question : id (pour les liens #faq/<id>), question, court (deux phrases au plus), detail (paragraphes), exemple (facultatif). condition : « acompte » ou « llm » (masquée si ce n'est pas activé). actif : « salle » ou « mode » (repère du réglage en vigueur). tableau : « categories » (le tableau des catégories réelles). liens : [[adresse, texte]]. Les personnages des exemples sont toujours les mêmes : Martine l'hébergeuse, Bill et Bob, Evelyne qui arrive en retard. Le gîte coûte 1 400 € pour 50 nuitées, soit 28 € la nuitée ; Bill reste 5 nuits.",
+  "attention": [
+    "On a tous des soucis d'argent de temps en temps. Mais ne pas payer, c'est exposer ceux qui avancent l'argent à des soucis bien plus gros que les nôtres.",
+    "S'engager à venir, c'est s'engager à pouvoir rembourser : c'est justement ce qui permet à certains d'avancer l'argent pour tous.",
+    "Nous sommes une communauté d'amis : respectons-nous, et respectons ceux qui donnent de leur temps pour que nous passions les fêtes dans de si bonnes conditions."
+  ],
+  "parties": [
+    {
+      "titre": "Avant le séjour : le gîte et la salle",
+      "questions": [
+        {
+          "id": "qui-paie-quoi",
+          "question": "Qui paie quoi ?",
+          "court": "Il y a quatre sources de dépenses : le gîte, la salle, les courses de la réserve, et les dépenses qu'on partage entre quelques-uns. Seuls les ploucs qui viennent, ceux qui ont des dates dans Présence, paient.",
+          "detail": [
+            "Le gîte, c'est là où l'on dort : chacun paie ses nuits. La salle, c'est la vie de la semaine (repas, soirées, tournois) : elle se partage selon le réglage du staff.",
+            "Les courses de la réserve se répartissent par catégories : l'alimentaire au prorata des repas pris, l'alcool entre ceux qui en boivent, et ainsi de suite.",
+            "Les dépenses entre quelques-uns (un resto, un McDo) se partagent entre ceux qui y étaient.",
+            "Un compte sans dates (« Je ne viens pas ») ne paie ni le gîte, ni la salle, ni les repas."
+          ],
+          "exemple": "Gîte → Créances (payé à Martine) · Salle → Créances · Courses → Dépenses, par catégories · Resto entre amis → Dépenses, parts égales ou montants exacts.",
+          "liens": [["#presence", "Présence"], ["#creances", "Créances"], ["#depenses", "Dépenses"]]
+        },
+        {
+          "id": "part-gite",
+          "question": "Comment est calculée ma part du gîte ?",
+          "court": "Au prorata des nuits : on divise le prix du gîte par le total des nuitées, puis on multiplie par mes nuits.",
+          "detail": [
+            "Une nuitée, c'est une personne qui dort une nuit au gîte. On additionne les nuits de tous ceux qui viennent (sauf les exemptés) : c'est le total des nuitées.",
+            "Le prix d'une nuitée est le prix du gîte divisé par ce total. Ta part est ce prix multiplié par tes nuits.",
+            "Tout se compte au centime : les centimes en trop vont à l'hébergeur."
+          ],
+          "exemple": "Le gîte coûte 1 400 € pour 50 nuitées : 1 400 € / 50 = 28 € la nuitée. Bill reste 5 nuits : 28 € × 5 = 140 €.",
+          "liens": [["#creances", "Créances"]]
+        },
+        {
+          "id": "salle",
+          "question": "Et la salle ?",
+          "court": "Selon le mode choisi par le staff : à parts égales (le montant divisé par le nombre de ploucs qui viennent), ou comme le gîte (au prorata des nuits).",
+          "actif": "salle",
+          "detail": [
+            "À parts égales : que tu viennes une journée ou toute la semaine, ta part de la salle est la même. C'est le mode par défaut, parce que la salle sert à tout le monde.",
+            "Comme le gîte : la salle se répartit au prorata des nuits, avec le même calcul que le gîte.",
+            "Une venue d'une journée sans nuit ne paie pas le gîte, mais paie la salle si elle est à parts égales."
+          ],
+          "exemple": "La salle coûte 300 € et 10 ploucs viennent. À parts égales : 300 € / 10 = 30 € chacun, Bill comme Bob."
+        },
+        {
+          "id": "prix-deux-temps",
+          "question": "Pourquoi le prix bouge, puis ne bouge plus ?",
+          "court": "Ça se passe en deux temps. Tant que les paiements ne sont pas ouverts, le prix est une estimation qui baisse quand on est plus nombreux ; à l'ouverture des paiements, chacun a sa part, figée.",
+          "detail": [
+            "Avant l'ouverture des paiements, chacun dit s'il vient et à quelles dates. Les parts sont recalculées à chaque changement : plus il y a de nuitées, moins la nuitée coûte cher.",
+            "À l'ouverture des paiements, le staff fige les parts : chacun connaît son prix, et on paie l'hébergeur.",
+            "Ensuite, un changement de dates ne modifie plus les parts. Des nuits en plus font de toi un retardataire, des nuits en moins ne sont pas remboursées.",
+            "Inscriptions → ouverture des paiements → séjour → clôture des comptes."
+          ],
+          "exemple": "Avec 40 nuitées, Bill aurait payé 1 400 € / 40 × 5 = 175 €. Le jour de l'ouverture, on est à 50 nuitées : sa part est figée à 140 €."
+        },
+        {
+          "id": "exemptions",
+          "question": "Certains ne paient pas ?",
+          "court": "Des exemptions peuvent être décidées en communauté. Elles restent anonymes : on n'affiche que leur nombre, et leur part se répartit sur les autres.",
+          "detail": [
+            "Par exemple : quelqu'un qu'on ne fait pas dormir par terre, ou qui paie déjà très cher pour venir.",
+            "Une personne peut être exemptée du gîte, de la salle, ou des deux. Elle est retirée du calcul, et le prix de la nuitée se calcule sans elle.",
+            "Seul le staff connaît les noms. Créances affiche seulement « 2 personnes exemptées »."
+          ]
+        },
+        {
+          "id": "comment-payer",
+          "question": "Comment je paie ?",
+          "court": "L'appli ne fait pas de virement. Tu paies l'hébergeur avec un de ses moyens (Wero, PayPal, IBAN), tu déclares « j'ai payé », et il confirme qu'il a reçu.",
+          "detail": [
+            "Dans Créances, le bouton Payer affiche les moyens de paiement de l'hébergeur, avec le montant et le libellé à copier, et un QR code de virement.",
+            "Une fois le virement fait, déclare le montant payé. Un paiement peut être partiel : tu peux payer en plusieurs fois.",
+            "L'hébergeur confirme quand il a reçu l'argent. S'il n'a rien reçu, il refuse, et le bouton Payer revient."
+          ],
+          "exemple": "Bill paie 140 € à Martine par Wero, puis déclare « j'ai payé 140 € ». Martine confirme : « Payé, merci ! ».",
+          "liens": [["#creances", "Créances"]]
+        },
+        {
+          "id": "retardataire",
+          "question": "J'arrive en retard, ou je reste plus longtemps ?",
+          "court": "Après l'ouverture des paiements, tu es retardataire : tu dors dans un gîte que les autres ont payé, donc tu leur dois tes nuits en plus. Les courses servent de tampon, et ce qui reste se rembourse en direct.",
+          "detail": [
+            "Ta dette, c'est ce que tu aurais payé si on avait tout recalculé : le prix du gîte divisé par (les nuitées figées + tes nuits en plus), multiplié par tes nuits en plus.",
+            "Elle est répartie entre ceux qui ont une part du gîte (l'hébergeur compris, pas les exemptés), au prorata de leurs nuits. Elle arrive dans Mes comptes.",
+            "Le tampon : ce que chacun d'eux te doit pour la nourriture se compense d'abord avec ta dette. Seul le reste se règle par virement.",
+            "Même principe pour la salle : à parts égales, tu dois une part de plus, répartie entre ceux qui l'ont payée."
+          ],
+          "exemple": "Evelyne ajoute 2 nuits. Elle doit 1 400 € / 52 × 2 = 53,85 €, répartis entre ceux qui ont payé au prorata de leurs nuits : 53,85 € × 5 / 50 = 5,38 € à Bill.",
+          "liens": [["#comptes", "Mes comptes"]]
+        },
+        {
+          "id": "retirer-nuits",
+          "question": "Je retire des nuits, ou je ne viens plus ?",
+          "court": "Avant l'ouverture des paiements, tout se recalcule, sans souci. Après, ce qui est payé est payé : pas de remboursement, le gîte a été réservé et avancé pour toi.",
+          "detail": [
+            "Les parts sont figées à l'ouverture des paiements : elles ne bougent plus quand quelqu'un retire des nuits. Il n'y a ni remboursement ni avoir.",
+            "L'appli te le rappelle dans une confirmation avant d'enregistrer."
+          ],
+          "exemple": "Bob avait 5 nuits à l'ouverture, et n'en fait finalement que 3 : sa part reste celle de 5 nuits."
+        },
+        {
+          "id": "payer-a-temps",
+          "question": "Je ne peux pas payer à temps ?",
+          "court": "Tu reçois des rappels jusqu'à la date limite. Ensuite, contacte l'hébergeur pour trouver un arrangement : s'il accepte un report, ce qui reste devient une dette envers lui dans Mes comptes, à régler quand tu peux.",
+          "detail": [
+            "Les rappels : un par semaine, puis un par jour pendant la dernière semaine. Le jour de la date limite, un message t'invite à t'arranger avec l'hébergeur.",
+            "En attendant les messages privés, passe par Contacter le staff.",
+            "Relis l'encadré ATTENTION, en haut de cette page : ne pas payer, c'est exposer ceux qui avancent l'argent."
+          ],
+          "liens": [["#contact", "Contacter le staff"], ["#comptes", "Mes comptes"]]
+        },
+        {
+          "id": "acompte",
+          "question": "Comment marche l'acompte ?",
+          "court": "Une part du prévisionnel est demandée avant une date limite, et ce paiement vaut inscription. Une régularisation suit après le séjour.",
+          "condition": "acompte",
+          "detail": [
+            "Le pourcentage du prévisionnel demandé et la date limite sont réglés par le staff.",
+            "Après le séjour, la régularisation compare l'acompte aux vraies dépenses."
+          ]
+        }
+      ]
+    },
+    {
+      "titre": "Pendant le séjour : les dépenses et les repas",
+      "questions": [
+        {
+          "id": "paye-pour-groupe",
+          "question": "J'ai payé pour le groupe : je fais quoi ?",
+          "court": "Tu saisis la dépense dans Dépenses, avec la photo du ticket, et tu l'envoies. Un staff la valide, ou te la renvoie avec un motif ; une fois validée, elle compte dans les comptes de chacun.",
+          "detail": [
+            "Brouillon → En attente → Validée. Tant qu'elle est en brouillon, tu peux la modifier. Une fois envoyée, elle ne se modifie plus.",
+            "C'est un autre staff qui valide, ou le staff lui-même s'il est seul. S'il refuse, la dépense revient en brouillon avec un motif : corrige-la et renvoie-la.",
+            "Les parts de chacun sont calculées et figées au moment de la validation."
+          ],
+          "liens": [["#depenses", "Dépenses"]]
+        },
+        {
+          "id": "trois-modes",
+          "question": "Parts égales, montants exacts ou communauté ?",
+          "court": "Trois façons de partager une dépense : le montant divisé entre quelques personnes, un montant par personne, ou des catégories pour les courses de la réserve.",
+          "detail": [
+            "Parts égales : le resto où chacun paie autant. Le payeur est inclus par défaut, et on peut le retirer.",
+            "Montants exacts : le McDo où chacun a pris autre chose. Une ligne par personne, et la somme doit tomber sur le total.",
+            "Pour la communauté : les courses du Leclerc pour la réserve. Le ticket est découpé par catégories, et chacune se répartit selon sa règle."
+          ],
+          "exemple": "Bob paie 41,50 € de McDo : Bill a pris 12,40 €, Martine 9,80 €, Bob 19,30 €. En montants exacts, Bill doit 12,40 € à Bob et Martine 9,80 €."
+        },
+        {
+          "id": "categories",
+          "question": "Comment les courses sont-elles réparties ?",
+          "court": "Par catégories. Une catégorie obligatoire concerne tout le monde, une facultative seulement ceux qui l'ont cochée dans Ma fiche ; chacune a sa règle : à parts égales, au prorata des repas ou au prorata des nuits.",
+          "tableau": "categories",
+          "detail": [
+            "Les catégories sont réglées par le staff. Voici celles qui sont en vigueur :",
+            "On ne corrige pas les concernés au cas par cas : ce sont les nuits de Présence, les repas de Mes repas et les coches de Ma fiche qui comptent, telles qu'elles sont au moment de la validation."
+          ],
+          "liens": [["#fiche", "Ma fiche"]]
+        },
+        {
+          "id": "pas-alcool",
+          "question": "Je ne bois pas d'alcool : pourquoi je paierais ?",
+          "court": "Tu ne paies pas : seuls ceux qui ont coché Alcool dans Ma fiche y participent. Changer une coche ne vaut que pour les dépenses validées ensuite.",
+          "detail": [
+            "Les catégories facultatives sont décochées par défaut : on participe parce qu'on l'a choisi, pas par oubli.",
+            "Si tu décoches Monster le 30, tu paies quand même les Monster des dépenses validées avant."
+          ],
+          "exemple": "Bob achète du Monster sans en boire : les buveurs le remboursent en entier, Bob ne paie rien de cette ligne."
+        },
+        {
+          "id": "non-gere",
+          "question": "C'est quoi « NON GÉRÉ » ?",
+          "court": "Un achat perso glissé dans le panier commun : il reste à la charge de celui qui a payé. Un ticket qui mélange perso et commun autrement se règle entre vous.",
+          "detail": [
+            "Dans une dépense pour la communauté, mets le montant de ton achat perso dans la ligne NON GÉRÉ : personne d'autre ne le paie.",
+            "Une dépense n'a qu'un seul mode. Les autres mélanges (le sandwich de quelqu'un d'autre dans les courses) s'arrangent entre ploucs, en dehors de l'outil."
+          ],
+          "exemple": "Le ticket de Bob fait 89,20 € : 70 € d'alimentaire, 14,20 € de Monster, et 5 € pour son sandwich, en NON GÉRÉ."
+        },
+        {
+          "id": "mange-ailleurs",
+          "question": "J'ai mangé ailleurs : pourquoi je paie ?",
+          "court": "C'est Mes repas qui compte : par défaut, tu manges sur la réserve. Décoche le repas avant qu'il commence (8 h, 12 h, 19 h) ; ensuite, il est figé.",
+          "detail": [
+            "La catégorie Alimentaire se répartit au prorata des repas pris sur la réserve. Un repas que tu n'as pas décoché est compté, même si tu as mangé ailleurs.",
+            "Les heures limites sont celles où le repas commence. Passé ce moment, c'est « qui a mangé, et quand »."
+          ],
+          "liens": [["#repas", "Mes repas"]]
+        },
+        {
+          "id": "ticket-llm",
+          "question": "Le ticket se lit tout seul ?",
+          "court": "Oui : l'appli lit la photo et préremplit la dépense. C'est à toi de vérifier avant d'envoyer.",
+          "condition": "llm",
+          "detail": [
+            "Les lignes, les montants et une catégorie proposée pour chacune : ce n'est qu'un préremplissage. Tu peux toujours tout saisir à la main."
+          ]
+        },
+        {
+          "id": "centimes",
+          "question": "Pourquoi 3,34 € au lieu de 3,33 € ?",
+          "court": "Tout se compte au centime, et le centime en trop va à celui qui a payé.",
+          "detail": [
+            "Diviser ne tombe pas toujours juste. Plutôt que de perdre des centimes, on les donne à celui qui a payé : il paie un peu plus de sa propre dépense, les autres un peu moins.",
+            "Pour le gîte et la salle, les centimes en trop vont à l'hébergeur."
+          ],
+          "exemple": "Bill paie un resto de 10 € à trois : 3,33 € pour Bob, 3,33 € pour Martine, et 3,34 € pour Bill."
+        },
+        {
+          "id": "erreur-validee",
+          "question": "Une erreur a été validée : que faire ?",
+          "court": "Une dépense validée est définitive. On s'arrange entre ploucs.",
+          "detail": [
+            "Les comptes ne bougent jamais tout seuls après coup : c'est ce qui les rend fiables. Une erreur se corrige par un arrangement, un remboursement ou une grâce."
+          ]
+        }
+      ]
+    },
+    {
+      "titre": "Après le séjour (et pendant) : on se rembourse",
+      "questions": [
+        {
+          "id": "mon-solde",
+          "question": "Que veut dire mon solde ?",
+          "court": "C'est ce que tu as avancé pour les autres, moins ce que tu dois. Rouge : tu dois ; vert : on te doit ; gris : tu es quitte.",
+          "detail": [
+            "Il compte les dépenses validées, les reports, les avoirs et les manques du gîte et de la salle, les dettes des retardataires, et les remboursements confirmés.",
+            "Le paiement normal de ta part du gîte et de la salle, lui, se suit dans Créances."
+          ],
+          "exemple": "Bob a payé 84,20 € de courses, dont 30 € sont pour lui. Il doit 96,50 € de parts dans les dépenses des autres. Son solde : 54,20 € - 96,50 € = « Tu dois 42,30 € ».",
+          "liens": [["#comptes", "Mes comptes"]]
+        },
+        {
+          "id": "direct-ou-minimum",
+          "question": "Remboursement direct ou minimum de virements ?",
+          "court": "En direct, chacun rembourse ceux qui ont payé pour lui. En minimum de virements, on fait le moins de virements possible, quitte à rembourser quelqu'un qui n'a rien payé pour soi.",
+          "actif": "mode",
+          "detail": [
+            "Direct : les dettes ne se compensent pas entre deux personnes. Si Bill a payé pour Bob et Bob pour Bill, chacun rembourse l'autre.",
+            "Minimum de virements : l'appli part des soldes de tout le groupe, et associe le plus gros débiteur au plus gros créancier, jusqu'à ce que tout le monde soit quitte.",
+            "Les soldes sont les mêmes dans les deux modes : seuls les virements changent. Le staff peut changer de mode à tout moment."
+          ],
+          "exemple": "Bill doit 10 € à Bob, et Bob doit 10 € à Martine. En direct, 2 virements. En minimum, un seul : Bill paie 10 € à Martine."
+        },
+        {
+          "id": "report-avoir",
+          "question": "Un report, un trop-payé du gîte : avec qui ?",
+          "court": "En direct, c'est toujours entre toi et l'hébergeur : un report est une dette envers lui, un trop-payé une dette de lui envers toi.",
+          "detail": [
+            "Un report : l'hébergeur a accepté que ton reste à payer passe dans Mes comptes, à régler quand tu peux.",
+            "Un avoir : tu as payé plus que ta part (ou le staff a baissé un montant). L'hébergeur te doit la différence ; elle entre dans ton solde et se compense avec tes parts des dépenses.",
+            "Un manque : à la clôture des comptes, ce qui reste à payer devient une dette envers l'hébergeur."
+          ],
+          "exemple": "Bill a payé 150 € pour une part de 140 € : Martine lui doit 10 €, qui viennent en déduction de ce qu'il doit pour les courses."
+        },
+        {
+          "id": "comment-rembourser",
+          "question": "Comment je rembourse ?",
+          "court": "Avec un des moyens de la personne, puis tu déclares « j'ai remboursé ». Elle confirme qu'elle a reçu ; sans réponse, elle a une dernière notification au bout de 7 jours, et le remboursement est confirmé d'office 24 h plus tard.",
+          "detail": [
+            "Dans Mes comptes, le bouton Rembourser affiche ses moyens de paiement et le montant que tu lui dois. Tu peux rembourser une partie seulement.",
+            "Un remboursement ne compte dans les soldes qu'une fois confirmé. Si la personne n'a rien reçu, elle refuse, et ta dette revient."
+          ],
+          "liens": [["#comptes", "Mes comptes"]]
+        },
+        {
+          "id": "on-me-rembourse",
+          "question": "Comment on me rembourse ?",
+          "court": "Renseigne tes moyens dans Me rembourser : Wero, PayPal, IBAN (masqué, sauf pour ceux qui te doivent de l'argent), espèces. Il n'y a pas de paiement par carte : il faudrait un compte commerçant, avec des frais.",
+          "detail": [
+            "Ceux qui te doivent de l'argent voient tes moyens au moment de payer, ton moyen préféré en premier.",
+            "Sans aucun moyen renseigné, ils verront « Demande-lui comment la rembourser »."
+          ],
+          "liens": [["#rembourser", "Me rembourser"]]
+        },
+        {
+          "id": "relancer-grace",
+          "question": "Relancer, faire grâce ?",
+          "court": "Relancer envoie un petit rappel, une fois par 24 h au plus. Faire grâce efface tout ou partie d'une dette : c'est irréversible, et c'est celui qui fait grâce qui absorbe le montant.",
+          "detail": [
+            "Il n'y a pas de rappel automatique entre ploucs : c'est à celui à qui on doit de relancer, s'il le souhaite.",
+            "Une grâce compte comme un remboursement confirmé, sans argent qui circule. La personne est prévenue."
+          ],
+          "exemple": "Bob doit 2,40 € à Martine. Martine lui fait grâce : la dette disparaît, et Martine absorbe les 2,40 €."
+        },
+        {
+          "id": "fin",
+          "question": "Quand est-ce que tout est fini ?",
+          "court": "Après le séjour, le staff clôture les comptes : plus de nouvelle dépense, et chacun reçoit son plan final de virements. Les remboursements restent possibles jusqu'à ce que tout le monde soit quitte.",
+          "detail": [
+            "À la clôture, les présences ne changent plus, et ce qui reste à payer du gîte et de la salle devient une dette envers l'hébergeur."
+          ]
+        }
+      ]
+    },
+    {
+      "titre": "Ce que l'outil ne gère pas",
+      "questions": [
+        {
+          "id": "hors-outil",
+          "question": "Ce qui reste en dehors de l'appli",
+          "court": "Les revenus (consignes, restes revendus), les tickets qui mélangent perso et commun, et les paiements par carte. Tout ça se règle entre ploucs.",
+          "detail": [
+            "L'appli ne fait pas circuler d'argent : elle compte, et chacun paie de son côté."
+          ]
+        }
+      ]
+    }
+  ]
+}

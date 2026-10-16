@@ -102,6 +102,21 @@ const PHRASES = {
   nom: l => `a corrigé un nom (${l.detail})`,
   desactive: l => `a désactivé le compte de ${l.qui}`,
   reactive: l => `a réactivé le compte de ${l.qui}`,
+  "gite-date": l => `a fixé une date limite (${l.detail})`,
+  "gite-montant": l => `a changé un montant (${l.detail})`,
+  "gite-hebergeur": l => l.qui ? `a désigné ${l.qui} hébergeur (${l.detail})` : `a retiré l'hébergeur (${l.detail})`,
+  "gite-repartition": l => `a réglé la répartition de la salle (${l.detail})`,
+  "gite-exemption": l => `a réglé l'exemption de ${l.qui} (${l.detail})`,
+  "gite-ouverture": l => `a ouvert les paiements (${l.detail})`,
+  "gite-lit": l => `a réglé un lit (${l.detail})`,
+  "gite-lit-supprime": l => `a supprimé le lit ${l.detail}`,
+  "gite-salle-couchage": l => `a réglé la salle comme couchage (${l.detail})`,
+  "gite-plan": () => "a changé le plan du gîte",
+  "gite-inscription": l => `a accepté l'inscription de ${l.qui}`,
+  "creances-report": l => `a accepté un report pour ${l.qui} (${l.detail})`,
+  "compta-mode": l => `a changé le mode de remboursement (${l.detail})`,
+  "compta-categorie": l => `a réglé une catégorie (${l.detail})`,
+  "compta-categorie-supprimee": l => `a supprimé la catégorie ${l.detail}`,
 };
 
 export function vueStaffComptes() {

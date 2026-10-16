@@ -98,6 +98,8 @@ def inscription(config, nom, code):
         from notifications import notifier   # import ici : notifications importe stockage, pas l'inverse
         notifier(config, "gite", "Nouvelle inscription", f"{nom} vient de créer son compte.", "#staff",
                  destinataires=set(cd.staffs_actifs(comptes)), sauf=nom)
+        import gite_salle   # import ici : gite_salle importe (de loin) ce module
+        gite_salle.prevenir_inscription(config, nom)
     return {"jeton": jeton, "nom": nom}
 
 

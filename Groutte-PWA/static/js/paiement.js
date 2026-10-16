@@ -8,6 +8,13 @@ import qrcode from "./qrcode.js";
 const formatEuros = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" });
 export const euros = c => formatEuros.format(c / 100);
 export const enSaisie = c => (c / 100).toFixed(2).replace(".", ",");
+
+/* Un montant tapé (« 12,50 », « 12.5 », « 1 400 ») en centimes, ou null s'il est illisible. */
+export function lireEuros(texte) {
+  const propre = String(texte || "").replace(/[\s\u202f€]/g, "").replace(",", ".");
+  if (!/^\d+(\.\d{0,2})?$/.test(propre)) return null;
+  return Math.round(parseFloat(propre) * 100);
+}
 const enLien = c => (c / 100).toFixed(2);
 
 /* Les moyens, dans l'ordre d'affichage par défaut (le moyen préféré passe en premier). */

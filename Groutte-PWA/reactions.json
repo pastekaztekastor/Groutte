@@ -1,0 +1,13 @@
+{
+  "_aide": "Réactions proposées sous les posts et les commentaires du forum. En texte, pas en emoji. 8 caractères max chacune. Redémarrer le serveur n'est pas nécessaire après modification.",
+  "reactions": [
+    "T_T",
+    ">_<",
+    "^_^",
+    ";)",
+    ":P",
+    "XD",
+    "o/",
+    "+1"
+  ]
+}

@@ -14,6 +14,15 @@ Organisation :
 - acces.py         connexion, inscription, codes provisoires, jetons
 - comptes.py       ma fiche, me rembourser, photo, notifications, annonces
 - staff.py         Staff > Comptes : droits, codes, rôles, muet, noms, désactivation, journal
+- forum.py         Communauté > Forum (repris de NextSession)
+- sejour.py        dates du séjour et modèle de présence (créneaux, nuits, repas)
+- presence.py      Gîte > Présence ; lits.py Gîte > Lits ; repas.py Repas > Mes repas
+- gite_salle.py    Staff > Gîte et salle : montants, hébergeurs, exemptions, lits, inscriptions tardives
+- compta.py        le calcul de l'argent : parts, retardataires, dépenses, soldes, dettes
+- creances.py      Budget > Créances gîte et salle ; depenses.py Budget > Dépenses et Staff > Validation
+- mes_comptes.py   Budget > Mes comptes : remboursements, grâces, relances
+- reglages_compta.py  Staff > Réglages compta : catégories, mode de remboursement
+- taches.py        rappels datés, vérifiés au chargement de l'état
 - notifications.py Web Push (seule dépendance : cryptography, facultative)
 - lus.py           ce que chacun a vu : pastilles « nouveau »
 - medias.py        fichiers envoyés, rangés dans data/medias/
@@ -30,9 +39,19 @@ from wsgiref.simple_server import WSGIServer, make_server
 
 import acces
 import comptes  # noqa: F401  (routes /api/profil, /api/notifs/...)
+import creances  # noqa: F401  (routes /api/creances/...)
+import depenses  # noqa: F401  (routes /api/depenses/...)
+import forum
+import gite_salle  # noqa: F401  (routes /api/gite/...)
+import lits  # noqa: F401  (routes /api/lits/...)
 import lus  # noqa: F401  (route /api/lu)
 import medias
+import mes_comptes  # noqa: F401  (routes /api/comptes/...)
+import presence  # noqa: F401  (routes /api/presence...)
+import reglages_compta  # noqa: F401  (routes /api/compta/...)
+import repas  # noqa: F401  (route /api/repas)
 import staff  # noqa: F401  (routes /api/staff/...)
+import taches
 from environnement import environnement
 from etat import etat
 from requetes import Demande, Refus, lire_corps
@@ -48,6 +67,7 @@ STATIQUE = ICI / "static"
 PAGE = STATIQUE / "index.html"
 TYPES_STATIQUES = {
     ".css": "text/css; charset=utf-8",
+    ".json": "application/json; charset=utf-8",
     ".js": "text/javascript; charset=utf-8",
     ".png": "image/png",
     ".svg": "image/svg+xml",
@@ -216,8 +236,16 @@ def application(environ, start_response):
                 # Le staff a corrigé le nom de ce compte : l'appareil garde son jeton et prend le nouveau nom.
                 return repondre(start_response, "200 OK", dict(etat(vrai), renomme=vrai))
             acces.exiger_jeton(lire_config(), nom, jeton)
+            if nom:
+                taches.verifier(lire_config())
             return repondre(start_response, "200 OK", etat(nom))
         # Détail chargé à part (trop lourd pour l'état général) : un GET par module qui en a besoin, ici.
+        if methode == "GET" and chemin == "/api/forum":
+            nom = parametre("nom")
+            acces.exiger_jeton(lire_config(), nom, jeton)
+            if not nom:
+                raise Refus("code demandé", "401 Unauthorized")
+            return repondre(start_response, "200 OK", forum.detail(parametre("sujet"), nom))
         if methode == "POST" and chemin == "/api/connexion":
             corps = lire_corps(environ)
             return repondre(start_response, "200 OK", acces.connexion(lire_config(), corps.get("nom"), corps.get("code", "")))

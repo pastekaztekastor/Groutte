@@ -1,0 +1,15 @@
+{
+  "_aide": "Flairs (étiquettes) des posts du forum, à modifier à la main : nom (20 caractères max), couleur (#rrggbb), staff (true : seul le staff peut publier avec ce flair). Pris en compte sans redémarrer.",
+  "flairs": [
+    {"nom": "Règles",      "couleur": "#5c1f2e", "staff": true},
+    {"nom": "Sécurité",    "couleur": "#c2410c", "staff": true},
+    {"nom": "Infos",       "couleur": "#3e3160", "staff": true},
+    {"nom": "FAQ",         "couleur": "#33493a", "staff": false},
+    {"nom": "Tâches",      "couleur": "#8c4a28", "staff": false},
+    {"nom": "Covoiturage", "couleur": "#2f5d7c", "staff": false},
+    {"nom": "Idées",       "couleur": "#d2a45c", "staff": false},
+    {"nom": "Discussion",  "couleur": "#63635e", "staff": false},
+    {"nom": "Tournoi",     "couleur": "#6b4f9c", "staff": false},
+    {"nom": "Gîte",        "couleur": "#4a6b3a", "staff": false}
+  ]
+}

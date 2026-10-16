@@ -1,6 +1,7 @@
 """Les comptes (data/comptes.json) et les rôles (roles.json).
 
-data/comptes.json : {nom: {"couleur", "staff", "roles": [id], "muet", "desactive", "code", "code_provisoire", "cree"}}
+data/comptes.json : {nom: {"couleur", "staff", "roles": [id], "muet", "desactive", "code", "code_provisoire", "cree",
+                           "inscription_acceptee"}}
 - "code" : le code à 4 chiffres, haché (pbkdf2), jamais en clair. Vide : le compte choisira son code à la connexion.
 - "code_provisoire" : le code a été remis à zéro par le staff (ou vient de config.json) ; à la connexion, la personne
   doit en choisir un nouveau.
@@ -46,8 +47,9 @@ def code_valide(code):
 # --- Lecture et écriture --------------------------------------------------------------------------
 
 def _compte_vide():
+    # "inscription_acceptee" : {"par", "quand"} quand le staff accepte une inscription tardive (Gîte et salle).
     return {"couleur": "", "staff": False, "roles": [], "muet": False, "desactive": False,
-            "code": "", "code_provisoire": False, "cree": ""}
+            "code": "", "code_provisoire": False, "cree": "", "inscription_acceptee": None}
 
 
 def _depart(config):
@@ -158,3 +160,28 @@ def renommer_cle(chemin, ancien, nouveau):
     if ancien in donnees:
         donnees[nouveau] = donnees.pop(ancien)
         ecrire_json(chemin, donnees)
+
+
+def renommer_dans(donnees, ancien, nouveau, cles):
+    """Renomme un compte dans une structure JSON : les clés de dictionnaire égales à `ancien` ({nom: ...}), et,
+    sous les clés listées dans `cles`, les valeurs égales à `ancien` ou les listes qui le contiennent. Les textes
+    libres (titres, messages) ne sont jamais touchés. Renvoie la structure modifiée."""
+    if isinstance(donnees, list):
+        return [renommer_dans(x, ancien, nouveau, cles) for x in donnees]
+    if not isinstance(donnees, dict):
+        return donnees
+    resultat = {}
+    for cle, valeur in donnees.items():
+        if cle in cles:
+            if valeur == ancien:
+                valeur = nouveau
+            elif isinstance(valeur, list):
+                valeur = [nouveau if x == ancien else x for x in valeur]
+        resultat[nouveau if cle == ancien else cle] = renommer_dans(valeur, ancien, nouveau, cles)
+    return resultat
+
+
+def renommer_fichier(chemin, ancien, nouveau, cles):
+    """renommer_dans() appliqué à tout un fichier de données (sous le verrou)."""
+    if chemin.exists():
+        ecrire_json(chemin, renommer_dans(lire_json(chemin, {}), ancien, nouveau, cles))

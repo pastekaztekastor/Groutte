@@ -50,6 +50,17 @@ export const estStaff = () => !!compte(app.moi)?.staff;
 export const sansAccent = t => (t || "").normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
 export const tronquer = (t, n) => t.length > n ? t.slice(0, n).trimEnd() + "..." : t;
 export const pluriel = (n, mot) => `${n} ${mot}${n > 1 ? "s" : ""}`;
+export const dateCourte = jour => `${jour.slice(8, 10)}/${jour.slice(5, 7)}`;   // « 28/12 »
+export const jourCourt = jour => majuscule(depuisIso(jour).toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "numeric" }));
+
+/* Mode modération (staff, sur cet appareil) : les outils de modération du forum s'affichent. Actif par défaut. */
+export function modeModeration() {
+  return estStaff() && lireLocal("moderation") !== "0";
+}
+
+export function changerModeModeration(actif) {
+  ecrireLocal("moderation", actif ? "1" : "0");
+}
 
 /* Construit un élément. Les enfants texte deviennent des nœuds texte : rien n'est interprété comme du HTML
    (aucune injection possible depuis le texte d'un utilisateur). false, null et undefined sont ignorés, ce qui
@@ -108,10 +119,14 @@ export function avatar(nom, taille = 22) {
   return e;
 }
 
-/* Un compte : sa photo seule (le nom au survol et pour les lecteurs d'écran). avatarNomme : photo et nom. */
-export function qui(nom) {
-  return el("span", { class: "qui", title: nom, "aria-label": nom }, avatar(nom, 26));
+/* Un compte : sa photo seule (le nom au survol et pour les lecteurs d'écran), avec `lien` vers sa fiche du carnet.
+   avatarNomme : photo et nom. */
+export function qui(nom, lien = false) {
+  return el(lien ? "a" : "span", { class: "qui", href: lien ? lienContact(nom) : null, title: nom, "aria-label": nom }, avatar(nom, 26));
 }
+
+/* La fiche d'une personne dans le carnet (la mienne : Ma fiche). */
+export const lienContact = nom => nom === app.moi ? "#fiche" : "#carnet/" + encodeURIComponent(nom);
 
 export function avatarNomme(nom) {
   return el("span", { class: "qui" }, avatar(nom), nom);
@@ -148,6 +163,12 @@ const ICONES = {
   coche: ["M5 12.5l4.5 4.5L19 7"],
   image: ["M4 5h16v14H4z", "M4 16l5-5 4 4 3-3 4 4", "M15.5 7.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 1 0 0-3z"],
   envoyer: ["M4 12L20 4l-5 16-4-7z", "M11 13l9-9"],
+  epingle: ["M9 4h6", "M10 4v6l-3 4h10l-3-4V4", "M12 14v6"],
+  cadenas: ["M6 11h12v9H6z", "M9 11V8a3 3 0 0 1 6 0v3"],
+  cloche: ["M6 16V11a6 6 0 0 1 12 0v5l2 2H4z", "M10 20a2 2 0 0 0 4 0"],
+  "cloche-barree": ["M6 16V11a6 6 0 0 1 9-5.2", "M18 11v5l2 2H8", "M10 20a2 2 0 0 0 4 0", "M4 4l16 16"],
+  plus: ["M12 5v14", "M5 12h14"],
+  info: ["M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18z", "M12 11v5", "M12 8h.01"],
 };
 
 /* Une icône dessinée à la main (static/icones/ui/<nom>.svg, listée par le serveur) remplace le pictogramme. */
@@ -170,6 +191,20 @@ export function icone(nom) {
     svg.append(trace);
   }
   return svg;
+}
+
+/* Flèche du vote « +1 » du forum (pleine quand j'ai voté, en CSS). */
+export function flecheVote() {
+  const dessin = iconeDessinee("vote");
+  if (dessin) return dessin;
+  const NS = "http://www.w3.org/2000/svg";
+  const fleche = document.createElementNS(NS, "svg");
+  fleche.setAttribute("viewBox", "0 0 24 24");
+  fleche.setAttribute("aria-hidden", "true");
+  const trace = document.createElementNS(NS, "path");
+  trace.setAttribute("d", "M12 4l7 9h-4v7H9v-7H5z");
+  fleche.append(trace);
+  return fleche;
 }
 
 export function boutonIcone(nom, libelle, onclick, actif = false) {
@@ -354,6 +389,16 @@ export function ouvrirModale(titre, contenu, libelle, action) {
   $("modale").hidden = false;
   document.body.classList.add("sans-defilement");
   boite.querySelector("input, select, textarea")?.focus();
+}
+
+/* Une feuille à lire seulement (qui est là à ce créneau, le détail d'une dette...) : un seul bouton, Fermer. */
+export function ouvrirFeuille(titre, contenu) {
+  const boite = $("modale-contenu");
+  const fermer = el("button", { class: "btn large", type: "button", onclick: fermerModale }, "Fermer");
+  boite.replaceChildren(el("h2", {}, titre), el("div", { class: "contenu-feuille" }, contenu), el("div", { class: "actions" }, fermer));
+  $("modale").hidden = false;
+  document.body.classList.add("sans-defilement");
+  fermer.focus();
 }
 
 /* --- Connexion : « Qui es-tu ? » (les photos des comptes), puis le pavé du code -------------------------------

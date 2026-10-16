@@ -24,7 +24,7 @@ function ligne(c) {
     icone("chevron-droite"));
 }
 
-/* Contacts utiles : les hébergeurs (jalon 2), la personne qui a les clés, puis le staff. Chacun une fois. */
+/* Contacts utiles : les hébergeurs, la personne qui a les clés, puis le staff. Chacun une fois. */
 function contactsUtiles() {
   const rang = c => c.roles.includes("hebergeur") ? 0 : c.roles.includes("cles") ? 1 : c.staff ? 2 : 9;
   return actifs().filter(c => rang(c) < 9).sort((a, b) => rang(a) - rang(b) || a.nom.localeCompare(b.nom, "fr"));
@@ -87,6 +87,12 @@ function ligneInfo(nomIcone, libelle, contenu, action) {
     action);
 }
 
+/* Les catégories facultatives qu'une personne a cochées (Monster, Alcool...). */
+function partages(c) {
+  const toutes = [...app.etat.categories.categories, ...app.etat.categories.supprimees];
+  return toutes.filter(x => x.type === "facultative" && c.categories?.includes(x.id)).map(x => x.nom).join(", ");
+}
+
 export function vueContact(nom) {
   const c = compte(nom);
   if (!c || c.desactive) return [el("p", { class: "doux" }, "Cette personne n'est pas dans le carnet.")];
@@ -96,6 +102,7 @@ export function vueContact(nom) {
       el("button", { class: "discret", type: "button", onclick: () => copier(c.discord) }, "Copier")),
     (c.regimes.length > 0 || c.allergies) && ligneInfo("fa-regime", "Alimentation",
       el("span", { class: "texte-libre" }, [c.regimes.join(", "), c.allergies && `Allergies : ${c.allergies}`].filter(Boolean).join("\n"))),
+    partages(c) && ligneInfo("fa-categories", "Partage", el("span", {}, partages(c))),
     c.photo_ok === false && ligneInfo("fa-photo", "Photos et vidéos", el("span", {}, "Préfère ne pas apparaître sur les photos")),
   ].filter(Boolean);
   return [
