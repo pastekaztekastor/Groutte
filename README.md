@@ -9,14 +9,16 @@ Le brouillon d'origine, avec toutes les questions et réponses, est dans `README
 |              |                                                                        |
 | ------------ | ---------------------------------------------------------------------- |
 | Dates        | du 28/12/2026 au 03/01/2027                                            |
-| Lieu         | un gîte de 10 couchages, et une salle (voir Questions ouvertes)        |
-| Participants | la liste se fait au fil des inscriptions, jusqu'à une date limite      |
+| Lieu         | un gîte de 10 couchages, calme, pour dormir ; une salle des fêtes pour la vie de la semaine |
+| Ploucs | la liste se fait au fil des inscriptions, jusqu'à une date limite      |
 | Budget       | un prévisionnel : dépenses de l'année précédente + dépenses estimables |
 
 ## Principes
 
 - **C'est d'abord un outil de préparation.** Il servira avant, pendant et après le séjour, et évoluera.
-- **Deux niveaux de droits seulement : participant et staff.**
+- **On s'appelle « les ploucs ».** Dans l'appli comme entre nous, un participant est un **plouc**.
+  - **Seuls les ploucs qui viennent comptent dans les parts** : ceux qui ont des dates dans [Présence](cdc/gite/presence.md). Un compte sans dates (« Je ne viens pas ») ne paie ni le gîte, ni la salle, ni les repas.
+- **Deux niveaux de droits seulement : plouc et staff.**
   - Les staffs de départ sont dans `config.json`. Ensuite, un staff peut nommer un autre staff.
   - Les **rôles** sont des étiquettes affichées dans le carnet d'adresses. Ils ne donnent aucun droit sur l'appli (voir [Rôles](#rôles-rolesjson)).
 - **Inscription libre.** À l'installation, on crée un compte ou on se connecte à un compte existant.
@@ -93,52 +95,57 @@ Le rôle de SAM n'est pas dans cette liste : on se désigne SAM jour par jour, s
   | Nuit    | nuitée          |
 
 - Il n'y a pas d'après-midi. Un texte d'aide explique comment choisir.
-- On en déduit, pour chacun, **ses nuits et ses repas**. Les nuits servent au prix du gîte et aux couchages. Les repas sont la partie la plus souple.
+- L'arrivée est le premier créneau compté, le départ le dernier.
+- Un seul séjour par personne : pas d'allers-retours.
+- On en déduit, pour chacun, **ses nuits et ses repas**. Les nuits servent au prix du gîte et aux couchages. Les repas sont la partie la plus souple : par défaut on mange sur la réserve, et chacun décoche les repas qu'il prend ailleurs dans [Mes repas](cdc/repas/mes-repas.md). Les courses de la catégorie Alimentaire se répartissent au prorata des repas pris.
 
 ## Les pages
 
 Chaque page a sa fiche dans `cdc/<groupe>/`, décrite avec précision : but, qui voit et qui agit, écran, actions, données, règles et calculs, notifications, cas limites, questions ouvertes. Pour une nouvelle page, copier `cdc/_modele.md`.
 
-| Groupe     | Page                                                  | Priorité |
-| ---------- | ----------------------------------------------------- | -------- |
-| Staff      | [Comptes](cdc/staff/comptes.md)                       | 1        |
-| Compte     | [Inscription et connexion](cdc/compte/inscription.md) | 1        |
-| Compte     | [Ma fiche](cdc/compte/ma-fiche.md)                    | 1        |
-| Compte     | [Me rembourser](cdc/compte/me-rembourser.md)          | 1        |
-| Compte     | [Notifications](cdc/compte/notifications.md)          | 1        |
-| Compte     | [Carnet d'adresses](cdc/compte/carnet.md)             | 1        |
-| Communauté | [Forum](cdc/communaute/forum.md)                      | 2        |
-| Gîte       | [Ma réservation](cdc/gite/ma-reservation.md)          | 2        |
-| Gîte       | [Présence](cdc/gite/presence.md)                      | 2        |
-| Gîte       | [Lits](cdc/gite/lits.md)                              | 2        |
-| Budget     | [Mes comptes](cdc/budget/mes-comptes.md)              | 2        |
-| Budget     | [Créances gîte et salle](cdc/budget/creances.md)      | 2        |
-| Budget     | [Dépenses](cdc/budget/depenses.md)                    | 2        |
-| Budget     | [Comment ça marche](cdc/budget/comment-ca-marche.md)  | 2        |
-| Staff      | [Gîte et salle](cdc/staff/gite-salle.md)              | 2        |
-| Staff      | [Réglages compta](cdc/staff/reglages-compta.md)       | 2        |
-| Staff      | [Réglages gîte](cdc/staff/reglages-gite.md)           | 2        |
-| Gîte       | [Literie](cdc/gite/literie.md)                        | 3        |
-| Gîte       | [SAM](cdc/gite/sam.md)                                | 3        |
-| Repas      | [Événements repas](cdc/repas/repas.md)                | 3        |
-| Budget     | [Flux](cdc/budget/flux.md)                            | 3        |
-| Staff      | [Prévisionnel](cdc/staff/previsionnel.md)             | 3        |
-| Staff      | [Suivi des dépenses](cdc/staff/suivi-depenses.md)     | 3        |
-| Staff      | [Annonces](cdc/staff/annonces.md)                     | 3        |
-| Communauté | [Messages](cdc/communaute/messages.md)                | 4        |
-| Tournois   | [Jeux](cdc/tournois/jeux.md)                          | 4        |
-| Tournois   | [Planning](cdc/tournois/planning.md)                  | 4        |
-| Tournois   | [Règlements](cdc/tournois/reglements.md)              | 4        |
-| Tournois   | [Leaderboard](cdc/tournois/leaderboard.md)            | 4        |
-| Drop box   | [Photos et vidéos](cdc/dropbox/photos-videos.md)      | 4        |
-| Drop box   | [Musique](cdc/dropbox/musique.md)                     | 4        |
-| Drop box   | [POV du tournoi](cdc/dropbox/pov-tournoi.md)          | 4        |
-| Gîte       | [Clés](cdc/gite/cles.md)                              | 5        |
-| Staff      | [Checklist d'avancement](cdc/staff/checklist.md)      | 5        |
-| Staff      | [Hors ligne](cdc/staff/hors-ligne.md)                 | 5        |
-| Staff      | [Validation des dépenses](cdc/staff/validation-depenses.md) | 2  |
+| Groupe     | Page                                                        | Priorité |
+| ---------- | ----------------------------------------------------------- | -------- |
+| Staff      | [Comptes](cdc/staff/comptes.md)                             | 1        |
+| Compte     | [Inscription et connexion](cdc/compte/inscription.md)       | 1        |
+| Compte     | [Ma fiche](cdc/compte/ma-fiche.md)                          | 1        |
+| Compte     | [Me rembourser](cdc/compte/me-rembourser.md)                | 1        |
+| Compte     | [Notifications](cdc/compte/notifications.md)                | 1        |
+| Compte     | [Carnet d'adresses](cdc/compte/carnet.md)                   | 1        |
+| Communauté | [Forum](cdc/communaute/forum.md)                            | 2        |
+| Gîte       | [Présence](cdc/gite/presence.md)                            | 2        |
+| Gîte       | [Lits](cdc/gite/lits.md)                                    | 2        |
+| Budget     | [Mes comptes](cdc/budget/mes-comptes.md)                    | 2        |
+| Budget     | [Créances gîte et salle](cdc/budget/creances.md)            | 2        |
+| Budget     | [Dépenses](cdc/budget/depenses.md)                          | 2        |
+| Budget     | [Comment ça marche](cdc/budget/comment-ca-marche.md)        | 2        |
+| Staff      | [Gîte et salle](cdc/staff/gite-salle.md)                    | 2        |
+| Staff      | [Réglages compta](cdc/staff/reglages-compta.md)             | 2        |
+| Gîte       | [Literie](cdc/gite/literie.md)                              | 3        |
+| Gîte       | [SAM](cdc/gite/sam.md)                                      | 3        |
+| Repas      | [Événements repas](cdc/repas/repas.md)                      | 3        |
+| Staff      | [Prévisionnel](cdc/staff/previsionnel.md)                   | 3        |
+| Staff      | [Suivi des dépenses](cdc/staff/suivi-depenses.md)           | 3        |
+| Staff      | [Annonces](cdc/staff/annonces.md)                           | 3        |
+| Communauté | [Messages](cdc/communaute/messages.md)                      | 4        |
+| Tournois   | [Jeux](cdc/tournois/jeux.md)                                | 4        |
+| Tournois   | [Planning](cdc/tournois/planning.md)                        | 4        |
+| Tournois   | [Règlements](cdc/tournois/reglements.md)                    | 4        |
+| Tournois   | [Leaderboard](cdc/tournois/leaderboard.md)                  | 4        |
+| Drop box   | [Photos et vidéos](cdc/dropbox/photos-videos.md)            | 4        |
+| Drop box   | [Musique](cdc/dropbox/musique.md)                           | 4        |
+| Drop box   | [POV du tournoi](cdc/dropbox/pov-tournoi.md)                | 4        |
+| Gîte       | [Clés](cdc/gite/cles.md)                                    | 5        |
+| Staff      | [Checklist d'avancement](cdc/staff/checklist.md)            | 5        |
+| Staff      | [Hors ligne](cdc/staff/hors-ligne.md)                       | 5        |
+| Budget     | [Flux](cdc/budget/flux.md)                                  | 5        |
+| Staff      | [Validation des dépenses](cdc/staff/validation-depenses.md) | 2        |
+| Staff      | [Réglages LLM](cdc/staff/reglages-llm.md)                   | 3        |
+| Communauté | [Contacter le staff](cdc/communaute/contact-staff.md)       | 2        |
+| Repas      | [Mes repas](cdc/repas/mes-repas.md)                         | 2        |
 
 ## Priorités
+
+Un résumé. En cas d'écart, c'est le tableau [Les pages](#les-pages) qui fait foi.
 
 1. **Le socle** :
    - inscription et code par compte ;
@@ -147,19 +154,18 @@ Chaque page a sa fiche dans `cdc/<groupe>/`, décrite avec précision : but, qui
    - carnet d'adresses.
 2. **L'essentiel** :
    - Forum ;
-   - Ma réservation, Présence, Lits ;
+   - Présence, Lits ;
    - Budget avec saisie à la main : dépenses, créances, mes comptes ;
    - Staff : gîte et salle, réglages compta.
 3. **Ensuite** :
-   - lecture des tickets par LLM ;
-   - graphe des flux ;
+   - lecture des tickets par LLM (Staff > Réglages LLM) ;
    - prévisionnel ;
    - Repas ;
    - Literie ;
    - SAM ;
    - annonces ciblées.
 4. **Puis** : Tournois, Drop box, Messages.
-5. **Reporté** : clés, checklist staff, hors ligne.
+5. **Reporté** : clés, checklist staff, hors ligne, graphe des flux.
 
 ## Données à fournir
 
@@ -169,18 +175,13 @@ Les dépenses de l'année précédente, à fournir deux fois :
 
 ## Questions ouvertes
 
-- **La salle** : de quoi s'agit-il exactement ?
 - **Le réveillon** : comment le financer et l'organiser ?
-- **Les repas de tous les jours** : comment se répartissent les courses ?
-  - Proposition : les concernés sont les présents aux repas, au prorata de leur nombre de repas.
-- **Le LLM** : quel fournisseur, et qui paie la clé ?
 - **Les dates** :
   - la date limite d'inscription ;
   - la date de paiement du gîte et de la salle ;
   - le budget maximum accepté par le groupe.
 - **Le consentement photo** : quel effet concret ? Une simple information, ou des fichiers masqués ?
 - **« Tournois ? » dans la fiche perso** : que doit-elle contenir ?
-- **Les allers-retours** : une personne peut-elle avoir plusieurs séjours (partir, puis revenir) ?
 - **Messages** : seulement entre deux personnes, ou aussi des groupes ?
 
 ## Git

@@ -18,10 +18,10 @@
 - On arrive ici juste après la création du compte ([Inscription](inscription.md)).
 
 ## Qui voit, qui agit
-<!-- Participant, staff, ou seulement la personne concernée. -->
+<!-- Plouc, staff, ou seulement la personne concernée. -->
 - **Chacun modifie sa propre fiche**, et seulement la sienne.
 - **Le nom** ne se modifie pas ici : c'est le staff qui le corrige, dans [Staff > Comptes](../staff/comptes.md), parce qu'il sert d'identifiant partout.
-- **Tous les participants voient** :
+- **Tous les ploucs voient** :
   - l'identité, le contact et les rôles, dans le carnet d'adresses ;
   - les allergies et les régimes, pour ceux qui cuisinent ;
   - les catégories auxquelles chacun participe, puisqu'elles expliquent les parts dans Mes comptes.
@@ -122,7 +122,7 @@ Le thème et le mode sombre restent dans **Réglages**, comme dans le squelette,
 ## Cas limites
 <!-- Ce qui doit être refusé, et les cas bizarres. -->
 - **Une catégorie facultative cochée par personne** : une dépense de cette catégorie n'aurait aucun concerné. L'envoi de la dépense est refusé, avec un message qui propose « NON GÉRÉ » ou une autre catégorie (voir [Dépenses](../budget/depenses.md)).
-- **Le staff supprime une catégorie** que des personnes avaient cochée : la coche disparaît de leur fiche. Les dépenses déjà validées ne changent pas.
+- **Le staff supprime une catégorie** que des personnes avaient cochée : si au moins une dépense l'utilise, sa case reste dans la fiche, pour que chacun voie pourquoi il a payé. Sinon, elle disparaît. Les dépenses déjà validées ne changent pas (voir [Réglages compta](../staff/reglages-compta.md)).
 - **Le staff fait passer une catégorie de facultative à obligatoire** : tout le monde y participe à partir de ce moment.
 - **Un téléphone mal formé** est refusé (seulement des chiffres, des espaces et un « + » au début).
 - **Un membre muet** peut toujours modifier sa fiche.

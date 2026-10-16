@@ -12,7 +12,7 @@
 - La liste des jeux disponibles et du matériel.
 
 ## Qui voit, qui agit
-<!-- Participant, staff, ou seulement la personne concernée. -->
+<!-- Plouc, staff, ou seulement la personne concernée. -->
 - À décrire.
 
 ## Écran

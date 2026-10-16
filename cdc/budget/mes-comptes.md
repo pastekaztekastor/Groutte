@@ -10,25 +10,26 @@
 ## But
 <!-- À quoi sert la page, en une ou deux phrases. -->
 - Ce que je dois et à qui, ce qu'on me doit et qui me le doit. C'est aussi ici que je rembourse et que je confirme les remboursements reçus.
-- La page rassemble tout ce qui crée une dette entre participants :
+- La page rassemble tout ce qui crée une dette entre ploucs :
   - les dépenses validées ([Dépenses](depenses.md)) ;
   - les reports du gîte et de la salle ([Créances](creances.md)) ;
+  - les dettes des retardataires, arrivés ou restés plus longtemps après l'ouverture des paiements ([Créances](creances.md)) ;
   - les écarts de régularisation, c'est-à-dire les trop-payés et les manques ([Créances](creances.md)) ;
   - les remboursements déjà faits.
 - Le paiement normal du gîte et de la salle reste dans [Créances](creances.md). Ici, une ligne y renvoie seulement tant qu'il reste quelque chose à payer.
 
 ## Qui voit, qui agit
-<!-- Participant, staff, ou seulement la personne concernée. -->
-- **Chaque participant** voit ses propres comptes, rembourse ceux à qui il doit, et confirme les remboursements qu'il reçoit. Les membres du staff font de même, en tant que participants.
-- **Le staff** ne gère rien ici : il choisit le mode de remboursement dans [Réglages compta](../staff/reglages-compta.md), et voit l'ensemble dans [Suivi des dépenses](../staff/suivi-depenses.md).
-- **Le graphe de tout le groupe** est sur [Flux](flux.md), visible par tout le monde.
+<!-- Plouc, staff, ou seulement la personne concernée. -->
+- **Chaque plouc** voit ses propres comptes, rembourse ceux à qui il doit, et confirme les remboursements qu'il reçoit. Les membres du staff font de même, en tant que ploucs.
+- **Le staff** ne gère rien ici : il choisit le mode de remboursement dans [Réglages compta](../staff/reglages-compta.md), et verra l'ensemble dans [Suivi des dépenses](../staff/suivi-depenses.md), qui arrive au jalon 3.
+- **Le graphe de tout le groupe** sera sur [Flux](flux.md), visible par tout le monde. Flux arrive au jalon 5.
 
 ## Écran
 <!-- Ce qu'on voit, de haut en bas. Un croquis ASCII est bienvenu. -->
 De haut en bas :
 1. **Mon solde net**, en grand.
    - Exemple : « Tu dois 42,30 € », ou « On te doit 18,00 € », ou « Tu es quitte ».
-   - Sa couleur suit le même dégradé que la bulle de [Flux](flux.md) : rouge, gris ou vert.
+   - Sa couleur va du rouge au vert en passant par le gris, avec les couleurs du squelette (`tokens.css`). [Flux](flux.md) reprendra le même dégradé au jalon 5.
    - Le mode actif est affiché en petit : *Direct* ou *Minimum de virements*.
 2. **Je dois** : une ligne par personne à qui je dois de l'argent.
    - Sa photo, son nom et le montant.
@@ -44,13 +45,13 @@ De haut en bas :
    - les remboursements ;
    - les reports ;
    - les avoirs.
-6. Des liens vers [Flux](flux.md) et vers la [FAQ du budget](comment-ca-marche.md).
+6. Un lien vers la [FAQ du budget](comment-ca-marche.md), et vers [Flux](flux.md) à partir du jalon 5.
 
 ```
 Mes comptes
 ┌───────────────────────────────────────────┐
 │          Tu dois 42,30 €                  │
-│          Mode : minimum de virements      │
+│          Mode : direct                    │
 ├─ Je dois ─────────────────────────────────┤
 │ (o) Alice      32,50 €      [Rembourser]  │
 │ (o) David       9,80 €  En attente de conf│
@@ -69,7 +70,7 @@ Mes comptes
 - **Mode direct** :
   - « Je dois » contient, pour chaque personne, la somme de mes parts des dépenses qu'elle a payées, moins ce que je lui ai déjà remboursé ;
   - toucher une ligne affiche le détail, dépense par dépense, avec leur état : remboursée, remboursée partiellement ou à rembourser.
-- **Mode minimum de virements** : « Je dois » et « On me doit » contiennent les virements calculés à partir des soldes de tout le groupe (voir [Flux](flux.md)).
+- **Mode minimum de virements** : « Je dois » et « On me doit » contiennent les virements calculés à partir des soldes de tout le groupe (l'algorithme est décrit dans [Flux](flux.md), même si sa page n'arrive qu'au jalon 5).
   - Je peux devoir de l'argent à quelqu'un qui n'a payé aucune de mes dépenses. C'est normal, et la FAQ l'explique.
 
 ## Actions
@@ -86,7 +87,7 @@ Mes comptes
   - Une fenêtre demande de confirmer, parce que c'est irréversible.
   - La personne est prévenue.
 - **Toucher une ligne** : le détail des dépenses qui composent la dette, en mode direct seulement.
-- **Clôturer les comptes** (staff, depuis [Suivi des dépenses](../staff/suivi-depenses.md)), après le séjour :
+- **Clôturer les comptes** (staff, depuis [Suivi des dépenses](../staff/suivi-depenses.md), qui arrive au jalon 3), après le séjour :
   - les comptes sont figés : plus de nouvelle dépense, et plus de changement de présence ;
   - la régularisation finale du gîte et de la salle est calculée ([Créances](creances.md)) ;
   - chacun reçoit son plan final de virements ;
@@ -119,7 +120,9 @@ Mes comptes
 - **Tout se compte en centimes.**
 - **Solde net** = (ce que j'ai payé pour les autres + reports et avoirs en ma faveur + remboursements confirmés que j'ai faits) − (mes parts des dépenses des autres + reports et manques à ma charge + remboursements confirmés que j'ai reçus).
 - **Un remboursement est un simple transfert d'argent entre deux personnes.** Il marche donc dans les deux modes, et même si le staff change de mode en cours de route : on recalcule simplement les listes à partir des soldes.
-- **Mode direct** : la dette de A envers B = les parts de A dans les dépenses payées par B − ce que A a remboursé à B. Les dettes ne se compensent pas entre deux personnes (voir [Flux](flux.md)).
+- **Mode direct** : la dette de A envers B = les parts de A dans les dépenses payées par B + ce que A doit à B pour le gîte et la salle − ce que A a remboursé à B. Les dettes ne se compensent pas entre deux personnes (voir [Flux](flux.md)), sauf pour les retardataires (ci-dessous).
+  - **Le gîte et la salle** : un report ou un manque est une dette envers l'hébergeur ; un avoir (un trop-payé) est une dette de l'hébergeur envers moi. La FAQ l'explique.
+  - **Un retardataire** doit sa part à chacun de ceux qui ont payé le gîte (voir [Créances](creances.md)). Cette dette se compense d'abord avec ce que chacun d'eux lui doit pour la nourriture : c'est le tampon. Seul le reste se rembourse par virement direct.
   - Un remboursement s'applique aux dépenses **de la plus ancienne à la plus récente**. C'est ce qui donne leur état : remboursée, remboursée partiellement ou à rembourser.
 - **Mode minimum de virements** : on calcule le plan de virements à partir des soldes nets, avec le même algorithme que [Flux](flux.md).
   - Le plan peut changer quand une nouvelle dépense est validée. Les remboursements déjà confirmés restent acquis, puisqu'ils ont déjà fait bouger les soldes.

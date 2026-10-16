@@ -14,7 +14,7 @@
 - **On reprend la page « Me rembourser » de NextSession** (`#rembourser`) et sa page « Payer », avec le QR code de virement (`qrcode.js`).
 
 ## Qui voit, qui agit
-<!-- Participant, staff, ou seulement la personne concernée. -->
+<!-- Plouc, staff, ou seulement la personne concernée. -->
 - **Chacun** renseigne ses propres moyens de paiement.
 - **Seuls ceux qui me doivent de l'argent** les voient, au moment de payer. C'est la règle de NextSession : mon IBAN n'est pas affiché à tout le monde.
 - **Les moyens de l'hébergeur** sont visibles par tous ceux qui ont une part du gîte ou de la salle à payer.
@@ -83,7 +83,7 @@ Ensuite vient le bouton **« J'ai payé »** (voir [Mes comptes](../budget/mes-c
 
 ## Notifications
 <!-- Qui reçoit quoi, et quand. -->
-- **Un hébergeur sans aucun moyen de paiement** reçoit une notification quand le staff ouvre les paiements : « Ajoute un moyen de paiement pour qu'on puisse te payer ».
+- **Un hébergeur sans aucun moyen de paiement** reçoit une notification quand un staff essaie d'ouvrir les paiements : « Ajoute un moyen de paiement pour qu'on puisse te payer ».
 
 ## Cas limites
 <!-- Ce qui doit être refusé, et les cas bizarres. -->

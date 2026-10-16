@@ -12,7 +12,7 @@
 - Chacun se désigne SAM pour un jour.
 
 ## Qui voit, qui agit
-<!-- Participant, staff, ou seulement la personne concernée. -->
+<!-- Plouc, staff, ou seulement la personne concernée. -->
 - À décrire.
 
 ## Écran

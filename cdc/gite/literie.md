@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Réglages gîte](../staff/reglages-gite.md) · [Menu](../../README.md#les-pages)
+[Précédent : Réglages compta](../staff/reglages-compta.md) · [Menu](../../README.md#les-pages)
 <!-- /nav -->
 
 # Gîte > Literie
@@ -12,7 +12,7 @@
 - Pour chaque nuit, ce qu'il faut (draps, couettes, matelas, sacs de couchage), comparé à ce que fournit le gîte et à ce que chacun apporte.
 
 ## Qui voit, qui agit
-<!-- Participant, staff, ou seulement la personne concernée. -->
+<!-- Plouc, staff, ou seulement la personne concernée. -->
 - À décrire.
 
 ## Écran
@@ -25,7 +25,7 @@
 
 ## Données
 <!-- Ce qui est enregistré, et d'où viennent les données lues ailleurs. -->
-- Ce que fournit le gîte vient de Staff > Réglages gîte.
+- Ce que fournit le gîte vient de [Staff > Gîte et salle](../staff/gite-salle.md).
 
 ## Règles et calculs
 <!-- Formules, répartitions, valeurs par défaut. -->

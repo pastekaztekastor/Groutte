@@ -14,8 +14,8 @@
 - Le gîte et la salle ne passent pas par ici : ils sont gérés dans [Créances gîte et salle](creances.md). On ne les compte donc pas deux fois.
 
 ## Qui voit, qui agit
-<!-- Participant, staff, ou seulement la personne concernée. -->
-- **Chaque participant** saisit ses dépenses, puis les modifie tant qu'elles sont en brouillon. Les membres du staff font de même, en tant que participants.
+<!-- Plouc, staff, ou seulement la personne concernée. -->
+- **Chaque plouc** saisit ses dépenses, puis les modifie tant qu'elles sont en brouillon. Les membres du staff font de même, en tant que ploucs.
 - **Dans la liste, chacun voit ses propres dépenses.**
 - **Les personnes concernées** voient aussi le détail et le ticket des dépenses qu'elles paient, depuis [Mes comptes](mes-comptes.md).
 - **Le staff** valide ou refuse les dépenses en attente, sur une page dédiée : [Validation des dépenses](../staff/validation-depenses.md). Il y voit toutes les pièces jointes.
@@ -52,8 +52,9 @@ Dépenses
 - **Motif** : un texte.
 - **Montant** : un nombre en euros, avec des centimes.
 - **Photo du ticket** : facultative.
-- **Personnes concernées** : on les ajoute en tapant `@`, comme dans le forum.
-  - Le payeur est inclus par défaut, et on peut le retirer (c'est le cas du Monster).
+- **Personnes concernées**, en parts égales et en montants exacts seulement : on les ajoute en tapant `@`, comme dans le forum.
+  - Le payeur est inclus par défaut, et on peut le retirer.
+  - En mode communauté, ce champ n'apparaît pas : ce sont les catégories qui disent qui est concerné.
 - **Mode de répartition**, au choix parmi trois :
   - **Parts égales** : le montant est divisé entre les personnes concernées.
   - **Montants exacts** : une ligne par personne, avec son montant. Exemple : 4 personnes vont au McDo, une seule paie tout, et on note qui a pris quoi.
@@ -64,7 +65,8 @@ Dépenses
 ## Actions
 <!-- Chaque bouton ou saisie, et ce qui se passe ensuite. -->
 - **Préremplir avec le ticket.** Le LLM lit la photo : les lignes, les montants et une catégorie proposée pour chacune. Ce n'est qu'un préremplissage, et l'auteur doit le vérifier.
-  - Si le LLM est indisponible (hors ligne, ou pas de clé d'API), la lecture attend, et la dépense reste en brouillon.
+  - Cette option n'apparaît que si un LLM est configuré dans [Réglages LLM](../staff/reglages-llm.md).
+  - Si le LLM configuré est injoignable (hors ligne, clé refusée), la lecture attend, et la dépense reste en brouillon.
 - **Saisir à la main** : c'est toujours possible.
 - **Enregistrer** : la dépense reste en **Brouillon**, et on peut la modifier.
 - **Envoyer** : la dépense passe **En attente**, et le staff est prévenu.
@@ -91,7 +93,7 @@ Une dépense contient :
 
 Ce que la dépense lit ailleurs :
 - les catégories et leurs concernés par défaut, dans Réglages compta ;
-- les présences, dans Ma réservation ;
+- les nuits, dans [Présence](../gite/presence.md), et les repas pris sur la réserve, dans [Mes repas](../repas/mes-repas.md) ;
 - les catégories facultatives cochées par chacun, dans Ma fiche.
 
 ## Règles et calculs
@@ -105,16 +107,16 @@ Ce que la dépense lit ailleurs :
 
   | Catégorie | Type | Qui paie | Répartition |
   | --- | --- | --- | --- |
-  | Alimentaire | obligatoire | les présents aux repas | au prorata des repas |
+  | Alimentaire | obligatoire | ceux qui mangent sur la réserve | au prorata des repas pris ([Mes repas](../repas/mes-repas.md)) |
   | Monster | facultative | ceux qui l'ont cochée | au prorata des nuits |
   | Alcool | facultative | ceux qui l'ont cochée | à parts égales |
   | NON GÉRÉ | spéciale | le payeur seul | - |
 
   - Exemple : A achète des Monster sans en boire, les buveurs le remboursent en totalité.
   - Le staff gère les autres catégories et leur règle dans Réglages compta.
-  - **On ne corrige pas les concernés au cas par cas.** Ce sont les présences déclarées par chacun (Ma réservation, Repas) qui comptent : quelqu'un qui s'est déclaré présent mais n'a finalement pas mangé est quand même compté.
+  - **On ne corrige pas les concernés au cas par cas.** Ce sont les nuits déclarées dans [Présence](../gite/presence.md) et les repas déclarés dans [Mes repas](../repas/mes-repas.md) qui comptent : quelqu'un qui n'a pas décoché un repas est compté, même s'il a mangé ailleurs.
   - **Les concernés et les parts sont figés au moment de la validation.** On prend les présences et les coches de Ma fiche telles qu'elles sont à cet instant. Les changements faits ensuite ne valent que pour les dépenses validées après. Les comptes ne bougent donc jamais tout seuls après coup.
-- **Un seul mode par dépense.** Un ticket qui mélange des achats perso et des achats communs (des courses avec le sandwich de quelqu'un) se règle par un arrangement entre participants, en dehors de l'outil.
+- **Un seul mode par dépense.** Un ticket qui mélange des achats perso et des achats communs (des courses avec le sandwich de quelqu'un) se règle par un arrangement entre ploucs, en dehors de l'outil.
 - **Les revenus** (consignes, restes revendus…) ne sont pas gérés.
 - **La vie d'une dépense s'arrête à « Validée ».** Les remboursements se suivent dans Mes comptes, sous forme de soldes. Un état « remboursée » n'aurait pas de sens en mode minimum de virements.
   - En mode remboursement direct seulement, la dépense peut afficher « remboursée partiellement » ou « remboursée ».
@@ -136,7 +138,7 @@ Brouillon ──envoyer──> En attente ──staff valide──> Validée
 <!-- Ce qui doit être refusé, et les cas bizarres. -->
 L'envoi est refusé si :
 - le montant est nul ou négatif ;
-- aucune personne n'est concernée ;
+- aucune personne n'est concernée (en parts égales ou en montants exacts) ;
 - en montants exacts, la somme des lignes ne tombe pas sur le total ;
 - en mode communauté, la somme des catégories ne tombe pas sur le total ;
 - une personne concernée n'existe pas.

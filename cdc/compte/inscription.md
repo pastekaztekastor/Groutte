@@ -12,7 +12,7 @@
 - Créer son compte ou se connecter à un compte existant, à l'installation ou sur un nouvel appareil.
 
 ## Qui voit, qui agit
-<!-- Participant, staff, ou seulement la personne concernée. -->
+<!-- Plouc, staff, ou seulement la personne concernée. -->
 - Tout le monde, avant d'être connecté.
 
 ## Écran
@@ -55,9 +55,9 @@
 - **Se connecter** : je touche ma photo, puis je tape mon code. Le serveur vérifie le code et remet un jeton à l'appareil, que la page joint à chaque demande.
 - **Créer un compte** : je saisis mon nom, puis je choisis mon code et je le confirme. Je suis connecté directement, et j'arrive sur [Ma fiche](ma-fiche.md) pour la remplir.
 - **Code provisoire** : si un staff a remis mon code à zéro (voir [Staff > Comptes](../staff/comptes.md)), je tape le code provisoire qu'il m'a transmis, puis je choisis tout de suite un nouveau code.
-- **Après la date limite d'inscription** : créer un compte reste possible, mais le nouveau compte ne peut pas réserver ses nuits ([Ma réservation](../gite/ma-reservation.md)) tant que l'hébergeur n'a pas accepté. C'est le même principe que pour un paiement en retard dans [Créances](../budget/creances.md) :
-  - à la place de la réservation, un bouton **« Demander à l'hébergeur »** ouvre un message privé avec l'hébergeur du gîte ;
-  - l'hébergeur (ou un staff) touche **« Accepter l'inscription »** : le compte peut alors réserver normalement.
+- **Après la date limite d'inscription** : créer un compte reste possible, mais le nouveau compte ne peut pas réserver ses nuits ([Présence](../gite/presence.md)) tant que l'hébergeur n'a pas accepté. C'est le même principe que pour un paiement en retard dans [Créances](../budget/creances.md) :
+  - à la place de la réservation, un bouton **« Demander à l'hébergeur »** ouvre [Contacter le staff](../communaute/contact-staff.md), en attendant les messages privés (jalon 4) ;
+  - l'hébergeur (ou un staff) touche **« Accepter l'inscription »**, dans [Gîte et salle](../staff/gite-salle.md) : le compte peut alors réserver normalement.
 - **Se déconnecter** (dans Réglages) : le jeton de l'appareil est annulé, et l'on revient à « Qui es-tu ? ».
 
 ## Données
@@ -76,7 +76,7 @@
 <!-- Formules, répartitions, valeurs par défaut. -->
 - **Chaque compte a son code à 4 chiffres.** Après 5 erreurs, le compte est bloqué 5 minutes, comme dans NextSession.
 - **Sans jeton valable, rien ne se fait ni ne se lit au nom d'un compte.**
-- **Les inscriptions ne ferment jamais.** Après la date limite d'inscription, fixée par le staff, une inscription tardive doit être acceptée par l'hébergeur.
+- **Les inscriptions ne ferment jamais.** Après la date limite d'inscription, fixée par le staff dans [Gîte et salle](../staff/gite-salle.md), une inscription tardive doit être acceptée par l'hébergeur.
 - **Les staffs de départ** viennent de `config.json`, au premier démarrage seulement.
 - **Les comptes** sont dans un fichier JSON de `data/`, que le webmaster peut modifier à la main.
 

@@ -12,7 +12,7 @@
 - Si besoin : faire tourner l'outil sur un Raspberry Pi avec un hotspot wifi, et expliquer aux staffs comment faire.
 
 ## Qui voit, qui agit
-<!-- Participant, staff, ou seulement la personne concernée. -->
+<!-- Plouc, staff, ou seulement la personne concernée. -->
 - À décrire.
 
 ## Écran
@@ -44,5 +44,5 @@
 - À décrire.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Validation des dépenses](../staff/validation-depenses.md)
+[Menu](../../README.md#les-pages) · [Suivant : Flux](../budget/flux.md)
 <!-- /nav -->

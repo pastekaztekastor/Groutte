@@ -12,7 +12,7 @@
 - N'importe qui lance un événement repas, et chacun s'y inscrit.
 
 ## Qui voit, qui agit
-<!-- Participant, staff, ou seulement la personne concernée. -->
+<!-- Plouc, staff, ou seulement la personne concernée. -->
 - À décrire.
 
 ## Écran
@@ -42,8 +42,8 @@
 ## Questions ouvertes
 <!-- Ce qui n'est pas encore tranché. -->
 - Le réveillon du 31 : comment le financer et l'organiser ?
-- Les repas de tous les jours : les courses sont-elles payées par les présents aux repas, au prorata de leur nombre de repas ?
+- Le lien avec [Mes repas](mes-repas.md) : un événement (resto, réveillon) décoche-t-il automatiquement le repas de la réserve pour ses inscrits ?
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Flux](../budget/flux.md)
+[Menu](../../README.md#les-pages) · [Suivant : Prévisionnel](../staff/previsionnel.md)
 <!-- /nav -->

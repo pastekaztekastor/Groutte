@@ -12,7 +12,7 @@
 - Un tableau et un graphe des dépenses de tout le groupe. Budget > Dépenses, lui, montre celles de chacun.
 
 ## Qui voit, qui agit
-<!-- Participant, staff, ou seulement la personne concernée. -->
+<!-- Plouc, staff, ou seulement la personne concernée. -->
 - À décrire.
 
 ## Écran

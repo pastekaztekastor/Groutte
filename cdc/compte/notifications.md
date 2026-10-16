@@ -13,7 +13,7 @@
 - **On reprend la page Notifications de NextSession** (`#notifications`). Elle existe déjà dans le squelette (`static/js/notifs.js`, `notifications.py`). Il ne reste qu'à déclarer les catégories de la Groutte.
 
 ## Qui voit, qui agit
-<!-- Participant, staff, ou seulement la personne concernée. -->
+<!-- Plouc, staff, ou seulement la personne concernée. -->
 - Chacun, pour lui-même.
 - Le staff voit en plus, dans [Annonces](../staff/annonces.md), qui n'a pas activé les notifications.
 

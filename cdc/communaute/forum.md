@@ -21,8 +21,8 @@
   - la modération, faite par le staff au lieu du MJ.
 
 ## Qui voit, qui agit
-<!-- Participant, staff, ou seulement la personne concernée. -->
-- **Tous les participants** lisent, publient, commentent, votent et réagissent.
+<!-- Plouc, staff, ou seulement la personne concernée. -->
+- **Tous les ploucs** lisent, publient, commentent, votent et réagissent.
 - **Un membre muet** peut tout lire, mais ne peut ni publier, ni commenter, ni répondre, ni réagir (voir [Staff > Comptes](../staff/comptes.md)).
 - **Le staff** modère, comme le MJ de NextSession : il épingle, verrouille un fil, change un flair et supprime un post ou un commentaire. Il peut aussi masquer ses outils de modération avec le **mode modération**, sur l'appareil.
 - **Chacun** modifie et supprime ses propres posts et commentaires.
@@ -110,7 +110,7 @@ Toutes les actions de NextSession :
 
 ## Cas limites
 <!-- Ce qui doit être refusé, et les cas bizarres. -->
-- **Un participant qui publie avec un flair réservé au staff** : la publication est refusée. Ces flairs ne sont même pas proposés aux participants.
+- **Un plouc qui publie avec un flair réservé au staff** : la publication est refusée. Ces flairs ne sont même pas proposés aux ploucs.
 - **Un fil verrouillé** : plus de commentaires ni de réactions. On peut toujours le lire et voter.
 - **Un post supprimé** : ses images sont effacées du serveur, et ses commentaires disparaissent avec lui, comme dans NextSession.
 - **Un membre muet** voit le champ d'écriture remplacé par « Tu ne peux plus écrire pour le moment ».
@@ -121,5 +121,5 @@ Toutes les actions de NextSession :
 - Aucune.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Ma réservation](../gite/ma-reservation.md)
+[Menu](../../README.md#les-pages) · [Suivant : Présence](../gite/presence.md)
 <!-- /nav -->

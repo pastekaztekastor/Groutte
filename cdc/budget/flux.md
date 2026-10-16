@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Événements repas](../repas/repas.md) · [Menu](../../README.md#les-pages)
+[Précédent : Hors ligne](../staff/hors-ligne.md) · [Menu](../../README.md#les-pages)
 <!-- /nav -->
 
 # Budget > Flux
@@ -13,7 +13,7 @@
 - On peut l'afficher dans les deux modes de remboursement, pour comprendre la différence entre les deux.
 
 ## Qui voit, qui agit
-<!-- Participant, staff, ou seulement la personne concernée. -->
+<!-- Plouc, staff, ou seulement la personne concernée. -->
 - **Tout le monde** voit le graphe complet.
 - **Personne n'agit ici.** On consulte seulement : les remboursements se font dans [Mes comptes](mes-comptes.md).
 
@@ -110,5 +110,5 @@ De haut en bas :
 - Aucune.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Prévisionnel](../staff/previsionnel.md)
+[Menu](../../README.md#les-pages) · [Suivant : Validation des dépenses](../staff/validation-depenses.md)
 <!-- /nav -->

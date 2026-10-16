@@ -18,8 +18,8 @@
 - Garder une trace de chaque action du staff.
 
 ## Qui voit, qui agit
-<!-- Participant, staff, ou seulement la personne concernée. -->
-- **Le staff seul.** Les participants ne voient pas cette page.
+<!-- Plouc, staff, ou seulement la personne concernée. -->
+- **Le staff seul.** Les ploucs ne voient pas cette page.
 - **La personne concernée** est prévenue de chaque action qui la touche (voir Notifications).
 
 ## Écran
@@ -46,8 +46,8 @@ Comptes
 │                       David               │
 │                       Dana                │
 ├───────────────────────────────────────────┤
-│ (o) Bob     participant · Clés            │
-│ (o) Chloé   participant · muette          │
+│ (o) Bob     plouc · Clés            │
+│ (o) Chloé   plouc · muette          │
 ├─ Pour la sélection ───────────────────────┤
 │ [Ajouter un rôle] [Retirer un rôle]       │
 │ [Rendre muet]     [Rendre la parole]      │
@@ -140,7 +140,7 @@ La personne concernée est prévenue quand :
 <!-- Ce qui doit être refusé, et les cas bizarres. -->
 Sont refusés :
 - **retirer le droit staff au dernier staff** ;
-- **retirer le droit staff à un hébergeur** du gîte ou de la salle : il faut d'abord désigner un autre hébergeur ;
+- **retirer le droit staff à un hébergeur** du gîte ou de la salle : l'hébergeur reste staff pendant tout l'événement (voir [Gîte et salle](gite-salle.md)) ;
 - **rendre muet un staff** ;
 - **désactiver le dernier staff**, ou un hébergeur ;
 - **corriger un nom pour celui d'un autre compte** ;

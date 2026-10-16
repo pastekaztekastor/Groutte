@@ -15,8 +15,8 @@
   - la fiche d'un autre joueur, façon Contacts de l'iPhone, avec ses boutons Appeler et Message (`#joueur/<nom>`).
 
 ## Qui voit, qui agit
-<!-- Participant, staff, ou seulement la personne concernée. -->
-- **Tous les participants** voient le carnet en entier.
+<!-- Plouc, staff, ou seulement la personne concernée. -->
+- **Tous les ploucs** voient le carnet en entier.
 - **Personne ne modifie rien ici** : chacun remplit sa propre [Ma fiche](ma-fiche.md), et le staff attribue les rôles dans [Staff > Comptes](../staff/comptes.md).
 
 ## Écran
