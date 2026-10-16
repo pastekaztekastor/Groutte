@@ -66,6 +66,7 @@ Comptes de départ dans `config.json` (premier démarrage seulement) : Alice (st
 | `static/js/visionneuse.js` | Plein écran : zoom au pincement, glisser pour changer d'image, télécharger. |
 | `static/js/zone-message.js` | Zone d'envoi collée en bas (champ qui grandit, icône image, envoyer). |
 | `static/js/mentions.js` | `@Nom` : suggestions en tapant, mise en couleur dans les textes. |
+| `static/js/bandeau-test.js` | Bandeau en haut de tous les écrans hors production : rouge « Serveur de test » si l'adresse commence par `test.`, bleu « Local » sur localhost, 127.x, 192.168.x, 10.x ou .local. |
 | `static/js/icones-fa.js` | Icônes pleines Font Awesome Free (CC BY 4.0). |
 | `static/icones/` | Icônes de l'appli (192, 512, maskable, apple-touch, badge). `ui/<nom>.svg` remplace une icône par un dessin. |
 | `outils/captures.mjs` | Captures d'écran dans Chromium sans fenêtre, pour vérifier un rendu. |
