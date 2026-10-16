@@ -106,8 +106,7 @@ Chaque page a sa fiche dans `cdc/<groupe>/`, décrite avec précision : but, qui
 | Compte     | [Ma fiche](cdc/compte/ma-fiche.md)                    | 1        |
 | Compte     | [Me rembourser](cdc/compte/me-rembourser.md)          | 1        |
 | Compte     | [Notifications](cdc/compte/notifications.md)          | 1        |
-| Compte     | [Carnet d'adresses](cdc/compte/carnet.md)             | 1        |
-        
+| Compte     | [Carnet d'adresses](cdc/compte/carnet.md)             | 1        | 
 | Communauté | [Forum](cdc/communaute/forum.md)                      | 2        |
 | Gîte       | [Ma réservation](cdc/gite/ma-reservation.md)          | 2        |
 | Gîte       | [Présence](cdc/gite/presence.md)                      | 2        |
@@ -119,7 +118,6 @@ Chaque page a sa fiche dans `cdc/<groupe>/`, décrite avec précision : but, qui
 | Staff      | [Gîte et salle](cdc/staff/gite-salle.md)              | 2        |
 | Staff      | [Réglages compta](cdc/staff/reglages-compta.md)       | 2        |
 | Staff      | [Réglages gîte](cdc/staff/reglages-gite.md)           | 2        |
-
 | Gîte       | [Literie](cdc/gite/literie.md)                        | 3        |
 | Gîte       | [SAM](cdc/gite/sam.md)                                | 3        |
 | Repas      | [Événements repas](cdc/repas/repas.md)                | 3        |
@@ -127,7 +125,6 @@ Chaque page a sa fiche dans `cdc/<groupe>/`, décrite avec précision : but, qui
 | Staff      | [Prévisionnel](cdc/staff/previsionnel.md)             | 3        |
 | Staff      | [Suivi des dépenses](cdc/staff/suivi-depenses.md)     | 3        |
 | Staff      | [Annonces](cdc/staff/annonces.md)                     | 3        |
-
 | Communauté | [Messages](cdc/communaute/messages.md)                | 4        |
 | Tournois   | [Jeux](cdc/tournois/jeux.md)                          | 4        |
 | Tournois   | [Planning](cdc/tournois/planning.md)                  | 4        |
@@ -136,7 +133,6 @@ Chaque page a sa fiche dans `cdc/<groupe>/`, décrite avec précision : but, qui
 | Drop box   | [Photos et vidéos](cdc/dropbox/photos-videos.md)      | 4        |
 | Drop box   | [Musique](cdc/dropbox/musique.md)                     | 4        |
 | Drop box   | [POV du tournoi](cdc/dropbox/pov-tournoi.md)          | 4        |
-
 | Gîte       | [Clés](cdc/gite/cles.md)                              | 5        |
 | Staff      | [Checklist d'avancement](cdc/staff/checklist.md)      | 5        |
 | Staff      | [Hors ligne](cdc/staff/hors-ligne.md)                 | 5        |
