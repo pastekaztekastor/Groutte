@@ -1,6 +1,10 @@
 /* Service worker : rend l'appli installable et garde une copie de la page pour les coupures de réseau.
    Toujours le réseau d'abord : après une mise à jour du site, on n'utilise jamais une vieille copie. */
 const CACHE = "appli";   /* un nom par appli servie sur le même domaine */
+/* Hors production, le serveur remplace null par {id, nom} (environnement.py) : les notifications prennent
+   l'icône de cet environnement et son nom en tête du titre, pour ne pas les confondre avec la production. */
+const ENVIRONNEMENT = null;
+const ICONES = "static/icones/" + (ENVIRONNEMENT ? ENVIRONNEMENT.id + "/" : "");
 
 const HORS_LIGNE = `<!doctype html><html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>Hors ligne</title></head>
@@ -35,12 +39,12 @@ self.addEventListener("push", ev => {
   let donnees = {};
   try { donnees = ev.data ? ev.data.json() : {}; } catch (e) { /* message illisible : notification générique */ }
   ev.waitUntil(Promise.all([
-    self.registration.showNotification(donnees.titre || "Notification", {
+    self.registration.showNotification((ENVIRONNEMENT ? ENVIRONNEMENT.nom + " · " : "") + (donnees.titre || "Notification"), {
       body: donnees.texte || "",
       tag: donnees.tag || undefined,          // même page : la nouvelle remplace l'ancienne
       renotify: Boolean(donnees.tag),
-      icon: "static/icones/icone-192.png",
-      badge: "static/icones/badge-96.png",    // petite silhouette de la barre d'état Android
+      icon: ICONES + "icone-192.png",
+      badge: ICONES + "badge-96.png",          // petite silhouette de la barre d'état Android
       data: { lien: donnees.lien || "#" },
     }),
     augmenterPastille(),

@@ -1,4 +1,4 @@
-import { app, $, el, icone, compte, themeDe, appliquerMode, charger, fermerModale, afficherConnexion, marquerLu, definirRendu, afficher } from "./commun.js";
+import { app, $, el, icone, titreAppli, compte, themeDe, appliquerMode, charger, fermerModale, afficherConnexion, marquerLu, definirRendu, afficher } from "./commun.js";
 import { majEcrans } from "./installation.js";
 import { telephone, bulleCompte, dessinerPanneau } from "./panneau.js";
 import { ecran, A_RAFRAICHIR } from "./rubriques.js";
@@ -33,7 +33,7 @@ function dessiner() {
   if (!app.etat) return;
   majEcrans();
   if (!compte(app.moi)) { app.moi = null; afficherConnexion(); }
-  document.title = app.etat.titre;
+  document.title = titreAppli();
   const m = compte(app.moi);
   if (!m) { dessinerPanneau(); $("vue").replaceChildren(); $("barre-nav").hidden = true; return; }
   // Thème du compte : une couleur, tokens.css en tire toute l'échelle.

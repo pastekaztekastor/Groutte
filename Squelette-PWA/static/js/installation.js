@@ -1,4 +1,4 @@
-import { app, $, el, notifier, afficher, PREFIXE } from "./commun.js";
+import { app, $, el, notifier, afficher, PREFIXE, nomCourtAppli, ICONES_APPLI } from "./commun.js";
 import { pris_en_charge, etatAppareil, activer } from "./notifs.js";
 
 /* Écrans d'arrivée, par-dessus tout le reste :
@@ -9,7 +9,7 @@ import { pris_en_charge, etatAppareil, activer } from "./notifs.js";
 const GUIDE_VU = PREFIXE + "-guide-vu";          // sessionStorage : « continuer dans le navigateur »
 const NOTIFS_OK = PREFIXE + "-notifs-ok-";       // localStorage + nom : activées une fois sur cet appareil
 const NOTIFS_BLOQUEES = PREFIXE + "-notifs-bloquees-";
-const nomAppli = () => app.etat?.nom_court || "l'appli";   // le nom sous l'icône (config.json > nom_court)
+const nomAppli = () => nomCourtAppli() || "l'appli";   // le nom sous l'icône (config.json > nom_court, + l'environnement)
 
 const lire = (stockage, cle) => { try { return stockage.getItem(cle); } catch (e) { return null; } };
 const ecrire = (stockage, cle, valeur) => { try { stockage.setItem(cle, valeur); } catch (e) { /* navigation privée */ } };
@@ -53,7 +53,7 @@ function etapes(...lignes) {
 
 function entete(titre, texte) {
   return [
-    el("img", { class: "icone-appli", src: "static/icones/icone-192.png", alt: "" }),
+    el("img", { class: "icone-appli", src: ICONES_APPLI + "icone-192.png", alt: "" }),
     el("h1", {}, titre),
     texte && el("p", {}, texte),
   ];

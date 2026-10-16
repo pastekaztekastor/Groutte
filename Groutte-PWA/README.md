@@ -43,6 +43,7 @@ Comptes de départ dans `config.json` (premier démarrage seulement) : Alice (st
 | `lus.py` | Ce que chacun a vu, pour les pastilles « nouveau ». Chaque module déclare un `@compteur`. |
 | `medias.py` | Fichiers envoyés, rangés sous des noms aléatoires dans `data/medias/`, avec un aperçu léger. |
 | `etat.py` | **Ce que voit chaque compte.** Chaque module y ajoute sa partie. |
+| `environnement.py` | Production, test (`test.`) ou local (localhost, 127.x, 192.168.x, 10.x, .local), d'après l'adresse. Hors production, le nom et l'icône de l'appli, le titre, le bandeau et les notifications le disent. |
 | `config.json` | Titre, comptes de départ, régimes proposés, thèmes, catégories de notifications. |
 | `roles.json` | Les rôles du carnet et leur type (`libre`, `staff`, `automatique`). Modifié par le webmaster, versionné. |
 | `static/index.html` | La coquille : barre du haut, `<main id="vue">`, panneau, fenêtres, visionneuse. |
@@ -66,10 +67,11 @@ Comptes de départ dans `config.json` (premier démarrage seulement) : Alice (st
 | `static/js/visionneuse.js` | Plein écran : zoom au pincement, glisser pour changer d'image, télécharger. |
 | `static/js/zone-message.js` | Zone d'envoi collée en bas (champ qui grandit, icône image, envoyer). |
 | `static/js/mentions.js` | `@Nom` : suggestions en tapant, mise en couleur dans les textes. |
-| `static/js/bandeau-test.js` | Bandeau en haut de tous les écrans hors production : rouge « Serveur de test » si l'adresse commence par `test.`, bleu « Local » sur localhost, 127.x, 192.168.x, 10.x ou .local. |
+| `static/js/bandeau-test.js` | Bandeau en haut de tous les écrans hors production (`environnement.py`) : rouge « Serveur de test », bleu « Local ». |
 | `static/js/icones-fa.js` | Icônes pleines Font Awesome Free (CC BY 4.0). |
-| `static/icones/` | Icônes de l'appli (192, 512, maskable, apple-touch, badge). `ui/<nom>.svg` remplace une icône par un dessin. |
+| `static/icones/` | Icônes de l'appli (192, 512, maskable, apple-touch, badge). `test/` et `local/` : les mêmes, en rouge et en bleu, marquées « TEST » ou « LOCAL ». `ui/<nom>.svg` remplace une icône par un dessin. |
 | `outils/captures.mjs` | Captures d'écran dans Chromium sans fenêtre, pour vérifier un rendu. |
+| `outils/icones_environnements.py` | Refait `static/icones/test/` et `local/` depuis les icônes de production. |
 
 ---
 
@@ -186,7 +188,7 @@ Pour chaque nouvelle page du cahier des charges. Le modèle complet (Notes) est 
   - les couleurs des dégradés (`DEGRADES` dans `commun.js`) ;
   - les couleurs des groupes du panneau (`.groupe-1` à `.groupe-4` dans `style.css`) ;
   - les thèmes de `config.json` ;
-  - les icônes de `static/icones/` : le gîte et son feu d'artifice doré, sur le prune du thème. Les PNG se refont depuis les SVG : `rsvg-convert -w 512 -h 512 icone.svg -o icone-512.png` (192, 512, maskable 512, apple-touch 180 depuis le maskable, badge 96).
+  - les icônes de `static/icones/` : le gîte et son feu d'artifice doré, sur le prune du thème. Les PNG se refont depuis les SVG : `rsvg-convert -w 512 -h 512 icone.svg -o icone-512.png` (192, 512, maskable 512, apple-touch 180 depuis le maskable, badge 96). Ensuite, `python3 outils/icones_environnements.py` refait celles du test et du local.
 
 ---
 

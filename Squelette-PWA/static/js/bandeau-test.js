@@ -1,14 +1,16 @@
-/* Bandeau en haut de tous les écrans, hors production :
-   - « Serveur de test » si l'adresse commence par « test. » (ex. test.monappli.fr) ;
-   - « Local » sur la machine ou le réseau de la maison (localhost, 127.x, 192.168.x, 10.x, xxx.local).
-   Ailleurs, rien : le même fichier part en production sans rien y changer. */
+/* Bandeau en haut de tous les écrans, hors production. Le serveur dit où l'on est (environnement.py, posé
+   sur <html data-environnement>) :
+   - rouge « Serveur de test » si l'adresse commence par « test. » (ex. test.monappli.fr) ;
+   - bleu « Local » sur la machine ou le réseau de la maison (localhost, 127.x, 192.168.x, 10.x, xxx.local).
+   En production, rien : le même fichier part partout sans rien y changer.
+   Les couleurs sont celles des icônes de static/icones/test/ et local/ (outils/icones_environnements.py). */
 (function () {
-  var hote = location.hostname;
+  var env = document.documentElement.dataset.environnement;
   var texte, c1, c2;
-  if (hote.startsWith("test.")) {
+  if (env === "test") {
     texte = "Serveur de test"; c1 = "#d13415"; c2 = "#b02a10";
-  } else if (hote === "localhost" || /^(127|10)\./.test(hote) || hote.startsWith("192.168.") || hote.endsWith(".local") || hote.endsWith(".localhost")) {
-    texte = "Local · " + hote; c1 = "#2f6fb5"; c2 = "#255a94";
+  } else if (env === "local") {
+    texte = "Local · " + location.hostname; c1 = "#2f6fb5"; c2 = "#255a94";
   } else {
     return;
   }

@@ -1,4 +1,4 @@
-import { app, $, el, icone, compte, themeDe, appliquerMode, charger, fermerModale, afficherConnexion, nouveauCode, marquerLu, definirRendu, afficher } from "./commun.js";
+import { app, $, el, icone, titreAppli, compte, themeDe, appliquerMode, charger, fermerModale, afficherConnexion, nouveauCode, marquerLu, definirRendu, afficher } from "./commun.js";
 import { majEcrans } from "./installation.js";
 import { telephone, bulleCompte, dessinerPanneau } from "./panneau.js";
 import { ecran, A_RAFRAICHIR } from "./rubriques.js";
@@ -34,7 +34,7 @@ function dessiner() {
   majEcrans();
   const connecte = Boolean(app.etat.moi) && compte(app.moi);
   if (!connecte) afficherConnexion();
-  document.title = app.etat.titre;
+  document.title = titreAppli();
   const m = connecte ? compte(app.moi) : null;
   if (!m) { dessinerPanneau(); $("vue").replaceChildren(); $("barre-nav").hidden = true; return; }
   // Code provisoire (remis à zéro par le staff) : on choisit son code avant tout le reste.

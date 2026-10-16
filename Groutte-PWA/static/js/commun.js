@@ -19,6 +19,13 @@ export const app = {
   installation: null,   // invitation « Installer l'appli » d'Android, quand le navigateur la propose
 };
 export const brouillons = {};    // saisies en cours, gardées quand la page se redessine
+
+/* Hors production, le serveur pose l'environnement sur <html> (environnement.py) : « test », « local », ou rien.
+   Il s'ajoute au nom de l'appli, pour ne pas confondre deux applis installées côte à côte. */
+export const ENVIRONNEMENT = document.documentElement.dataset.environnement || "";
+export const ICONES_APPLI = "static/icones/" + (ENVIRONNEMENT ? ENVIRONNEMENT + "/" : "");   // les icônes de l'appli, celles de l'environnement
+export const titreAppli = () => app.etat.titre + (ENVIRONNEMENT ? ` (${ENVIRONNEMENT})` : "");
+export const nomCourtAppli = () => app.etat?.nom_court && app.etat.nom_court + (ENVIRONNEMENT ? " " + ENVIRONNEMENT : "");
 try { app.moi = localStorage.getItem(CLE); app.jeton = localStorage.getItem(CLE_JETON) || ""; } catch (e) { app.jeton = ""; }
 
 /* Lire et écrire dans le navigateur sans planter (navigation privée, stockage bloqué). */
@@ -533,7 +540,7 @@ export function afficherConnexion() {
       avatar(c.nom, 84), el("span", { class: "rangee" }, c.nom)));
   }
   if (!$("creer-compte")) boite.append(el("button", { type: "button", class: "btn large creer-compte", id: "creer-compte", onclick: creerCompte }, "Créer un compte"));
-  $("connexion-titre").textContent = app.etat.titre;
+  $("connexion-titre").textContent = titreAppli();
   $("connexion").hidden = false;
 }
 

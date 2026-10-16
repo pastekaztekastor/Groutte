@@ -16,11 +16,13 @@ Organisation :
 - lus.py           ce que chacun a vu : pastilles « nouveau »
 - medias.py        fichiers envoyés, rangés dans data/medias/
 - etat.py          ce que voit chaque compte
+- environnement.py production, test ou local : nom et icônes de l'appli hors production
 - notes.py         module d'exemple
 - static/          la page (index.html, tokens.css, style.css, js/)
 """
 import json
 import os
+import re
 from socketserver import ThreadingMixIn
 from urllib.parse import parse_qs, quote
 from wsgiref.simple_server import WSGIServer, make_server
@@ -30,6 +32,7 @@ import comptes  # noqa: F401  (routes /api/profil, /api/notifs/...)
 import lus  # noqa: F401  (route /api/lu)
 import medias
 import notes
+from environnement import environnement
 from etat import etat
 from requetes import Demande, Refus, lire_corps
 from routes import ROUTES
@@ -50,14 +53,20 @@ TYPES_STATIQUES = {
 }
 
 
-def manifeste():
-    """Manifeste de l'appli installable (PWA), construit d'après config.json."""
+def manifeste(env):
+    """Manifeste de l'appli installable (PWA), construit d'après config.json. Hors production, le nom et
+    l'icône disent où l'on est (environnement.py)."""
     config = lire_config()
     titre = config.get("titre", "Appli")
+    nom_court = config.get("nom_court", titre[:12])
     icones = "static/icones/"
+    if env:
+        titre = f"{titre} ({env['nom'].lower()})"
+        nom_court = f"{nom_court} {env['nom'].lower()}"
+        icones += env["id"] + "/"
     return {
         "name": titre,
-        "short_name": config.get("nom_court", titre[:12]),
+        "short_name": nom_court,
         "description": config.get("description", ""),
         "lang": "fr",
         "id": "./",
@@ -73,6 +82,26 @@ def manifeste():
             {"src": icones + "icone.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"},
         ],
     }
+
+
+def page(env):
+    """index.html. Hors production : l'environnement sur <html> (lu par bandeau-test.js et commun.js), les
+    icônes de static/icones/<id>/ et le nom sous l'icône sur iPhone."""
+    html = PAGE.read_text(encoding="utf-8")
+    if env:
+        html = (html
+                .replace('<html lang="fr">', f'<html lang="fr" data-environnement="{env["id"]}">', 1)
+                .replace('href="static/icones/', f'href="static/icones/{env["id"]}/'))
+        html = re.sub(r'(<meta name="apple-mobile-web-app-title" content="[^"]*)"', rf'\1 {env["nom"].lower()}"', html, count=1)
+    return html.encode("utf-8")
+
+
+def service_worker(env):
+    """sw.js, avec l'environnement (pour l'icône et le titre des notifications)."""
+    js = (STATIQUE / "sw.js").read_text(encoding="utf-8")
+    if env:
+        js = js.replace('const ENVIRONNEMENT = null;', f'const ENVIRONNEMENT = {json.dumps(env, ensure_ascii=False)};', 1)
+    return js.encode("utf-8")
 
 
 def repondre(start_response, statut, corps, type_contenu="application/json; charset=utf-8", entetes=(),
@@ -166,14 +195,15 @@ def application(environ, start_response):
     parametres = parse_qs(environ.get("QUERY_STRING", ""))
     parametre = lambda cle: parametres.get(cle, [""])[0]  # noqa: E731
     jeton = environ.get("HTTP_X_JETON", "")   # compte admin : jeton remis à la saisie de son code (acces.py)
+    env = environnement(environ)   # None en production
     try:
         if methode == "GET" and chemin in ("/", "/index.html"):
-            return repondre(start_response, "200 OK", PAGE.read_bytes(), "text/html; charset=utf-8")
+            return repondre(start_response, "200 OK", page(env), "text/html; charset=utf-8")
         if methode == "GET" and chemin == "/manifest.webmanifest":
-            return repondre(start_response, "200 OK", manifeste(), "application/manifest+json; charset=utf-8")
+            return repondre(start_response, "200 OK", manifeste(env), "application/manifest+json; charset=utf-8")
         if methode == "GET" and chemin == "/sw.js":
             # Servi à la racine pour que le service worker couvre tout le site, pas seulement static/.
-            return repondre(start_response, "200 OK", (STATIQUE / "sw.js").read_bytes(), TYPES_STATIQUES[".js"])
+            return repondre(start_response, "200 OK", service_worker(env), TYPES_STATIQUES[".js"])
         if methode == "GET" and chemin.startswith("/static/"):
             fichier = fichier_statique(chemin)
             if fichier:
