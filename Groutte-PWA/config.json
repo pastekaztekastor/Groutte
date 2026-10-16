@@ -1,26 +1,77 @@
 {
- "titre": "Nouvel An à la Groutte",
- "nom_court": "Groutte",
- "description": "Le séjour du Nouvel An à la Groutte : inscription, gîte, budget, tournois et souvenirs.",
- "notifications": true,
- "prefixe_notifications": "Groutte",
- "contact_notifications": "mailto:admin@example.org",
- "categories_notifications": {"gite": "Gîte"},
- "taille_max_fichier_mo": 20,
- "_aide_comptes": "Comptes de départ, lus au premier démarrage seulement (quand data/comptes.json n'existe pas encore). staff : true pour les staffs de départ. code : un code provisoire à 4 chiffres, à changer à la première connexion (sans code, la personne choisit le sien à sa première connexion). Ensuite, c'est l'appli qui décide (Staff > Comptes). À remplacer par les vrais staffs avant le premier déploiement.",
- "comptes": [
-  {"nom": "Alice", "couleur": "#5c1f2e", "staff": true, "code": "1111"},
-  {"nom": "Bob", "couleur": "#33493a", "code": "2222"},
-  {"nom": "Chloé", "couleur": "#3e3160", "code": "3333"}
- ],
- "_aide_regimes": "Régimes proposés dans Ma fiche (une case par régime).",
- "regimes": ["Végétarien", "Végan", "Sans gluten", "Sans lactose", "Sans porc", "Halal", "Casher"],
- "_aide_themes": "Couleurs proposées dans Réglages > Thème : la couleur des boutons et liens, et celle du texte posé dessus.",
- "themes": [
-  {"nom": "Persian plum", "couleur": "#5c1f2e", "texte": "#fdfdfc"},
-  {"nom": "Prairie sand", "couleur": "#8c4a28", "texte": "#fdfdfc"},
-  {"nom": "Anzac", "couleur": "#d2a45c", "texte": "#21201c"},
-  {"nom": "Tom thumb", "couleur": "#33493a", "texte": "#fdfdfc"},
-  {"nom": "Blackcurrant", "couleur": "#3e3160", "texte": "#fdfdfc"}
- ]
+    "titre": "La Groutte",
+    "nom_court": "Groutte",
+    "description": "Le séjour du Nouvel An à la Groutte : inscription, gîte, budget, tournois et souvenirs.",
+    "notifications": true,
+    "prefixe_notifications": "La Groutte",
+    "contact_notifications": "mailto:staff@la-groutte.champemont.fr",
+    "categories_notifications": {
+        "gite": "Gîte"
+    },
+    "taille_max_fichier_mo": 20,
+    "_aide_comptes": "Comptes de départ, lus au premier démarrage seulement (quand data/comptes.json n'existe pas encore). staff : true pour les staffs de départ. code : un code provisoire à 4 chiffres, à changer à la première connexion (sans code, la personne choisit le sien à sa première connexion). Ensuite, c'est l'appli qui décide (Staff > Comptes). À remplacer par les vrais staffs avant le premier déploiement.",
+    "comptes": [
+        {
+            "nom": "Mathurin",
+            "couleur": "#5c1f2e",
+            "staff": true,
+            "code": "0000"
+        },
+        {
+            "nom": "Paul",
+            "couleur": "#5c1f2e",
+            "staff": false,
+            "code": "0000"
+        },
+        {
+            "nom": "Joshua",
+            "couleur": "#33493a",
+            "staff": false,
+            "code": "0000"
+        },
+        {
+            "nom": "Jickael",
+            "couleur": "#3e3160",
+            "staff": false,
+            "code": "0000"
+        }
+    ],
+    "_aide_regimes": "Régimes proposés dans Ma fiche (une case par régime).",
+    "regimes": [
+        "Végétarien",
+        "Végan",
+        "Sans gluten",
+        "Sans lactose",
+        "Sans porc",
+        "Halal",
+        "Casher"
+    ],
+    "_aide_themes": "Couleurs proposées dans Réglages > Thème : la couleur des boutons et liens, et celle du texte posé dessus.",
+    "themes": [
+        {
+            "nom": "Persian plum",
+            "couleur": "#5c1f2e",
+            "texte": "#fdfdfc"
+        },
+        {
+            "nom": "Prairie sand",
+            "couleur": "#8c4a28",
+            "texte": "#fdfdfc"
+        },
+        {
+            "nom": "Anzac",
+            "couleur": "#d2a45c",
+            "texte": "#21201c"
+        },
+        {
+            "nom": "Tom thumb",
+            "couleur": "#33493a",
+            "texte": "#fdfdfc"
+        },
+        {
+            "nom": "Blackcurrant",
+            "couleur": "#3e3160",
+            "texte": "#fdfdfc"
+        }
+    ]
 }
