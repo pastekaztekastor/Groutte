@@ -738,6 +738,8 @@ input[type=checkbox].case-cocher:disabled { cursor: default; }
 .encart-sam { background: var(--c3); }
 .coche-courte { display: inline-flex; align-items: center; gap: var(--e1); font-size: var(--t-petit); color: var(--texte-doux); }
 .coche-courte input[type=checkbox] { margin: 0; }
+.ligne-exemption { flex-wrap: wrap; }
+.ligne-exemption .coches { display: flex; flex-wrap: wrap; gap: var(--e2) var(--e3); }
 .replie-supprimees { margin-top: var(--e6); }
 .replie-supprimees summary { cursor: pointer; padding: var(--e2) var(--e4); color: var(--texte-doux); font-size: var(--t-second); }
 

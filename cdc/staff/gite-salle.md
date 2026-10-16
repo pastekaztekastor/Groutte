@@ -29,11 +29,12 @@
    - la date limite de paiement, commune au gîte et à la salle.
 2. **Le bloc Gîte** :
    - le montant total ;
+   - **la répartition** : au prorata des nuits (par défaut), ou à parts égales ;
    - l'hébergeur, choisi parmi les staffs, avec un rappel s'il n'a aucun moyen de paiement dans [Me rembourser](../compte/me-rembourser.md) ;
    - le bouton **Ouvrir les paiements**, ou la date d'ouverture s'ils sont ouverts ;
    - le suivi : « X € avancés, Y € reçus, Z € manquants », avec une barre de progression.
-3. **Le bloc Salle** : les mêmes éléments, plus **la répartition** (à parts égales, ou comme le gîte).
-4. **Les exemptions** : la liste des personnes exemptées, avec pour chacune deux cases, Gîte et Salle. Un bouton pour en ajouter une.
+3. **Le bloc Salle** : les mêmes éléments ; sa répartition est à parts égales par défaut.
+4. **Les exemptions** : la liste des personnes exemptées, avec pour chacune trois cases, Gîte, Salle et Communauté. Un bouton pour en ajouter une.
 5. **Les couchages** :
    - les lits : une ligne par lit, avec sa lettre, sa description et son nombre de places, et un bouton **Ajouter un lit** ;
    - la capacité du gîte, calculée : la somme des places ;
@@ -85,9 +86,9 @@
 <!-- Chaque bouton ou saisie, et ce qui se passe ensuite. -->
 - **Saisir ou modifier un montant** (en euros, enregistré en centimes) : les parts de chacun sont recalculées en direct dans [Créances](../budget/creances.md) et [Présence](../gite/presence.md).
 - **Choisir l'hébergeur** du gîte ou de la salle, parmi les staffs : c'est celui qui a payé la location. L'étiquette « Hébergeur » du [Carnet d'adresses](../compte/carnet.md) suit automatiquement. Le choix se corrige tant que les paiements ne sont pas ouverts, puis il est figé.
-- **Choisir la répartition de la salle** : à parts égales, ou comme le gîte (au prorata des nuits).
+- **Choisir la répartition du gîte ou de la salle** : au prorata des nuits, ou à parts égales.
 - **Fixer les dates limites** d'inscription et de paiement.
-- **Ajouter, modifier ou retirer une exemption** : une personne, et ce dont elle est exemptée (gîte, salle, ou les deux). Les parts des autres sont recalculées.
+- **Ajouter, modifier ou retirer une exemption** : une personne, et ce dont elle est exemptée (gîte, salle, dépenses de la communauté). Les parts des autres sont recalculées. L'exemption de la communauté ne vaut que pour les dépenses validées ensuite (voir [Dépenses](../budget/depenses.md)).
 - **Ouvrir les paiements** du gîte ou de la salle, avec une confirmation qui rappelle que l'hébergeur ne pourra plus changer : le bouton Payer apparaît dans Créances, et tous les ploucs non exemptés sont prévenus. L'ouverture est définitive.
 - **Ajouter, modifier ou supprimer un lit** : une lettre, une description et un nombre de places.
 - **Envoyer ou remplacer le plan du gîte** : une image où les lettres des lits sont déjà dessinées.
@@ -101,8 +102,8 @@
 **Dans `data/gite-salle.json`** :
 - la date limite d'inscription, et la date limite de paiement ;
 - pour le gîte et pour la salle : le montant en centimes, l'hébergeur, et la date d'ouverture des paiements (vide tant qu'ils sont fermés) ;
-- la répartition de la salle : `egale` ou `nuits` ;
-- les exemptions : pour chaque personne, gîte oui ou non, salle oui ou non ;
+- la répartition du gîte et celle de la salle : `nuits` ou `egale` (par défaut, `nuits` pour le gîte, `egale` pour la salle) ;
+- les exemptions : pour chaque personne, gîte oui ou non, salle oui ou non, communauté oui ou non ;
 - les lits : pour chacun, une lettre (A, B, C…), une description (« grande chambre du RdC ») et un nombre de places (1 pour un simple, 2 pour un double) ;
 - la salle comme couchage : oui ou non ;
 - la literie fournie par le gîte (jalon 3, voir [Literie](../gite/literie.md)) ;
@@ -127,7 +128,7 @@
 - **L'hébergeur est forcément un staff.** Le gîte et la salle peuvent avoir le même hébergeur.
 - **L'hébergeur ne change pas pendant tout l'événement** : c'est le compte d'où est sorti l'argent de la location. Une fois les paiements ouverts, le choix est figé, et l'hébergeur reste staff jusqu'à la fin.
 - **Ouvrir les paiements demande** un montant, un hébergeur qui a au moins un moyen de paiement, et une date limite de paiement.
-- **La répartition de la salle par défaut** : à parts égales.
+- **La répartition par défaut** : le gîte au prorata des nuits, la salle à parts égales.
 - **Les exemptions restent anonymes partout ailleurs** : Créances affiche seulement leur nombre. Seule cette page donne les noms.
 - **Tout changement après l'ouverture des paiements** (montant, exemption, répartition) recalcule les parts en direct. Les écarts avec ce qui a déjà été payé se régularisent dans [Mes comptes](../budget/mes-comptes.md) (voir [Créances](../budget/creances.md)). Les changements de dates des ploucs, eux, suivent la règle des retardataires.
 - **La capacité du gîte** = la somme des places de tous les lits, sans la salle. [Présence](../gite/presence.md) s'en sert pour son alerte.

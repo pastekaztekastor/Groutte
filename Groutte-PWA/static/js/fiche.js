@@ -55,6 +55,10 @@ function partage(m) {
   const changer = (id, actif) => envoyer("profil", {
     categories: actif ? [...cochees, id] : cochees.filter(x => x !== id),
   });
+  if (app.etat.gite.exempte_communaute) {
+    return el("div", { class: "liste-groupee" }, el("div", { class: "ligne" },
+      el("span", { class: "ligne-texte" }, "Tu es exempté des dépenses de la communauté", el("span", { class: "doux petit" }, "Une décision du staff : tu ne participes à aucune catégorie."))));
+  }
   return el("div", { class: "liste-groupee" },
     categories.filter(c => c.type !== "speciale").map(c => c.type === "obligatoire"
       ? el("div", { class: "ligne" }, el("span", { class: "ligne-texte" }, c.nom), el("span", { class: "ligne-valeur" }, "Tu participes d'office"))

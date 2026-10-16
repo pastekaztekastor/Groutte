@@ -28,7 +28,9 @@ function visible(q) {
 }
 
 function reperes(q) {
-  if (q.actif === "salle") return el("span", { class: "badge actif" }, `Actif : ${app.etat.gite.salle.repartition === "egale" ? "parts égales" : "comme le gîte"}`);
+  if (q.actif === "gite" || q.actif === "salle") {
+    return el("span", { class: "badge actif" }, `Actif : ${app.etat.gite[q.actif].repartition === "egale" ? "parts égales" : "au prorata des nuits"}`);
+  }
   if (q.actif === "mode") return el("span", { class: "badge actif" }, `Actif : ${app.etat.compta.mode === "direct" ? "direct" : "minimum de virements"}`);
   return null;
 }

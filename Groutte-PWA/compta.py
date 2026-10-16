@@ -4,8 +4,9 @@ Rien n'est enregistré ici : tout est recalculé à chaque affichage à partir d
 par `Compta(config)`. Tout se compte en centimes (des entiers).
 
 Les règles viennent des fiches Créances, Dépenses et Mes comptes :
-- Gîte : prix d'une nuitée = montant / total des nuitées des non-exemptés ; ma part = prix × mes nuits.
-  Salle : à parts égales entre les ploucs non exemptés qui viennent, ou comme le gîte.
+- Gîte et salle, chacun selon son réglage : au prorata des nuits (prix d'une nuitée = montant / total des nuitées des
+  non-exemptés ; ma part = prix × mes nuits), ou à parts égales entre les ploucs non exemptés qui viennent.
+  Par défaut, le gîte au prorata des nuits, la salle à parts égales.
   Les centimes en trop vont à l'hébergeur (comme le reste au payeur d'une dépense).
 - Avant l'ouverture des paiements, les parts suivent les présences en direct. À l'ouverture, les nuits de chacun sont
   figées (« instantane », gite_salle.py) : un changement de montant, d'exemption ou de répartition recalcule les parts,
@@ -134,7 +135,7 @@ class Compta:
         return bool(limite) and aujourdhui() >= limite
 
     def par_nuits(self, quoi):
-        return quoi == "gite" or self.gs["salle"]["repartition"] == "nuits"
+        return self.gs[quoi]["repartition"] == "nuits"
 
     @memo
     def base(self, quoi):
@@ -165,9 +166,9 @@ class Compta:
     @memo
     def retards(self, quoi):
         """Les dettes des retardataires, après l'ouverture des paiements : [{"de", "a", "montant", "plus"}].
-        Gîte (et salle comme le gîte) : montant / (nuitées figées + ses nuits en plus) × ses nuits en plus, réparti
-        entre ceux qui ont une part au prorata de leurs nuits. Salle à parts égales : une part de plus, si l'on n'en
-        avait pas, répartie à parts égales entre ceux qui l'ont payée."""
+        Au prorata des nuits : montant / (nuitées figées + ses nuits en plus) × ses nuits en plus, réparti entre ceux
+        qui ont une part au prorata de leurs nuits. À parts égales : une part de plus, si l'on n'en avait pas,
+        répartie à parts égales entre ceux qui l'ont payée."""
         if not self.ouvert(quoi):
             return []
         montant = self.gs[quoi]["montant"]
@@ -206,9 +207,9 @@ class Compta:
 
     def participants(self, cat):
         """{nom: poids} d'une catégorie : les ploucs qui viennent (et qui l'ont cochée, si elle est facultative),
-        pondérés selon sa règle."""
-        noms = [n for n in self.venants()
-                if cat["type"] != "facultative" or cat["id"] in self.profils.get(n, {}).get("categories", [])]
+        pondérés selon sa règle. Ceux qui sont exemptés des dépenses de la communauté n'y sont jamais."""
+        noms = [n for n in self.venants() if not self.exempte(n, "communaute")
+                and (cat["type"] != "facultative" or cat["id"] in self.profils.get(n, {}).get("categories", []))]
         if cat["regle"] == "repas":
             return {n: len(self.repas_pris(n)) for n in noms}
         if cat["regle"] == "nuits":
@@ -275,7 +276,7 @@ class Compta:
                     ajouter(nom, heb, reste, "manque", self.cloture(), f"Reste {LIEU[quoi]} à la clôture")
             for r in self.retards(quoi):
                 ajouter(r["de"], r["a"], r["montant"], "retard", ouverture,
-                        f"Nuits en plus {LIEU[quoi]}" if quoi == "gite" or self.par_nuits(quoi) else "Part de la salle en retard",
+                        f"Nuits en plus {LIEU[quoi]}" if self.par_nuits(quoi) else f"Part {LIEU[quoi]} en retard",
                         compensable=True)
         return sorted(lignes, key=lambda l: l["date"])
 

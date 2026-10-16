@@ -48,10 +48,10 @@ function blocLieu(quoi) {
   const sansMoyen = r.hebergeur && app.etat.gite.sans_moyen?.includes(r.hebergeur);
   const recu = (b.suivi || []).reduce((t, s) => t + s.confirme, 0);
   const manque = (b.suivi || []).filter(s => !s.hebergeur).reduce((t, s) => t + Math.max(0, s.reste), 0);
-  const repartition = quoi === "salle" && el("div", { class: "segments large", role: "radiogroup", "aria-label": "Répartition de la salle" },
-    [["egale", "Parts égales"], ["nuits", "Comme le gîte"]].map(([v, libelle]) => el("button", {
-      type: "button", class: app.etat.gite.salle.repartition === v ? "choisi" : "", role: "radio",
-      onclick: () => { if (v !== app.etat.gite.salle.repartition && (!ouvert || confirm("Les paiements sont ouverts : les parts vont changer, et les écarts se régleront dans Mes comptes. Continuer ?"))) envoyer("gite/repartition", { repartition: v }); },
+  const repartition = el("div", { class: "segments large", role: "radiogroup", "aria-label": `Répartition ${quoi === "gite" ? "du gîte" : "de la salle"}` },
+    [["nuits", "Au prorata des nuits"], ["egale", "Parts égales"]].map(([v, libelle]) => el("button", {
+      type: "button", class: r.repartition === v ? "choisi" : "", role: "radio", "aria-checked": String(r.repartition === v),
+      onclick: () => { if (v !== r.repartition && (!ouvert || confirm("Les paiements sont ouverts : les parts vont changer, et les écarts se régleront dans Mes comptes. Continuer ?"))) envoyer("gite/repartition", { quoi, repartition: v }); },
     }, libelle)));
   return [
     el("h2", {}, LIEU[quoi]),
@@ -59,7 +59,7 @@ function blocLieu(quoi) {
       ligne("Montant", montant, el("span", { class: "doux" }, "€")),
       ligne("Hébergeur", hebergeur),
       sansMoyen && el("p", { class: "alerte-ligne dans-liste" }, icone("info"), `${r.hebergeur} n'a aucun moyen de paiement dans Me rembourser.`),
-      repartition && el("div", { class: "ligne" }, el("span", { class: "ligne-texte" }, "Répartition"), repartition),
+      el("div", { class: "ligne" }, el("span", { class: "ligne-texte" }, "Répartition"), repartition),
       el("div", { class: "ligne" }, ouvert
         ? el("span", { class: "ligne-texte" }, `Paiements ouverts ${ilYa(r.ouverture)}`)
         : el("button", { class: "btn principal large", type: "button", onclick: () => {
@@ -71,26 +71,31 @@ function blocLieu(quoi) {
   ];
 }
 
+/* Ce dont on peut être exempté : le gîte, la salle, et les dépenses pour la communauté (les courses de la réserve). */
+const EXEMPTIONS = { gite: "Gîte", salle: "Salle", communaute: "Communauté" };
+const DE = { gite: "du gîte", salle: "de la salle", communaute: "des dépenses de la communauté" };
+
 function exemptions() {
   const ex = app.etat.gite.exemptions || {};
   const noms = Object.keys(ex).sort((a, b) => a.localeCompare(b, "fr"));
-  const regler = (nom, gite, salle) => envoyer("gite/exemption", { qui: nom, gite, salle });
+  const regler = (nom, choix) => envoyer("gite/exemption", { qui: nom, ...choix });
   const ajout = el("select", { "aria-label": "Exempter quelqu'un" }, el("option", { value: "" }, "Ajouter une personne..."),
     actifs().filter(c => !ex[c.nom]).map(c => el("option", { value: c.nom }, c.nom)));
-  ajout.onchange = () => ajout.value && regler(ajout.value, true, true);
+  ajout.onchange = () => ajout.value && regler(ajout.value, { gite: true, salle: true, communaute: false });
   return [
     el("h2", {}, "Exemptions"),
     el("div", { class: "liste-groupee" },
       noms.map(nom => {
         const coche = quoi => {
-          const e = el("input", { type: "checkbox", checked: Boolean(ex[nom][quoi]), "aria-label": `${nom} : exempté ${quoi === "gite" ? "du gîte" : "de la salle"}` });
-          e.onchange = () => regler(nom, quoi === "gite" ? e.checked : ex[nom].gite, quoi === "salle" ? e.checked : ex[nom].salle);
-          return el("label", { class: "coche-courte" }, LIEU[quoi], e);
+          const e = el("input", { type: "checkbox", checked: Boolean(ex[nom][quoi]), "aria-label": `${nom} : exempté ${DE[quoi]}` });
+          e.onchange = () => regler(nom, { ...ex[nom], [quoi]: e.checked });
+          return el("label", { class: "coche-courte" }, EXEMPTIONS[quoi], e);
         };
-        return el("div", { class: "ligne" }, avatar(nom, 28), el("span", { class: "ligne-texte" }, nom), coche("gite"), coche("salle"));
+        return el("div", { class: "ligne ligne-exemption" }, avatar(nom, 28), el("span", { class: "ligne-texte" }, nom),
+          el("span", { class: "coches" }, Object.keys(EXEMPTIONS).map(coche)));
       }),
       el("div", { class: "ligne" }, ajout)),
-    el("p", { class: "doux petit note" }, "Les exemptions restent anonymes ailleurs : Créances n'en affiche que le nombre."),
+    el("p", { class: "doux petit note" }, "Les exemptions restent anonymes ailleurs : Créances n'en affiche que le nombre. Communauté : la personne ne participe à aucune catégorie des dépenses pour la communauté, à partir des dépenses validées ensuite."),
   ];
 }
 

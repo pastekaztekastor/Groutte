@@ -114,6 +114,7 @@ Ce que la dépense lit ailleurs :
 
   - Exemple : A achète des Monster sans en boire, les buveurs le remboursent en totalité.
   - Le staff gère les autres catégories et leur règle dans Réglages compta.
+  - **Une personne exemptée des dépenses de la communauté** (dans [Gîte et salle](../staff/gite-salle.md)) ne participe à aucune catégorie.
   - **On ne corrige pas les concernés au cas par cas.** Ce sont les nuits déclarées dans [Présence](../gite/presence.md) et les repas déclarés dans [Mes repas](../repas/mes-repas.md) qui comptent : quelqu'un qui n'a pas décoché un repas est compté, même s'il a mangé ailleurs.
   - **Les concernés et les parts sont figés au moment de la validation.** On prend les présences et les coches de Ma fiche telles qu'elles sont à cet instant. Les changements faits ensuite ne valent que pour les dépenses validées après. Les comptes ne bougent donc jamais tout seuls après coup.
 - **Un seul mode par dépense.** Un ticket qui mélange des achats perso et des achats communs (des courses avec le sandwich de quelqu'un) se règle par un arrangement entre ploucs, en dehors de l'outil.

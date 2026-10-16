@@ -25,8 +25,10 @@
         {
           "id": "part-gite",
           "question": "Comment est calculée ma part du gîte ?",
-          "court": "Au prorata des nuits : on divise le prix du gîte par le total des nuitées, puis on multiplie par mes nuits.",
+          "court": "Selon le mode choisi par le staff : au prorata des nuits (le prix du gîte divisé par le total des nuitées, multiplié par mes nuits), ou à parts égales entre ceux qui viennent.",
+          "actif": "gite",
           "detail": [
+            "Par défaut, le gîte se paie au prorata des nuits : c'est là où l'on dort, chacun paie ses nuits. Le staff peut aussi choisir les parts égales, comme pour la salle.",
             "Une nuitée, c'est une personne qui dort une nuit au gîte. On additionne les nuits de tous ceux qui viennent (sauf les exemptés) : c'est le total des nuitées.",
             "Le prix d'une nuitée est le prix du gîte divisé par ce total. Ta part est ce prix multiplié par tes nuits.",
             "Tout se compte au centime : les centimes en trop vont à l'hébergeur."
@@ -37,11 +39,11 @@
         {
           "id": "salle",
           "question": "Et la salle ?",
-          "court": "Selon le mode choisi par le staff : à parts égales (le montant divisé par le nombre de ploucs qui viennent), ou comme le gîte (au prorata des nuits).",
+          "court": "Selon le mode choisi par le staff : à parts égales (le montant divisé par le nombre de ploucs qui viennent), ou au prorata des nuits.",
           "actif": "salle",
           "detail": [
             "À parts égales : que tu viennes une journée ou toute la semaine, ta part de la salle est la même. C'est le mode par défaut, parce que la salle sert à tout le monde.",
-            "Comme le gîte : la salle se répartit au prorata des nuits, avec le même calcul que le gîte.",
+            "Au prorata des nuits : la salle se répartit avec le même calcul que le gîte au prorata des nuits.",
             "Une venue d'une journée sans nuit ne paie pas le gîte, mais paie la salle si elle est à parts égales."
           ],
           "exemple": "La salle coûte 300 € et 10 ploucs viennent. À parts égales : 300 € / 10 = 30 € chacun, Bill comme Bob."
@@ -65,6 +67,7 @@
           "detail": [
             "Par exemple : quelqu'un qu'on ne fait pas dormir par terre, ou qui paie déjà très cher pour venir.",
             "Une personne peut être exemptée du gîte, de la salle, ou des deux. Elle est retirée du calcul, et le prix de la nuitée se calcule sans elle.",
+            "Elle peut aussi être exemptée des dépenses de la communauté : elle ne participe alors à aucune catégorie des courses de la réserve, à partir des dépenses validées ensuite.",
             "Seul le staff connaît les noms. Créances affiche seulement « 2 personnes exemptées »."
           ]
         },

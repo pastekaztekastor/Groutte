@@ -4,9 +4,10 @@ tardives. Les calculs des parts sont dans compta.py ; cette page ne fait que fou
 
 data/gite-salle.json : {
     "limite_inscription": "AAAA-MM-JJ" ou "", "limite_paiement": "AAAA-MM-JJ" ou "",
-    "gite":  {"montant": centimes, "hebergeur": nom, "ouverture": horodatage ou "", "instantane": {nom: nuits}},
-    "salle": {... la même chose, "repartition": "egale" | "nuits"},
-    "exemptions": {nom: {"gite": bool, "salle": bool}},
+    "gite":  {"montant": centimes, "hebergeur": nom, "ouverture": horodatage ou "", "instantane": {nom: nuits},
+              "repartition": "nuits" | "egale"},
+    "salle": {... la même chose},
+    "exemptions": {nom: {"gite": bool, "salle": bool, "communaute": bool}},
     "lits": [{"lettre", "description", "places"}], "salle_couchage": bool, "plan": média ou ""}
 
 « instantane » : les nuits de chacun au moment de l'ouverture des paiements. Les parts sont figées sur ces nuits :
@@ -25,6 +26,11 @@ from stockage import GITE_SALLE, PROFILS, ecrire_json, lire_json, maintenant
 
 QUOI = ("gite", "salle")
 NOMS = {"gite": "gîte", "salle": "salle"}
+# Ce dont on peut être exempté : le gîte, la salle, et les dépenses pour la communauté (les courses de la réserve).
+EXEMPTIONS = QUOI + ("communaute",)
+NOMS_EXEMPTIONS = dict(NOMS, communaute="dépenses de la communauté")
+# Répartition par défaut : le gîte au prorata des nuits, la salle à parts égales.
+REPARTITION_DEFAUT = {"gite": "nuits", "salle": "egale"}
 MONTANT_MAX = 10_000_000   # 100 000 € : une faute de frappe, sinon
 LITS_MAX = 40
 
@@ -37,7 +43,7 @@ def lire():
         x = donnees.setdefault(quoi, {})
         for cle, valeur in (("montant", 0), ("hebergeur", ""), ("ouverture", ""), ("instantane", {})):
             x.setdefault(cle, valeur)
-    donnees["salle"].setdefault("repartition", "egale")
+        x.setdefault("repartition", REPARTITION_DEFAUT[quoi])
     donnees.setdefault("exemptions", {})
     donnees.setdefault("lits", [])
     donnees.setdefault("salle_couchage", False)
@@ -179,28 +185,33 @@ def choisir_hebergeur(d):
 
 @route("/api/gite/repartition")
 def choisir_repartition(d):
+    """Le gîte ou la salle : au prorata des nuits, ou à parts égales entre ceux qui viennent."""
     d.exiger_staff()
+    quoi = d.corps.get("quoi", "salle")
+    if quoi not in QUOI:
+        raise Refus("gîte ou salle ?")
     repartition = d.corps.get("repartition")
     if repartition not in ("egale", "nuits"):
         raise Refus("répartition inconnue")
 
     def changer(donnees):
-        donnees["salle"]["repartition"] = repartition
+        donnees[quoi]["repartition"] = repartition
     parts_avant_apres(d, changer)
-    noter(d, "gite-repartition", detail="parts égales" if repartition == "egale" else "comme le gîte")
+    noter(d, "gite-repartition", detail=f"{NOMS[quoi]} : {'parts égales' if repartition == 'egale' else 'au prorata des nuits'}")
 
 
 @route("/api/gite/exemption")
 def regler_exemption(d):
-    """Exempter quelqu'un du gîte, de la salle, ou des deux. Les deux à non : l'exemption est retirée."""
+    """Exempter quelqu'un du gîte, de la salle, des dépenses de la communauté, ou de plusieurs. Tout à non :
+    l'exemption est retirée. L'exemption de la communauté ne vaut que pour les dépenses validées ensuite."""
     d.exiger_staff()
     comptes = cd.lire_comptes(d.config)
     qui = d.corps.get("qui")
     if not isinstance(qui, str) or qui not in comptes:
         raise Refus("compte inconnu")
-    choix = {quoi: bool(d.corps.get(quoi)) for quoi in QUOI}
-    avant = lire()["exemptions"].get(qui, {"gite": False, "salle": False})
-    if all(avant.get(q, False) == choix[q] for q in QUOI):
+    choix = {quoi: bool(d.corps.get(quoi)) for quoi in EXEMPTIONS}
+    avant = lire()["exemptions"].get(qui, {})
+    if all(avant.get(q, False) == choix[q] for q in EXEMPTIONS):
         return
 
     def changer(donnees):
@@ -209,7 +220,7 @@ def regler_exemption(d):
         else:
             donnees["exemptions"].pop(qui, None)
     parts_avant_apres(d, changer)
-    detail = " et ".join(NOMS[q] for q in QUOI if choix[q]) or "aucune"
+    detail = ", ".join(NOMS_EXEMPTIONS[q] for q in EXEMPTIONS if choix[q]) or "aucune"
     noter(d, "gite-exemption", qui, detail)
     notifier(d.config, None, "Exemption",
              f"Tu es exempté : {detail}." if any(choix.values()) else "Ton exemption est retirée : tu as de nouveau une part à payer.",
@@ -374,12 +385,13 @@ def vue(c, nom, staff):
         "salle_couchage": donnees["salle_couchage"],
         "plan": donnees["plan"],
         "tardif": est_tardif(c.config, nom, c.comptes, donnees),
-        "nb_exemptes": {quoi: sum(1 for e in donnees["exemptions"].values() if e.get(quoi)) for quoi in QUOI},
+        "nb_exemptes": {quoi: sum(1 for e in donnees["exemptions"].values() if e.get(quoi)) for quoi in EXEMPTIONS},
+        "exempte_communaute": bool(donnees["exemptions"].get(nom, {}).get("communaute")),
     }
     for quoi in QUOI:
         x = donnees[quoi]
-        resultat[quoi] = {"montant": x["montant"], "hebergeur": x["hebergeur"], "ouverture": x["ouverture"]}
-    resultat["salle"]["repartition"] = donnees["salle"]["repartition"]
+        resultat[quoi] = {"montant": x["montant"], "hebergeur": x["hebergeur"], "ouverture": x["ouverture"],
+                          "repartition": x["repartition"]}
     if staff:
         from comptes import moyens_renseignes
         resultat["exemptions"] = donnees["exemptions"]

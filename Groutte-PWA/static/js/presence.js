@@ -69,7 +69,7 @@ function resultat() {
   else if (!gite.montant) part = el("p", { class: "doux petit" }, "Le prix du gîte n'est pas encore fixé.");
   else if (g.hebergeur) part = el("p", { class: "doux petit" }, "Tu es l'hébergeur du gîte : ta part réduit ce que tu as avancé.");
   else if (!gite.ouverture) {
-    const prix = g.nuitees ? Math.round(gite.montant / g.nuitees) : 0;
+    const prix = gite.repartition === "nuits" && g.nuitees ? Math.round(gite.montant / g.nuitees) : 0;
     part = [el("p", {}, `Gîte : environ ${euros(g.part)}`, prix > 0 && el("span", { class: "doux" }, ` (${euros(prix)} la nuit)`)),
       el("p", { class: "doux petit" }, "Estimation : elle baisse si d'autres s'inscrivent, jusqu'à l'ouverture des paiements.")];
   } else {

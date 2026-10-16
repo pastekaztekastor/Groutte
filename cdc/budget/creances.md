@@ -108,7 +108,7 @@ Créances gîte et salle
 
 ## Règles et calculs
 <!-- Formules, répartitions, valeurs par défaut. -->
-- **Le gîte** :
+- **Le gîte**, selon le réglage du staff (au prorata des nuits par défaut, ou à parts égales comme la salle) :
   - prix d'une nuitée = montant du gîte / total des nuitées des non-exemptés ;
   - ma part = prix d'une nuitée × mes nuits ;
   - exemple : 1 400 € / 50 nuitées = 28 € la nuitée, et 28 € × 5 nuits = 140 €.

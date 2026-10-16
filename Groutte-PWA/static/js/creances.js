@@ -69,13 +69,18 @@ function methode() {
   const prix = gite.nuitees ? Math.round(g.gite.montant / gite.nuitees) : 0;
   const egale = g.salle.repartition === "egale";
   return el("section", { class: "carte methode" },
-    el("p", {}, "Le gîte, c'est l'endroit où l'on dort : chacun paie ses nuits. Plus on est nombreux, moins la nuitée coûte cher."),
-    g.gite.montant > 0 && gite.nuitees > 0 && [
-      el("p", { class: "calcul" }, `${euros(g.gite.montant)} / ${pluriel(gite.nuitees, "nuitée")} = ${euros(prix)} la nuitée`),
-      gite.part > 0 && !gite.hebergeur && el("p", { class: "calcul" }, `${euros(prix)} × ${pluriel(gite.nuits_figees ?? c.mes_nuits, "nuit")} = ${euros(gite.part)} (arrondi au centime)`)],
+    g.gite.repartition === "egale" ? [
+      el("p", {}, "Le gîte se partage à parts égales entre ceux qui viennent, quelle que soit la durée."),
+      g.gite.montant > 0 && gite.nb_parts > 0 && el("p", { class: "calcul" }, `${euros(g.gite.montant)} / ${pluriel(gite.nb_parts, "plouc")} = ${euros(Math.round(g.gite.montant / gite.nb_parts))}`),
+    ] : [
+      el("p", {}, "Le gîte, c'est l'endroit où l'on dort : chacun paie ses nuits. Plus on est nombreux, moins la nuitée coûte cher."),
+      g.gite.montant > 0 && gite.nuitees > 0 && [
+        el("p", { class: "calcul" }, `${euros(g.gite.montant)} / ${pluriel(gite.nuitees, "nuitée")} = ${euros(prix)} la nuitée`),
+        gite.part > 0 && !gite.hebergeur && el("p", { class: "calcul" }, `${euros(prix)} × ${pluriel(gite.nuits_figees ?? c.mes_nuits, "nuit")} = ${euros(gite.part)} (arrondi au centime)`)],
+    ],
     el("p", {}, egale
       ? "La salle, c'est la vie de la semaine : elle se partage à parts égales entre ceux qui viennent, quelle que soit la durée."
-      : "La salle se répartit comme le gîte, au prorata des nuits."),
+      : "La salle se répartit au prorata des nuits."),
     g.salle.montant > 0 && salle.nb_parts > 0 && el("p", { class: "calcul" }, egale
       ? `${euros(g.salle.montant)} / ${pluriel(salle.nb_parts, "plouc")} = ${euros(Math.round(g.salle.montant / salle.nb_parts))}`
       : `${euros(g.salle.montant)} / ${pluriel(salle.nuitees, "nuitée")} = ${euros(salle.nuitees ? Math.round(g.salle.montant / salle.nuitees) : 0)} la nuitée`),
@@ -132,13 +137,15 @@ export function vueCreances() {
       el("div", { class: "ligne" }, el("span", { class: "ligne-texte" }, "Mes nuits"), el("span", { class: "ligne-valeur" },
         c.gite.nuits_figees !== null && c.gite.nuits_figees !== c.mes_nuits ? `${c.gite.nuits_figees} à l'ouverture, ${c.mes_nuits} aujourd'hui` : String(c.mes_nuits))),
       el("div", { class: "ligne" }, el("span", { class: "ligne-texte" }, "Exempté"), el("span", { class: "ligne-valeur" },
-        [c.gite.exempte && "du gîte", c.salle.exempte && "de la salle"].filter(Boolean).join(" et ") || "non"))),
+        [c.gite.exempte && "du gîte", c.salle.exempte && "de la salle", g.exempte_communaute && "des dépenses de la communauté"].filter(Boolean).join(", ") || "non"))),
     el("h2", {}, "Les données générales"),
     el("div", { class: "liste-groupee" },
       el("div", { class: "ligne" }, el("span", { class: "ligne-texte" }, "Total des nuitées"), el("span", { class: "ligne-valeur" }, String(c.total_nuitees))),
       el("div", { class: "ligne" }, el("span", { class: "ligne-texte" }, "Ploucs qui viennent"), el("span", { class: "ligne-valeur" }, String(c.nb_ploucs))),
       (g.nb_exemptes.gite > 0 || g.nb_exemptes.salle > 0) && el("div", { class: "ligne" }, el("span", { class: "ligne-texte" }, "Exemptés"),
         el("span", { class: "ligne-valeur" }, `${g.nb_exemptes.gite} au gîte, ${g.nb_exemptes.salle} à la salle`)),
+      g.nb_exemptes.communaute > 0 && el("div", { class: "ligne" }, el("span", { class: "ligne-texte" }, "Exemptés des dépenses de la communauté"),
+        el("span", { class: "ligne-valeur" }, String(g.nb_exemptes.communaute))),
       el("div", { class: "ligne" }, el("span", { class: "ligne-texte" }, "Gîte"), el("span", { class: "ligne-valeur" }, euros(g.gite.montant))),
       el("div", { class: "ligne" }, el("span", { class: "ligne-texte" }, "Salle"), el("span", { class: "ligne-valeur" }, euros(g.salle.montant)))),
     el("h2", {}, "La méthode de calcul"),
