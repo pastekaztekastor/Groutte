@@ -1,3 +1,7 @@
+<!-- nav -->
+[Précédent : Clés](../gite/cles.md) · [Menu](../../README.md#les-pages)
+<!-- /nav -->
+
 # Repas > Événements repas
 
 - **Priorité** : 3
@@ -39,3 +43,7 @@
 <!-- Ce qui n'est pas encore tranché. -->
 - Le réveillon du 31 : comment le financer et l'organiser ?
 - Les repas de tous les jours : les courses sont-elles payées par les présents aux repas, au prorata de leur nombre de repas ?
+
+<!-- nav -->
+[Menu](../../README.md#les-pages) · [Suivant : Jeux](../tournois/jeux.md)
+<!-- /nav -->

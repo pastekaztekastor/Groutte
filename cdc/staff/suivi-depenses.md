@@ -1,3 +1,7 @@
+<!-- nav -->
+[Précédent : Réglages gîte](../staff/reglages-gite.md) · [Menu](../../README.md#les-pages)
+<!-- /nav -->
+
 # Staff > Suivi des dépenses
 
 - **Priorité** : 3
@@ -38,3 +42,7 @@
 ## Questions ouvertes
 <!-- Ce qui n'est pas encore tranché. -->
 - À décrire.
+
+<!-- nav -->
+[Menu](../../README.md#les-pages) · [Suivant : Annonces](../staff/annonces.md)
+<!-- /nav -->

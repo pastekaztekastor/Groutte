@@ -1,3 +1,7 @@
+<!-- nav -->
+[Précédent : Événements repas](../repas/repas.md) · [Menu](../../README.md#les-pages)
+<!-- /nav -->
+
 # Tournois > Jeux
 
 - **Priorité** : 4
@@ -38,3 +42,7 @@
 ## Questions ouvertes
 <!-- Ce qui n'est pas encore tranché. -->
 - À décrire.
+
+<!-- nav -->
+[Menu](../../README.md#les-pages) · [Suivant : Planning](../tournois/planning.md)
+<!-- /nav -->

@@ -1,3 +1,7 @@
+<!-- nav -->
+[Précédent : Présence](../gite/presence.md) · [Menu](../../README.md#les-pages)
+<!-- /nav -->
+
 # Gîte > Lits
 
 - **Priorité** : 2
@@ -38,3 +42,7 @@
 ## Questions ouvertes
 <!-- Ce qui n'est pas encore tranché. -->
 - À décrire.
+
+<!-- nav -->
+[Menu](../../README.md#les-pages) · [Suivant : Literie](../gite/literie.md)
+<!-- /nav -->

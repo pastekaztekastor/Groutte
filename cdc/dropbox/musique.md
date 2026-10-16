@@ -1,3 +1,7 @@
+<!-- nav -->
+[Précédent : Photos et vidéos](../dropbox/photos-videos.md) · [Menu](../../README.md#les-pages)
+<!-- /nav -->
+
 # Drop box > Musique
 
 - **Priorité** : 4
@@ -38,3 +42,7 @@
 ## Questions ouvertes
 <!-- Ce qui n'est pas encore tranché. -->
 - À décrire.
+
+<!-- nav -->
+[Menu](../../README.md#les-pages) · [Suivant : POV du tournoi](../dropbox/pov-tournoi.md)
+<!-- /nav -->

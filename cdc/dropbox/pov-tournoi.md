@@ -1,3 +1,7 @@
+<!-- nav -->
+[Précédent : Musique](../dropbox/musique.md) · [Menu](../../README.md#les-pages)
+<!-- /nav -->
+
 # Drop box > POV du tournoi
 
 - **Priorité** : 4
@@ -38,3 +42,7 @@
 ## Questions ouvertes
 <!-- Ce qui n'est pas encore tranché. -->
 - À décrire.
+
+<!-- nav -->
+[Menu](../../README.md#les-pages) · [Suivant : Gîte et salle](../staff/gite-salle.md)
+<!-- /nav -->

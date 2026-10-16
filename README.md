@@ -18,7 +18,7 @@ Le brouillon d'origine, avec toutes les questions et réponses, est dans `README
 - **C'est d'abord un outil de préparation.** Il servira avant, pendant et après le séjour, et évoluera.
 - **Deux niveaux de droits seulement : participant et staff.**
   - Les staffs de départ sont dans `config.json`. Ensuite, un staff peut nommer un autre staff.
-  - Les **rôles** (clés, SAM, cuisine, budget, média...) sont de simples étiquettes affichées dans le carnet d'adresses. Ils ne donnent aucun droit.
+  - Les **rôles** sont des étiquettes affichées dans le carnet d'adresses. Ils ne donnent aucun droit sur l'appli (voir [Rôles](#rôles-rolesjson)).
 - **Inscription libre.** À l'installation, on crée un compte ou on se connecte à un compte existant.
   - Chaque compte a son code à 4 chiffres. Après 5 erreurs, il est bloqué quelques minutes.
   - Un staff peut remettre un code à zéro.
@@ -26,6 +26,59 @@ Le brouillon d'origine, avec toutes les questions et réponses, est dans `README
 - **Quand une règle n'est pas encore tranchée, c'est un réglage du staff** : répartition de la salle, mode de remboursement, LLM.
 - **Le réseau au gîte est inconnu.** Le mode hors ligne (un Raspberry Pi avec un hotspot wifi) est reporté. S'il devient nécessaire, une page Staff expliquera comment le mettre en place.
 - **Hors de l'outil** : le nettoyage de fin de séjour.
+
+## Rôles (`roles.json`)
+
+Les rôles sont des étiquettes qui disent qui fait quoi, ou qui a quoi. Ils s'affichent dans le [Carnet d'adresses](cdc/compte/carnet.md) et **ne donnent aucun droit sur l'appli** : seul le droit staff en donne.
+
+La liste est dans `roles.json`, à la racine de l'appli. Ce fichier est versionné dans git, et c'est le webmaster qui le modifie.
+
+**Les trois types de rôles**
+
+| Type | Qui l'attribue | Où |
+| --- | --- | --- |
+| `libre` | chacun se l'attribue lui-même, et le staff peut aussi le poser | [Ma fiche](cdc/compte/ma-fiche.md), ou [Staff > Comptes](cdc/staff/comptes.md) |
+| `staff` | seulement le staff | [Staff > Comptes](cdc/staff/comptes.md) |
+| `automatique` | personne : il découle d'un autre réglage | indiqué par `source` |
+
+**Le champ `actions`** : un rôle peut déclencher des actions en plus de l'étiquette. Pour l'instant, seul Hébergeur en a.
+
+**La liste de départ**
+
+| Rôle       | Type          | Ce que ça veut dire                                                                                                                                                                                      |
+| ---------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Hébergeur  | `automatique` | a avancé le gîte ou la salle. Il est désigné dans [Gîte et salle](cdc/staff/gite-salle.md), et doit être staff. Il reçoit et confirme les paiements, et accepte les reports et les inscriptions tardives |
+| Clés       | `staff`       | a les clés du gîte : c'est lui qu'on appelle Attention, il aura besoin d'un page pour dire su'il les file a quelqu'un.                                                                                   |
+| Logistique | `staff`       | responsable (non officiel) de la logistique                                                                                                                                                              |
+| Nourriture | `staff`       | responsable (non officiel) de la nourriture                                                                                                                                                              |
+| Budget     | `staff`       | responsable (non officiel) du budget                                                                                                                                                                     |
+| Activités  | `staff`       | responsable (non officiel) des activités et des tournois                                                                                                                                                 |
+| Média      | `staff`       | responsable (non officiel) des photos, vidéos et musique                                                                                                                                                 |
+| Cuisine    | `libre`       | aime cuisiner, et se propose pour les repas                                                                                                                                                              |
+| Ménage     | `libre`       | se propose pour le ménage                                                                                                                                                                                |
+| Permis     | `libre`       | a le permis de conduire                                                                                                                                                                                  |
+| Véhicule   | `libre`       | vient avec une voiture                                                                                                                                                                                   |
+| Fumeur     | `libre`       | fume                                                                                                                                                                                                     |
+
+Le rôle de SAM n'est pas dans cette liste : on se désigne SAM jour par jour, sur la page [SAM](cdc/gite/sam.md).
+
+```json
+[
+  {"id": "hebergeur",  "nom": "Hébergeur",  "type": "automatique", "source": "gite-salle",
+   "actions": ["recevoir-paiements", "confirmer-paiements", "accepter-reports", "accepter-inscriptions-tardives"]},
+  {"id": "cles",       "nom": "Clés",       "type": "staff"},
+  {"id": "logistique", "nom": "Logistique", "type": "staff"},
+  {"id": "nourriture", "nom": "Nourriture", "type": "staff"},
+  {"id": "budget",     "nom": "Budget",     "type": "staff"},
+  {"id": "activites",  "nom": "Activités",  "type": "staff"},
+  {"id": "media",      "nom": "Média",      "type": "staff"},
+  {"id": "cuisine",    "nom": "Cuisine",    "type": "libre"},
+  {"id": "menage",     "nom": "Ménage",     "type": "libre"},
+  {"id": "permis",     "nom": "Permis",     "type": "libre"},
+  {"id": "vehicule",   "nom": "Véhicule",   "type": "libre"},
+  {"id": "fumeur",     "nom": "Fumeur",     "type": "libre"}
+]
+```
 
 ## Le modèle de présence (commun à Gîte, Repas et Budget)
 
@@ -48,39 +101,43 @@ Chaque page a sa fiche dans `cdc/<groupe>/`, décrite avec précision : but, qui
 
 | Groupe     | Page                                                  | Priorité |
 | ---------- | ----------------------------------------------------- | -------- |
+| Staff      | [Comptes](cdc/staff/comptes.md)                       | 1        |
 | Compte     | [Inscription et connexion](cdc/compte/inscription.md) | 1        |
 | Compte     | [Ma fiche](cdc/compte/ma-fiche.md)                    | 1        |
 | Compte     | [Me rembourser](cdc/compte/me-rembourser.md)          | 1        |
 | Compte     | [Notifications](cdc/compte/notifications.md)          | 1        |
 | Compte     | [Carnet d'adresses](cdc/compte/carnet.md)             | 1        |
+        
 | Communauté | [Forum](cdc/communaute/forum.md)                      | 2        |
-| Communauté | [Messages](cdc/communaute/messages.md)                | 4        |
 | Gîte       | [Ma réservation](cdc/gite/ma-reservation.md)          | 2        |
 | Gîte       | [Présence](cdc/gite/presence.md)                      | 2        |
 | Gîte       | [Lits](cdc/gite/lits.md)                              | 2        |
+| Budget     | [Mes comptes](cdc/budget/mes-comptes.md)              | 2        |
+| Budget     | [Créances gîte et salle](cdc/budget/creances.md)      | 2        |
+| Budget     | [Dépenses](cdc/budget/depenses.md)                    | 2        |
+| Budget     | [Comment ça marche](cdc/budget/comment-ca-marche.md)  | 2        |
+| Staff      | [Gîte et salle](cdc/staff/gite-salle.md)              | 2        |
+| Staff      | [Réglages compta](cdc/staff/reglages-compta.md)       | 2        |
+| Staff      | [Réglages gîte](cdc/staff/reglages-gite.md)           | 2        |
+
 | Gîte       | [Literie](cdc/gite/literie.md)                        | 3        |
 | Gîte       | [SAM](cdc/gite/sam.md)                                | 3        |
-| Gîte       | [Clés](cdc/gite/cles.md)                              | 5        |
 | Repas      | [Événements repas](cdc/repas/repas.md)                | 3        |
+| Budget     | [Flux](cdc/budget/flux.md)                            | 3        |
+| Staff      | [Prévisionnel](cdc/staff/previsionnel.md)             | 3        |
+| Staff      | [Suivi des dépenses](cdc/staff/suivi-depenses.md)     | 3        |
+| Staff      | [Annonces](cdc/staff/annonces.md)                     | 3        |
+
+| Communauté | [Messages](cdc/communaute/messages.md)                | 4        |
 | Tournois   | [Jeux](cdc/tournois/jeux.md)                          | 4        |
 | Tournois   | [Planning](cdc/tournois/planning.md)                  | 4        |
 | Tournois   | [Règlements](cdc/tournois/reglements.md)              | 4        |
 | Tournois   | [Leaderboard](cdc/tournois/leaderboard.md)            | 4        |
-| Budget     | [Dépenses](cdc/budget/depenses.md)                    | 2        |
-| Budget     | [Créances gîte et salle](cdc/budget/creances.md)      | 2        |
-| Budget     | [Mes comptes](cdc/budget/mes-comptes.md)              | 2        |
-| Budget     | [Flux](cdc/budget/flux.md)                            | 3        |
-| Budget     | [Comment ça marche](cdc/budget/comment-ca-marche.md)  | 2        |
 | Drop box   | [Photos et vidéos](cdc/dropbox/photos-videos.md)      | 4        |
 | Drop box   | [Musique](cdc/dropbox/musique.md)                     | 4        |
 | Drop box   | [POV du tournoi](cdc/dropbox/pov-tournoi.md)          | 4        |
-| Staff      | [Gîte et salle](cdc/staff/gite-salle.md)              | 2        |
-| Staff      | [Prévisionnel](cdc/staff/previsionnel.md)             | 3        |
-| Staff      | [Réglages compta](cdc/staff/reglages-compta.md)       | 2        |
-| Staff      | [Réglages gîte](cdc/staff/reglages-gite.md)           | 2        |
-| Staff      | [Suivi des dépenses](cdc/staff/suivi-depenses.md)     | 3        |
-| Staff      | [Annonces](cdc/staff/annonces.md)                     | 3        |
-| Staff      | [Comptes](cdc/staff/comptes.md)                       | 1        |
+
+| Gîte       | [Clés](cdc/gite/cles.md)                              | 5        |
 | Staff      | [Checklist d'avancement](cdc/staff/checklist.md)      | 5        |
 | Staff      | [Hors ligne](cdc/staff/hors-ligne.md)                 | 5        |
 

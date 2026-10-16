@@ -1,3 +1,7 @@
+<!-- nav -->
+[Précédent : Checklist d'avancement](../staff/checklist.md) · [Menu](../../README.md#les-pages)
+<!-- /nav -->
+
 # Staff > Hors ligne
 
 - **Priorité** : 5
@@ -38,3 +42,7 @@
 ## Questions ouvertes
 <!-- Ce qui n'est pas encore tranché. -->
 - À décrire.
+
+<!-- nav -->
+[Menu](../../README.md#les-pages)
+<!-- /nav -->

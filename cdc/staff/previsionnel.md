@@ -1,3 +1,7 @@
+<!-- nav -->
+[Précédent : Gîte et salle](../staff/gite-salle.md) · [Menu](../../README.md#les-pages)
+<!-- /nav -->
+
 # Staff > Prévisionnel
 
 - **Priorité** : 3
@@ -38,3 +42,7 @@
 ## Questions ouvertes
 <!-- Ce qui n'est pas encore tranché. -->
 - À décrire.
+
+<!-- nav -->
+[Menu](../../README.md#les-pages) · [Suivant : Réglages compta](../staff/reglages-compta.md)
+<!-- /nav -->

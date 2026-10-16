@@ -1,3 +1,7 @@
+<!-- nav -->
+[Précédent : Règlements](../tournois/reglements.md) · [Menu](../../README.md#les-pages)
+<!-- /nav -->
+
 # Tournois > Leaderboard
 
 - **Priorité** : 4
@@ -38,3 +42,7 @@
 ## Questions ouvertes
 <!-- Ce qui n'est pas encore tranché. -->
 - À décrire.
+
+<!-- nav -->
+[Menu](../../README.md#les-pages) · [Suivant : Dépenses](../budget/depenses.md)
+<!-- /nav -->

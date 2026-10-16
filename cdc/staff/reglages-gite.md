@@ -1,3 +1,7 @@
+<!-- nav -->
+[Précédent : Réglages compta](../staff/reglages-compta.md) · [Menu](../../README.md#les-pages)
+<!-- /nav -->
+
 # Staff > Réglages gîte
 
 - **Priorité** : 2
@@ -38,3 +42,7 @@
 ## Questions ouvertes
 <!-- Ce qui n'est pas encore tranché. -->
 - À décrire.
+
+<!-- nav -->
+[Menu](../../README.md#les-pages) · [Suivant : Suivi des dépenses](../staff/suivi-depenses.md)
+<!-- /nav -->

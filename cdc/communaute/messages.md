@@ -1,3 +1,7 @@
+<!-- nav -->
+[Précédent : Forum](../communaute/forum.md) · [Menu](../../README.md#les-pages)
+<!-- /nav -->
+
 # Communauté > Messages
 
 - **Priorité** : 4
@@ -39,3 +43,7 @@
 ## Questions ouvertes
 <!-- Ce qui n'est pas encore tranché. -->
 - Seulement entre deux personnes, ou aussi des groupes ?
+
+<!-- nav -->
+[Menu](../../README.md#les-pages) · [Suivant : Ma réservation](../gite/ma-reservation.md)
+<!-- /nav -->

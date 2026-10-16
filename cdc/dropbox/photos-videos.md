@@ -1,3 +1,7 @@
+<!-- nav -->
+[Précédent : Comment ça marche](../budget/comment-ca-marche.md) · [Menu](../../README.md#les-pages)
+<!-- /nav -->
+
 # Drop box > Photos et vidéos
 
 - **Priorité** : 4
@@ -41,3 +45,7 @@
 ## Questions ouvertes
 <!-- Ce qui n'est pas encore tranché. -->
 - À décrire.
+
+<!-- nav -->
+[Menu](../../README.md#les-pages) · [Suivant : Musique](../dropbox/musique.md)
+<!-- /nav -->

@@ -1,3 +1,7 @@
+<!-- nav -->
+[Précédent : Suivi des dépenses](../staff/suivi-depenses.md) · [Menu](../../README.md#les-pages)
+<!-- /nav -->
+
 # Staff > Annonces
 
 - **Priorité** : 3
@@ -38,3 +42,7 @@
 ## Questions ouvertes
 <!-- Ce qui n'est pas encore tranché. -->
 - À décrire.
+
+<!-- nav -->
+[Menu](../../README.md#les-pages) · [Suivant : Comptes](../staff/comptes.md)
+<!-- /nav -->

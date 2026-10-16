@@ -1,3 +1,7 @@
+<!-- nav -->
+[Précédent : SAM](../gite/sam.md) · [Menu](../../README.md#les-pages)
+<!-- /nav -->
+
 # Gîte > Clés
 
 - **Priorité** : 5
@@ -38,3 +42,7 @@
 ## Questions ouvertes
 <!-- Ce qui n'est pas encore tranché. -->
 - À décrire.
+
+<!-- nav -->
+[Menu](../../README.md#les-pages) · [Suivant : Événements repas](../repas/repas.md)
+<!-- /nav -->

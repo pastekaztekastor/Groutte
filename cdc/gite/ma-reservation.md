@@ -1,3 +1,7 @@
+<!-- nav -->
+[Précédent : Messages](../communaute/messages.md) · [Menu](../../README.md#les-pages)
+<!-- /nav -->
+
 # Gîte > Ma réservation
 
 - **Priorité** : 2
@@ -38,3 +42,7 @@
 ## Questions ouvertes
 <!-- Ce qui n'est pas encore tranché. -->
 - Les allers-retours : peut-on avoir plusieurs séjours ?
+
+<!-- nav -->
+[Menu](../../README.md#les-pages) · [Suivant : Présence](../gite/presence.md)
+<!-- /nav -->

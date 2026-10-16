@@ -1,3 +1,7 @@
+<!-- nav -->
+[Précédent : POV du tournoi](../dropbox/pov-tournoi.md) · [Menu](../../README.md#les-pages)
+<!-- /nav -->
+
 # Staff > Gîte et salle
 
 - **Priorité** : 2
@@ -38,3 +42,7 @@
 ## Questions ouvertes
 <!-- Ce qui n'est pas encore tranché. -->
 - À décrire.
+
+<!-- nav -->
+[Menu](../../README.md#les-pages) · [Suivant : Prévisionnel](../staff/previsionnel.md)
+<!-- /nav -->
