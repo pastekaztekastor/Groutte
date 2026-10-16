@@ -1,0 +1,18 @@
+{
+ "_aide": "Rôles affichés dans le carnet d'adresses. Aucun ne donne de droit sur l'appli. type : libre (chacun se l'attribue dans Ma fiche, le staff peut aussi le poser), staff (seul le staff l'attribue), automatique (découle d'un autre réglage, indiqué par source). Pris en compte sans redémarrer.",
+ "roles": [
+  {"id": "hebergeur",  "nom": "Hébergeur",  "type": "automatique", "source": "gite-salle",
+   "actions": ["recevoir-paiements", "confirmer-paiements", "accepter-reports", "accepter-inscriptions-tardives"]},
+  {"id": "cles",       "nom": "Clés",       "type": "staff"},
+  {"id": "logistique", "nom": "Logistique", "type": "staff"},
+  {"id": "nourriture", "nom": "Nourriture", "type": "staff"},
+  {"id": "budget",     "nom": "Budget",     "type": "staff"},
+  {"id": "activites",  "nom": "Activités",  "type": "staff"},
+  {"id": "media",      "nom": "Média",      "type": "staff"},
+  {"id": "cuisine",    "nom": "Cuisine",    "type": "libre"},
+  {"id": "menage",     "nom": "Ménage",     "type": "libre"},
+  {"id": "permis",     "nom": "Permis",     "type": "libre"},
+  {"id": "vehicule",   "nom": "Véhicule",   "type": "libre"},
+  {"id": "fumeur",     "nom": "Fumeur",     "type": "libre"}
+ ]
+}

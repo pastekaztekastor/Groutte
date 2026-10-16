@@ -28,7 +28,7 @@
 | Virement | IBAN et nom du titulaire |
 | Wero | numéro de téléphone ou adresse mail lié à Wero |
 | PayPal | identifiant PayPal.me |
-| Lydia / Sumeria | numéro de téléphone |
+| Lydia / Sumeria | lien de paiement Lydia / Sumeria (https://…) |
 | Revolut | identifiant Revolut (@revtag) |
 | Espèces | une case « J'accepte les espèces en main propre » |
 
@@ -50,7 +50,8 @@ Me rembourser
 - **Virement** : l'IBAN, le montant et le libellé, chacun avec un bouton Copier ; et le QR code de virement SEPA, que beaucoup d'applis bancaires savent lire ;
 - **PayPal** : un lien PayPal.me qui contient déjà le montant ;
 - **Revolut** : un lien revolut.me ;
-- **Wero et Lydia** : le numéro à copier, puisque Wero n'a pas de lien de paiement ;
+- **Wero** : le numéro à copier, puisque Wero n'a pas de lien de paiement ;
+- **Lydia / Sumeria** : un bouton qui ouvre son lien ;
 - **Espèces** : « Bob accepte les espèces en main propre ».
 
 Ensuite vient le bouton **« J'ai payé »** (voir [Mes comptes](../budget/mes-comptes.md) et [Créances](../budget/creances.md)).
@@ -68,7 +69,7 @@ Ensuite vient le bouton **« J'ai payé »** (voir [Mes comptes](../budget/mes-c
 - l'IBAN et le titulaire ;
 - le contact Wero ;
 - l'identifiant PayPal.me ;
-- le numéro Lydia ;
+- le lien Lydia / Sumeria ;
 - l'identifiant Revolut ;
 - s'il accepte les espèces ;
 - son moyen préféré.
