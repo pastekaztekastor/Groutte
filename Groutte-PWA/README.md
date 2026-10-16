@@ -180,13 +180,13 @@ Pour chaque nouvelle page du cahier des charges. Le modèle complet (Notes) est 
   - Pas de contrôle segmenté pour naviguer : chaque page a son titre et son entrée dans le panneau.
 - **Icônes** :
   - en traits (`ICONES` dans `commun.js`) pour les petites actions ;
-  - pleines (`icones-fa.js`, Font Awesome Free) pour le panneau. Leurs noms viennent de NextSession : renomme-les ou ajoutes-en (un `viewBox` et des tracés SVG) ;
+  - pleines (`icones-fa.js`, Font Awesome Free 7.1.0) pour le panneau et les fiches. Chaque nom de l'appli (`fa-carnet`, `fa-staff`...) dit en commentaire de quelle icône Font Awesome il vient et où il sert ; celles des pages des jalons suivants sont déjà là. Pour en ajouter une, prendre son SVG sur `cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/svgs/solid/<nom>.svg` ;
   - un fichier `static/icones/ui/<nom>.svg` remplace n'importe laquelle par un dessin.
 - **À personnaliser** :
   - les couleurs des dégradés (`DEGRADES` dans `commun.js`) ;
   - les couleurs des groupes du panneau (`.groupe-1` à `.groupe-4` dans `style.css`) ;
   - les thèmes de `config.json` ;
-  - les icônes de `static/icones/` (c'est le dé de NextSession, à remplacer).
+  - les icônes de `static/icones/` : le gîte et son feu d'artifice doré, sur le prune du thème. Les PNG se refont depuis les SVG : `rsvg-convert -w 512 -h 512 icone.svg -o icone-512.png` (192, 512, maskable 512, apple-touch 180 depuis le maskable, badge 96).
 
 ---
 

@@ -92,11 +92,11 @@ export function vueContact(nom) {
   if (!c || c.desactive) return [el("p", { class: "doux" }, "Cette personne n'est pas dans le carnet.")];
   const infos = [
     c.telephone && ligneInfo("fa-appeler", "Téléphone", el("a", { href: "tel:" + numero(c.telephone) }, c.telephone)),
-    c.discord && ligneInfo("fa-comu", "Discord", el("span", {}, c.discord),
+    c.discord && ligneInfo("fa-discord", "Discord", el("span", {}, c.discord),
       el("button", { class: "discret", type: "button", onclick: () => copier(c.discord) }, "Copier")),
     (c.regimes.length > 0 || c.allergies) && ligneInfo("fa-regime", "Alimentation",
       el("span", { class: "texte-libre" }, [c.regimes.join(", "), c.allergies && `Allergies : ${c.allergies}`].filter(Boolean).join("\n"))),
-    c.photo_ok === false && ligneInfo("fa-info", "Photos et vidéos", el("span", {}, "Préfère ne pas apparaître sur les photos")),
+    c.photo_ok === false && ligneInfo("fa-photo", "Photos et vidéos", el("span", {}, "Préfère ne pas apparaître sur les photos")),
   ].filter(Boolean);
   return [
     el("section", { class: "contact-tete" },

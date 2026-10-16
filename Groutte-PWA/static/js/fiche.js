@@ -4,7 +4,7 @@ import { app, el, icone, avatar, compte, saisie, oublier, envoyer, televerser, r
    quitte (pas de bouton « Enregistrer »). Le nom ne se change pas ici : c'est le staff qui le corrige.
    Le thème et le mode sont dans Réglages. */
 
-const ICONES = { prenom: "fa-moi", pseudo: "fa-moi", discord: "fa-comu", telephone: "fa-appeler", allergies: "fa-regime" };
+const ICONES = { prenom: "fa-fiche", pseudo: "fa-fiche", discord: "fa-discord", telephone: "fa-appeler", allergies: "fa-regime" };
 
 /* Un champ texte : enregistré quand on le quitte, s'il a changé. */
 function champ(m, cle, libelle, props = {}) {

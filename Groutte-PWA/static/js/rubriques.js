@@ -41,15 +41,15 @@ export function ecran(rubrique, argument) {
 export function groupesPanneau() {
   return [
     { titre: "Mon compte", classe: "groupe-compte", entrees: [
-      { lien: "#fiche", icone: "fa-moi", titre: "Ma fiche", resume: resumeFiche() },
-      { lien: "#rembourser", icone: "fa-comptes", titre: "Me rembourser", resume: resumeRembourser() },
-      { lien: "#notifications", icone: "fa-annonces", titre: "Notifications", resume: resumeNotifications() },
-      { lien: "#carnet", icone: "fa-appeler", titre: "Carnet d'adresses", resume: resumeCarnet() },
-      !estInstallee() && { lien: "#appli", icone: "fa-info", titre: "Installer l'appli", resume: "Icône, plein écran, notifications" },
+      { lien: "#fiche", icone: "fa-fiche", titre: "Ma fiche", resume: resumeFiche() },
+      { lien: "#rembourser", icone: "fa-rembourser", titre: "Me rembourser", resume: resumeRembourser() },
+      { lien: "#notifications", icone: "fa-cloche", titre: "Notifications", resume: resumeNotifications() },
+      { lien: "#carnet", icone: "fa-carnet", titre: "Carnet d'adresses", resume: resumeCarnet() },
+      !estInstallee() && { lien: "#appli", icone: "fa-installer", titre: "Installer l'appli", resume: "Icône, plein écran, notifications" },
       { lien: "#reglages", icone: "fa-reglages", titre: "Réglages", resume: "Thème, mode, code" },
     ] },
     { titre: "Staff", classe: "groupe-admin", entrees: [
-      estStaff() && { lien: "#staff", icone: "fa-mj", titre: "Comptes", resume: "Droits, codes, rôles, journal" },
+      estStaff() && { lien: "#staff", icone: "fa-staff", titre: "Comptes", resume: "Droits, codes, rôles, journal" },
       estStaff() && { lien: "#annonce", icone: "fa-annonces", titre: "Annonce", resume: "Notifier tout le monde" },
     ] },
   ];
