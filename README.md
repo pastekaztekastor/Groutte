@@ -17,7 +17,7 @@ Le brouillon d'origine, avec toutes les questions et réponses, est dans `README
 
 - **C'est d'abord un outil de préparation.** Il servira avant, pendant et après le séjour, et évoluera.
 - **On s'appelle « les ploucs ».** Dans l'appli comme entre nous, un participant est un **plouc**.
-  - **Seuls les ploucs qui viennent comptent dans les parts** : ceux qui ont des dates dans [Présence](cdc/gite/presence.md). Un compte sans dates (« Je ne viens pas ») ne paie ni le gîte, ni la salle, ni les repas.
+  - **Seuls les ploucs qui viennent comptent dans les parts** : ceux qui ont des dates dans [Présence](cdc/gite/presence.md). Un compte sans dates ne paie ni le gîte, ni la salle, ni les repas, qu'il ait touché « Je ne viens pas » ou qu'il n'ait pas encore répondu.
 - **Deux niveaux de droits seulement : plouc et staff.**
   - Les staffs de départ sont dans `config.json`. Ensuite, un staff peut nommer un autre staff.
   - Les **rôles** sont des étiquettes affichées dans le carnet d'adresses. Ils ne donnent aucun droit sur l'appli (voir [Rôles](#rôles-rolesjson)).
@@ -45,6 +45,8 @@ La liste est dans `roles.json`, à la racine de l'appli. Ce fichier est versionn
 
 **Le champ `actions`** : un rôle peut déclencher des actions en plus de l'étiquette. Pour l'instant, seul Hébergeur en a.
 
+**Un rôle `automatique`** ne se coche pas dans Ma fiche et ne s'attribue pas dans Staff > Comptes : il suit sa `source` (Gîte et salle pour Hébergeur, Menu pour Chef).
+
 **La liste de départ**
 
 | Rôle       | Type          | Ce que ça veut dire                                                                                                                                                                                      |
@@ -56,13 +58,14 @@ La liste est dans `roles.json`, à la racine de l'appli. Ce fichier est versionn
 | Budget     | `staff`       | responsable (non officiel) du budget                                                                                                                                                                     |
 | Activités  | `staff`       | responsable (non officiel) des activités et des tournois                                                                                                                                                 |
 | Média      | `staff`       | responsable (non officiel) des photos, vidéos et musique                                                                                                                                                 |
+| Chef       | `automatique` | a proposé au moins un plat dans [Menu](cdc/repas/menu.md). Il apparaît tout seul, et disparaît si la personne n'a plus aucun menu                                                                       |
 | Cuisine    | `libre`       | aime cuisiner, et se propose pour les repas                                                                                                                                                              |
 | Ménage     | `libre`       | se propose pour le ménage                                                                                                                                                                                |
 | Permis     | `libre`       | a le permis de conduire                                                                                                                                                                                  |
 | Véhicule   | `libre`       | vient avec une voiture                                                                                                                                                                                   |
 | Fumeur     | `libre`       | fume                                                                                                                                                                                                     |
 
-Le rôle de SAM n'est pas dans cette liste : on se désigne SAM jour par jour, sur la page [SAM](cdc/gite/sam.md).
+Le SAM n'est pas un rôle : il se décide de vive voix pendant la semaine. La page [SAM](cdc/gite/sam.md) est reportée.
 
 ```json
 [
@@ -74,6 +77,7 @@ Le rôle de SAM n'est pas dans cette liste : on se désigne SAM jour par jour, s
   {"id": "budget",     "nom": "Budget",     "type": "staff"},
   {"id": "activites",  "nom": "Activités",  "type": "staff"},
   {"id": "media",      "nom": "Média",      "type": "staff"},
+  {"id": "chef",       "nom": "Chef",       "type": "automatique", "source": "menu"},
   {"id": "cuisine",    "nom": "Cuisine",    "type": "libre"},
   {"id": "menage",     "nom": "Ménage",     "type": "libre"},
   {"id": "permis",     "nom": "Permis",     "type": "libre"},
@@ -103,69 +107,55 @@ Le rôle de SAM n'est pas dans cette liste : on se désigne SAM jour par jour, s
 
 Chaque page a sa fiche dans `cdc/<groupe>/`, décrite avec précision : but, qui voit et qui agit, écran, actions, données, règles et calculs, notifications, cas limites, questions ouvertes. Pour une nouvelle page, copier `cdc/_modele.md`.
 
-| Groupe     | Page                                                        | Priorité |
-| ---------- | ----------------------------------------------------------- | -------- |
-| Staff      | [Comptes](cdc/staff/comptes.md)                             | 1        |
-| Compte     | [Inscription et connexion](cdc/compte/inscription.md)       | 1        |
-| Compte     | [Ma fiche](cdc/compte/ma-fiche.md)                          | 1        |
-| Compte     | [Me rembourser](cdc/compte/me-rembourser.md)                | 1        |
-| Compte     | [Notifications](cdc/compte/notifications.md)                | 1        |
-| Compte     | [Carnet d'adresses](cdc/compte/carnet.md)                   | 1        |
-| Communauté | [Forum](cdc/communaute/forum.md)                            | 2        |
-| Gîte       | [Présence](cdc/gite/presence.md)                            | 2        |
-| Gîte       | [Lits](cdc/gite/lits.md)                                    | 2        |
-| Budget     | [Mes comptes](cdc/budget/mes-comptes.md)                    | 2        |
-| Budget     | [Créances gîte et salle](cdc/budget/creances.md)            | 2        |
-| Budget     | [Dépenses](cdc/budget/depenses.md)                          | 2        |
-| Budget     | [Comment ça marche](cdc/budget/comment-ca-marche.md)        | 2        |
-| Staff      | [Gîte et salle](cdc/staff/gite-salle.md)                    | 2        |
-| Staff      | [Réglages compta](cdc/staff/reglages-compta.md)             | 2        |
-| Gîte       | [Literie](cdc/gite/literie.md)                              | 3        |
-| Gîte       | [SAM](cdc/gite/sam.md)                                      | 3        |
-| Repas      | [Événements repas](cdc/repas/repas.md)                      | 3        |
-| Staff      | [Prévisionnel](cdc/staff/previsionnel.md)                   | 3        |
-| Staff      | [Suivi des dépenses](cdc/staff/suivi-depenses.md)           | 3        |
-| Staff      | [Annonces](cdc/staff/annonces.md)                           | 3        |
-| Communauté | [Messages](cdc/communaute/messages.md)                      | 4        |
-| Tournois   | [Jeux](cdc/tournois/jeux.md)                                | 4        |
-| Tournois   | [Planning](cdc/tournois/planning.md)                        | 4        |
-| Tournois   | [Règlements](cdc/tournois/reglements.md)                    | 4        |
-| Tournois   | [Leaderboard](cdc/tournois/leaderboard.md)                  | 4        |
-| Drop box   | [Photos et vidéos](cdc/dropbox/photos-videos.md)            | 4        |
-| Drop box   | [Musique](cdc/dropbox/musique.md)                           | 4        |
-| Drop box   | [POV du tournoi](cdc/dropbox/pov-tournoi.md)                | 4        |
-| Gîte       | [Clés](cdc/gite/cles.md)                                    | 5        |
-| Staff      | [Checklist d'avancement](cdc/staff/checklist.md)            | 5        |
-| Staff      | [Hors ligne](cdc/staff/hors-ligne.md)                       | 5        |
-| Budget     | [Flux](cdc/budget/flux.md)                                  | 5        |
-| Staff      | [Validation des dépenses](cdc/staff/validation-depenses.md) | 2        |
-| Staff      | [Réglages LLM](cdc/staff/reglages-llm.md)                   | 3        |
-| Communauté | [Contacter le staff](cdc/communaute/contact-staff.md)       | 2        |
-| Repas      | [Mes repas](cdc/repas/mes-repas.md)                         | 2        |
+| Groupe     | Page                                                        | Priorité | Statut   |
+| ---------- | ----------------------------------------------------------- | -------- | -------- |
+| Staff      | [Comptes](cdc/staff/comptes.md)                             | 1        | à revoir |
+| Compte     | [Inscription et connexion](cdc/compte/inscription.md)       | 1        | validé   |
+| Compte     | [Ma fiche](cdc/compte/ma-fiche.md)                          | 1        | à revoir |
+| Compte     | [Me rembourser](cdc/compte/me-rembourser.md)                | 1        | validé   |
+| Compte     | [Notifications](cdc/compte/notifications.md)                | 1        | à revoir |
+| Compte     | [Carnet d'adresses](cdc/compte/carnet.md)                   | 1        | validé   |
+| Communauté | [Forum](cdc/communaute/forum.md)                            | 2        | validé   |
+| Gîte       | [Présence](cdc/gite/presence.md)                            | 2        | à revoir |
+| Gîte       | [Lits](cdc/gite/lits.md)                                    | 2        | à revoir |
+| Budget     | [Mes comptes](cdc/budget/mes-comptes.md)                    | 2        | à revoir |
+| Budget     | [Créances gîte et salle](cdc/budget/creances.md)            | 2        | validé   |
+| Budget     | [Dépenses](cdc/budget/depenses.md)                          | 2        | à revoir |
+| Budget     | [Comment ça marche](cdc/budget/comment-ca-marche.md)        | 2        | à revoir |
+| Staff      | [Gîte et salle](cdc/staff/gite-salle.md)                    | 2        | à revoir |
+| Staff      | [Réglages compta](cdc/staff/reglages-compta.md)             | 2        | à revoir |
+| Staff      | [Validation des dépenses](cdc/staff/validation-depenses.md) | 2        | à revoir |
+| Communauté | [Contacter le staff](cdc/communaute/contact-staff.md)       | 2        | à revoir |
+| Repas      | [Mes repas](cdc/repas/mes-repas.md)                         | 2        | à revoir |
+| Staff      | [Réglages LLM](cdc/staff/reglages-llm.md)                   | 3        | a dev    |
+| Repas      | [Menu](cdc/repas/menu.md)                                   | 3        | a dev    |
+| Staff      | [Suivi des dépenses](cdc/staff/suivi-depenses.md)           | 3        | a dev    |
+| Staff      | [Annonces](cdc/staff/annonces.md)                           | 3        | a dev    |
+| Communauté | [Pings reçus](cdc/communaute/pings.md)                      | 3        | a dev    |
+| Communauté | [Messages](cdc/communaute/messages.md)                      | 4        |          |
+| Tournois   | [Jeux](cdc/tournois/jeux.md)                                | 4        |          |
+| Tournois   | [Planning](cdc/tournois/planning.md)                        | 4        |          |
+| Tournois   | [Règlements](cdc/tournois/reglements.md)                    | 4        |          |
+| Tournois   | [Leaderboard](cdc/tournois/leaderboard.md)                  | 4        |          |
+| Drop box   | [Photos et vidéos](cdc/dropbox/photos-videos.md)            | 4        |          |
+| Drop box   | [Musique](cdc/dropbox/musique.md)                           | 4        |          |
+| Drop box   | [POV du tournoi](cdc/dropbox/pov-tournoi.md)                | 4        |          |
+| Gîte       | [SAM](cdc/gite/sam.md)                                      | 5        |          |
+| Gîte       | [Clés](cdc/gite/cles.md)                                    | 5        |          |
+| Staff      | [Checklist d'avancement](cdc/staff/checklist.md)            | 5        |          |
+| Staff      | [Hors ligne](cdc/staff/hors-ligne.md)                       | 5        |          |
+| Budget     | [Flux](cdc/budget/flux.md)                                  | 5        |          |
+| Staff      | [Prévisionnel](cdc/staff/previsionnel.md)                   | 5        |          |
 
-## Priorités
+**C'est ce tableau qui fait foi** pour la priorité et le statut de chaque page : les fiches ne les répètent pas.
 
-Un résumé. En cas d'écart, c'est le tableau [Les pages](#les-pages) qui fait foi.
+- **Priorité** : 1 socle, 2 essentiel, 3 ensuite, 4 puis, 5 reporté.
+- **Statut** :
+  - *rédigé* : la fiche est écrite, elle attend d'être relue ;
+  - *validé* : relue et acceptée ;
+  - *à revoir* : validée, puis modifiée par un jalon suivant (ici le jalon 3, voir `discussion jalon.md`).
 
-1. **Le socle** :
-   - inscription et code par compte ;
-   - rôle staff ;
-   - fiche perso ;
-   - carnet d'adresses.
-2. **L'essentiel** :
-   - Forum ;
-   - Présence, Lits ;
-   - Budget avec saisie à la main : dépenses, créances, mes comptes ;
-   - Staff : gîte et salle, réglages compta.
-3. **Ensuite** :
-   - lecture des tickets par LLM (Staff > Réglages LLM) ;
-   - prévisionnel ;
-   - Repas ;
-   - Literie ;
-   - SAM ;
-   - annonces ciblées.
-4. **Puis** : Tournois, Drop box, Messages.
-5. **Reporté** : clés, checklist staff, hors ligne, graphe des flux.
+> **Note pour le code du jalon 3** : les pages *à revoir* sont déjà codées (jalons 1 et 2), mais leur fiche a changé depuis. En codant le jalon 3, il faut aussi reporter ces changements dans le code existant. Pour les retrouver, comparer les fiches avec la branche `main` (`git diff main -- cdc/ README.md`), ou, si tout est déjà fusionné, avec le dernier commit du jalon 2 (`git diff 2a6a07f -- cdc/ README.md`). Une fois reportés, la page repasse en *validé*.
 
 ## Données à fournir
 
@@ -175,7 +165,6 @@ Les dépenses de l'année précédente, à fournir deux fois :
 
 ## Questions ouvertes
 
-- **Le réveillon** : comment le financer et l'organiser ?
 - **Les dates** :
   - la date limite d'inscription ;
   - la date de paiement du gîte et de la salle ;
