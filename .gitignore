@@ -1,6 +1,9 @@
 # Données de l'appli (comptes, médias, clés des notifications) : jamais dans git
 data/
 
+# Clés d'API des LLM (Staff > Réglages LLM) : jamais dans git, ni dans les sauvegardes de data/
+secrets/
+
 # Python
 __pycache__/
 *.pyc
@@ -11,3 +14,4 @@ __pycache__/
 *.swp
 .DS_Store
 TODO.md
+discussion jalon.md

@@ -4,8 +4,6 @@
 
 # Budget > Flux
 
-- **Priorité** : 5
-- **Statut** : décrite
 
 ## But
 <!-- À quoi sert la page, en une ou deux phrases. -->
@@ -110,5 +108,5 @@ De haut en bas :
 - Aucune.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Validation des dépenses](../staff/validation-depenses.md)
+[Menu](../../README.md#les-pages) · [Suivant : Prévisionnel](../staff/previsionnel.md)
 <!-- /nav -->

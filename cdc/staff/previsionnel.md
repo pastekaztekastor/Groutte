@@ -1,11 +1,9 @@
 <!-- nav -->
-[Précédent : Événements repas](../repas/repas.md) · [Menu](../../README.md#les-pages)
+[Précédent : Flux](../budget/flux.md) · [Menu](../../README.md#les-pages)
 <!-- /nav -->
 
 # Staff > Prévisionnel
 
-- **Priorité** : 3
-- **Statut** : à décrire
 
 ## But
 <!-- À quoi sert la page, en une ou deux phrases. -->
@@ -45,5 +43,5 @@
 - À décrire.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Suivi des dépenses](../staff/suivi-depenses.md)
+[Menu](../../README.md#les-pages)
 <!-- /nav -->

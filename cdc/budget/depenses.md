@@ -4,8 +4,6 @@
 
 # Budget > Dépenses
 
-- **Priorité** : 2
-- **Statut** : décrite
 
 ## But
 <!-- À quoi sert la page, en une ou deux phrases. -->
@@ -66,7 +64,9 @@ Dépenses
 <!-- Chaque bouton ou saisie, et ce qui se passe ensuite. -->
 - **Préremplir avec le ticket.** Le LLM lit la photo : les lignes, les montants et une catégorie proposée pour chacune. Ce n'est qu'un préremplissage, et l'auteur doit le vérifier.
   - Cette option n'apparaît que si un LLM est configuré dans [Réglages LLM](../staff/reglages-llm.md).
-  - Si le LLM configuré est injoignable (hors ligne, clé refusée), la lecture attend, et la dépense reste en brouillon.
+  - **Une seule lecture par dépense.** Ensuite, le bouton est grisé : « Ce ticket a déjà été lu ». Un échec du fournisseur ne compte pas.
+  - Une ligne sous le bouton prévient que la photo est envoyée au fournisseur du LLM.
+  - Si le LLM est injoignable (hors ligne, clé refusée), la page le dit et propose la saisie à la main. La dépense reste en brouillon (voir [Réglages LLM](../staff/reglages-llm.md)).
 - **Saisir à la main** : c'est toujours possible.
 - **Enregistrer** : la dépense reste en **Brouillon**, et on peut la modifier.
 - **Envoyer** : la dépense passe **En attente**, et le staff est prévenu.
@@ -89,6 +89,7 @@ Une dépense contient :
 - **les parts de chacun, calculées et enregistrées à la validation** (personne + montant en centimes), pour toutes les dépenses, y compris en mode communauté ;
 - l'état : Brouillon, En attente ou Validée ;
 - le commentaire de refus, s'il y en a un ;
+- si le ticket a déjà été lu par le LLM ;
 - l'historique : qui a envoyé, validé ou refusé, et quand.
 
 Ce que la dépense lit ailleurs :
@@ -147,7 +148,7 @@ L'envoi est refusé si :
 - L'auteur ne peut plus modifier une dépense En attente ou Validée.
 - L'auteur ne peut pas retirer une dépense En attente : seul un refus du staff la remet en brouillon.
 - Un staff ne peut pas valider sa propre dépense, sauf s'il est le seul staff.
-- **Une dépense validée est définitive.** Si le staff a validé une erreur, elle reste.
+- **Une dépense validée ne se modifie plus.** Si le staff a validé une erreur, elle reste. En dernier recours, le staff peut effacer la part d'une personne depuis [Suivi des dépenses](../staff/suivi-depenses.md) : la dépense reste validée, et c'est le payeur qui absorbe cette part.
 
 ## Questions ouvertes
 <!-- Ce qui n'est pas encore tranché. -->

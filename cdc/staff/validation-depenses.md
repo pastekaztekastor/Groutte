@@ -1,11 +1,9 @@
 <!-- nav -->
-[Précédent : Flux](../budget/flux.md) · [Menu](../../README.md#les-pages)
+[Précédent : Réglages compta](../staff/reglages-compta.md) · [Menu](../../README.md#les-pages)
 <!-- /nav -->
 
 # Staff > Validation des dépenses
 
-- **Priorité** : 2
-- **Statut** : décrite
 
 ## But
 <!-- À quoi sert la page, en une ou deux phrases. -->
@@ -70,7 +68,7 @@ Détail :
 
 ## Cas limites
 <!-- Ce qui doit être refusé, et les cas bizarres. -->
-- **Une dépense validée est définitive.** Si le staff a validé une erreur, elle reste.
+- **Une dépense validée ne se modifie plus.** Si le staff a validé une erreur, elle reste. En dernier recours, la part d'une personne peut être effacée depuis [Suivi des dépenses](suivi-depenses.md).
 - **Un refus sans motif** est refusé.
 - **Deux staffs agissent en même temps** sur la même dépense : la première action enregistrée l'emporte. L'autre voit « Cette dépense vient d'être validée (ou refusée) par Alice ».
 - **Une dépense qui n'a plus de concerné au moment de valider** (par exemple, tous ceux qui avaient coché la catégorie l'ont décochée) : la validation est refusée. Il faut la refuser, avec un motif, pour que l'auteur la corrige.
@@ -81,5 +79,5 @@ Détail :
 -
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Réglages LLM](../staff/reglages-llm.md)
+[Menu](../../README.md#les-pages) · [Suivant : Contacter le staff](../communaute/contact-staff.md)
 <!-- /nav -->

@@ -1,11 +1,9 @@
 <!-- nav -->
-[Précédent : Literie](../gite/literie.md) · [Menu](../../README.md#les-pages)
+[Précédent : POV du tournoi](../dropbox/pov-tournoi.md) · [Menu](../../README.md#les-pages)
 <!-- /nav -->
 
 # Gîte > SAM
 
-- **Priorité** : 3
-- **Statut** : à décrire
 
 ## But
 <!-- À quoi sert la page, en une ou deux phrases. -->
@@ -44,5 +42,5 @@
 - À décrire.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Événements repas](../repas/repas.md)
+[Menu](../../README.md#les-pages) · [Suivant : Clés](../gite/cles.md)
 <!-- /nav -->

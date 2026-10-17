@@ -4,13 +4,11 @@
 
 # Gîte > Présence
 
-- **Priorité** : 2
-- **Statut** : décrite
 
 ## But
 <!-- À quoi sert la page, en une ou deux phrases. -->
 - Dire quand j'arrive et quand je pars, et voir qui est là à chaque créneau de la semaine.
-- Mes dates donnent mes nuits et les repas où je peux manger, qui servent ensuite partout : le prix du gîte ([Créances](../budget/creances.md)), les couchages ([Lits](lits.md), [Literie](literie.md)), et mes repas ([Mes repas](../repas/mes-repas.md)).
+- Mes dates donnent mes nuits et les repas où je peux manger, qui servent ensuite partout : le prix du gîte ([Créances](../budget/creances.md)), les couchages et la literie ([Lits](lits.md)), et mes repas ([Mes repas](../repas/mes-repas.md)).
 - Cette page remplace l'ancienne « Ma réservation » : saisir ses dates et voir le groupe se font au même endroit.
 
 ## Qui voit, qui agit
@@ -56,7 +54,7 @@
 ## Actions
 <!-- Chaque bouton ou saisie, et ce qui se passe ensuite. -->
 - **Saisir ou modifier mes dates** : arrivée et départ, chacun sous la forme date + créneau (matin, midi, soir, nuit). L'enregistrement est immédiat, et tout ce qui en dépend est recalculé.
-- **Je ne viens pas** : efface mes dates, avec une confirmation. Je ne compte plus nulle part. Je peux revenir sur ma décision en saisissant de nouvelles dates.
+- **Je ne viens pas** : efface mes dates, avec une confirmation, et **enregistre que je ne viens pas**. Je ne compte plus nulle part, et le staff ne me relance plus pour mes dates ([Annonces](../staff/annonces.md)). Je peux revenir sur ma décision en saisissant de nouvelles dates, ce qui efface la mention.
 - **Toucher une case** de l'emploi du temps : la liste des présents à ce créneau, avec un lien vers leur contact dans le [Carnet d'adresses](../compte/carnet.md).
 - **Demander à l'hébergeur** (inscription tardive) : ouvre [Contacter le staff](../communaute/contact-staff.md), en attendant les messages privés (jalon 4).
 
@@ -65,9 +63,11 @@
 **Dans `data/presences.json`**, pour chaque compte :
 - l'arrivée : date + créneau ;
 - le départ : date + créneau ;
-- la date de la dernière modification.
+- la date de la dernière modification ;
 
-Un compte absent de ce fichier ne vient pas.
+- la mention « ne vient pas », avec sa date, si la personne a touché « Je ne viens pas ».
+
+Un compte sans dates ne vient pas, et ne compte nulle part. S'il a la mention « ne vient pas », il l'a dit ; sinon, il n'a pas encore répondu.
 
 **Ce qui est lu ailleurs** :
 - les dates du séjour, dans `config.json` ;

@@ -4,8 +4,6 @@
 
 # Budget > Mes comptes
 
-- **Priorité** : 2
-- **Statut** : décrite
 
 ## But
 <!-- À quoi sert la page, en une ou deux phrases. -->
@@ -21,7 +19,7 @@
 ## Qui voit, qui agit
 <!-- Plouc, staff, ou seulement la personne concernée. -->
 - **Chaque plouc** voit ses propres comptes, rembourse ceux à qui il doit, et confirme les remboursements qu'il reçoit. Les membres du staff font de même, en tant que ploucs.
-- **Le staff** ne gère rien ici : il choisit le mode de remboursement dans [Réglages compta](../staff/reglages-compta.md), et verra l'ensemble dans [Suivi des dépenses](../staff/suivi-depenses.md), qui arrive au jalon 3.
+- **Le staff** ne gère rien ici : il choisit le mode de remboursement dans [Réglages compta](../staff/reglages-compta.md), et voit l'ensemble dans [Suivi des dépenses](../staff/suivi-depenses.md). Là, il peut aussi effacer une dette, ou en créer une à la main : ces actions apparaissent ici, dans l'historique.
 - **Le graphe de tout le groupe** sera sur [Flux](flux.md), visible par tout le monde. Flux arrive au jalon 5.
 
 ## Écran
@@ -44,7 +42,8 @@ De haut en bas :
    - les dépenses validées qui me concernent ;
    - les remboursements ;
    - les reports ;
-   - les avoirs.
+   - les avoirs ;
+   - les actions du staff : une dette effacée, une dette manuelle, avec « par le staff (Alice) » et le message.
 6. Un lien vers la [FAQ du budget](comment-ca-marche.md), et vers [Flux](flux.md) à partir du jalon 5.
 
 ```
@@ -83,11 +82,13 @@ Mes comptes
 - **Confirmer** (la personne qui reçoit) : elle a bien reçu l'argent. Le remboursement compte alors dans les soldes.
 - **Refuser** (la personne qui reçoit) : rien n'est arrivé. Le remboursement est annulé, et mon montant dû revient.
 - **Relancer** (celui à qui on doit) : envoie une notification à la personne qui doit, « Petit rappel : tu dois X € à Alice ». C'est au cas par cas, à son initiative : il n'y a pas de rappel automatique.
+  - **Si la personne n'a pas activé les notifications**, une infobulle le dit avant d'envoyer : « Bob n'a pas les notifications. Il verra ta relance à sa prochaine ouverture de l'appli, mais tu ferais mieux de le prévenir aussi autrement », avec un lien vers son contact.
+  - Chaque relance est gardée dans les [Pings reçus](../communaute/pings.md) de la personne.
 - **Faire grâce** (celui à qui on doit) : il renonce à tout ou partie de ce qu'on lui doit. Le montant est prérempli avec toute la dette, et il peut le modifier.
   - Une fenêtre demande de confirmer, parce que c'est irréversible.
   - La personne est prévenue.
 - **Toucher une ligne** : le détail des dépenses qui composent la dette, en mode direct seulement.
-- **Clôturer les comptes** (staff, depuis [Suivi des dépenses](../staff/suivi-depenses.md), qui arrive au jalon 3), après le séjour :
+- **Clôturer les comptes** (staff, depuis [Réglages compta](../staff/reglages-compta.md)), après le séjour :
   - les comptes sont figés : plus de nouvelle dépense, et plus de changement de présence ;
   - la régularisation finale du gîte et de la salle est calculée ([Créances](creances.md)) ;
   - chacun reçoit son plan final de virements ;
@@ -132,6 +133,7 @@ Mes comptes
   - au bout de **7 jours** sans réponse, celui qui reçoit a une dernière notification : « Sans réponse de ta part d'ici demain, le remboursement de Bob sera considéré comme reçu » ;
   - **24 h plus tard**, toujours sans réponse, le remboursement est **confirmé d'office**.
 - **Une grâce** est enregistrée comme un remboursement confirmé tout de suite, mais sans argent qui circule. La dette disparaît, et c'est celui qui fait grâce qui absorbe le montant.
+- **Une dette effacée par le staff** ([Suivi des dépenses](../staff/suivi-depenses.md)) est enregistrée comme une grâce faite au nom du créancier. **Une dette manuelle** compte comme une dépense validée.
 
 ## Notifications
 <!-- Qui reçoit quoi, et quand. -->
@@ -143,6 +145,7 @@ Mes comptes
 - **Celui qui doit**, quand on lui fait grâce : « Alice t'a fait grâce de 12,00 € ».
 - **Celui qui reçoit**, au bout de 7 jours sans confirmation : la dernière notification avant la confirmation d'office.
 - **Tout le monde**, à la clôture des comptes : son plan final de virements.
+- **Le débiteur et le créancier**, quand le staff efface ou crée une dette qui les concerne (envoyée par [Suivi des dépenses](../staff/suivi-depenses.md), toujours reçue).
 
 ## Cas limites
 <!-- Ce qui doit être refusé, et les cas bizarres. -->

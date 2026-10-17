@@ -4,8 +4,6 @@
 
 # Drop box > POV du tournoi
 
-- **Priorité** : 4
-- **Statut** : à décrire
 
 ## But
 <!-- À quoi sert la page, en une ou deux phrases. -->
@@ -44,5 +42,5 @@
 - À décrire.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Clés](../gite/cles.md)
+[Menu](../../README.md#les-pages) · [Suivant : SAM](../gite/sam.md)
 <!-- /nav -->

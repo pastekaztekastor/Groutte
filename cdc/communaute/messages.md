@@ -1,11 +1,9 @@
 <!-- nav -->
-[Précédent : Annonces](../staff/annonces.md) · [Menu](../../README.md#les-pages)
+[Précédent : Pings reçus](../communaute/pings.md) · [Menu](../../README.md#les-pages)
 <!-- /nav -->
 
 # Communauté > Messages
 
-- **Priorité** : 4
-- **Statut** : à décrire
 
 ## But
 <!-- À quoi sert la page, en une ou deux phrases. -->

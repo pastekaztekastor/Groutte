@@ -4,8 +4,6 @@
 
 # Compte > Notifications
 
-- **Priorité** : 1
-- **Statut** : décrite
 
 ## But
 <!-- À quoi sert la page, en une ou deux phrases. -->
@@ -68,10 +66,10 @@ Notifications
 | --- | --- |
 | Forum | les nouveaux fils, et les réponses à mes posts et à mes commentaires |
 | Messages privés | les nouveaux messages dans mes conversations |
-| Dépenses | ma dépense validée ou refusée ; pour le staff, une dépense à valider |
+| Dépenses | ma dépense validée ou refusée ; pour le staff, une dépense à valider, et une clé LLM qui ne marche plus |
 | Mes comptes | mon solde a changé, un remboursement à confirmer ou confirmé, une grâce, une relance |
-| Gîte | les présences, les lits, la literie, le SAM du jour ; pour le staff, une nouvelle inscription |
-| Repas | un nouvel événement repas, et les changements de ceux où je suis inscrit |
+| Gîte | les présences, les lits ; pour le staff, une nouvelle inscription et un manque de matelas ou de duvets |
+| Repas | un nouveau [Menu](../repas/menu.md), et les changements de ceux où je suis inscrit ; pour l'auteur, le nombre d'inscrits |
 | Tournois | le planning et les résultats |
 | Drop box | les nouvelles photos, vidéos et musiques |
 
@@ -80,7 +78,7 @@ Notifications
 - **les annonces du staff** ;
 - **les paiements du gîte et de la salle** : l'ouverture, les rappels, la date limite, la confirmation ou le refus d'un paiement, les reports (voir [Créances](../budget/creances.md)) ;
 - **ce qui fait bouger mon argent sans moi** : la dernière notification avant la confirmation d'office d'un remboursement, et la clôture des comptes (voir [Mes comptes](../budget/mes-comptes.md)) ;
-- **les actions du staff sur mon compte** : nommé staff ou non, code remis à zéro, mode muet, rôle, nom corrigé (voir [Staff > Comptes](../staff/comptes.md)) ;
+- **les actions du staff sur mon compte** : nommé staff ou non, code remis à zéro, mode muet, rôle, nom corrigé (voir [Staff > Comptes](../staff/comptes.md)) ; une dette effacée ou créée par le staff (voir [Suivi des dépenses](../staff/suivi-depenses.md)) ;
 - **pour l'hébergeur** : les inscriptions tardives à accepter, et les paiements à confirmer.
 
 **Repris de NextSession**
@@ -88,6 +86,7 @@ Notifications
 - **Le titre** de chaque notification commence par « Groutte - … ». La toucher ouvre la bonne page.
 - **Une notification remplace la précédente sur la même page.** Par exemple, plusieurs photos envoyées d'affilée ne donnent qu'une notification.
 - **La pastille sur l'icône de l'appli** compte les notifications reçues depuis la dernière ouverture.
+- **Chaque notification est gardée dans [Pings reçus](../communaute/pings.md)**, qu'elle soit partie ou non. À l'ouverture de l'appli, chacun voit les annonces et les relances qu'il n'a pas lues ; celui qui n'a pas activé les notifications est en plus invité à le faire.
 - **Il n'y a pas de tâche planifiée.** Les rappels datés (Créances, confirmation d'office) sont vérifiés au premier chargement de l'appli par quelqu'un, et chaque envoi est noté pour ne jamais partir deux fois.
 
 ## Notifications

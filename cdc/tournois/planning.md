@@ -4,8 +4,6 @@
 
 # Tournois > Planning
 
-- **Priorité** : 4
-- **Statut** : à décrire
 
 ## But
 <!-- À quoi sert la page, en une ou deux phrases. -->

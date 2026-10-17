@@ -4,8 +4,6 @@
 
 # Compte > Ma fiche
 
-- **Priorité** : 1
-- **Statut** : décrite
 
 ## But
 <!-- À quoi sert la page, en une ou deux phrases. -->
@@ -13,7 +11,8 @@
 - Elle nourrit :
   - le [Carnet d'adresses](carnet.md) ;
   - le budget, par les catégories auxquelles je participe ;
-  - les repas, par les allergies et les régimes ;
+  - les repas et le [Menu](../repas/menu.md), par les allergies et les régimes ;
+  - les [Lits](../gite/lits.md), par la literie que j'apporte ;
   - la [Drop box](../dropbox/photos-videos.md), par le consentement photo.
 - On arrive ici juste après la création du compte ([Inscription](inscription.md)).
 
@@ -39,13 +38,17 @@ Une liste groupée, comme les Réglages de l'iPhone. Chaque groupe a son titre :
 3. **Ce que je partage** : la liste des catégories créées par le staff dans [Réglages compta](../staff/reglages-compta.md).
    - **Catégories obligatoires** : affichées sans case à cocher, avec la mention « Tu participes d'office » (Alimentaire, par exemple).
    - **Catégories facultatives** : une case à cocher par catégorie (Monster, Alcool, par exemple). Cochée, je participe à ces dépenses.
-   - **Si je ne coche pas Alcool**, un encart s'affiche sous la catégorie : « Tu ne bois pas ? Propose-toi SAM pour un soir, et merci d'avance : grâce à toi, tout le monde rentre en sécurité. » Un bouton mène à la page [SAM](../gite/sam.md).
+   - **Si je ne coche pas Alcool**, un encart s'affiche sous la catégorie : « Tu ne bois pas ? Propose-toi SAM pour un soir, et merci d'avance : grâce à toi, tout le monde rentre en sécurité. » Le SAM se décide ensuite de vive voix (la page [SAM](../gite/sam.md) est reportée).
 4. **Alimentation** :
    - les régimes : une case par régime (végétarien, végan, sans gluten, sans lactose, sans porc…) ;
    - les allergies : un texte libre.
-5. **Photos et vidéos** : « D'accord pour apparaître sur les photos et vidéos », oui ou non.
-6. **Tournois** : une case par tournoi auquel je participe. La liste viendra des pages [Tournois](../tournois/jeux.md) (voir Questions ouvertes).
-7. **Mes rôles** :
+5. **Couchage** : ce que j'apporte pour dormir.
+   - **Matelas** : un nombre, ou « non renseigné ».
+   - **Duvets** (ou couettes, couvertures) : un nombre, ou « non renseigné ».
+   - Le texte d'aide : « Un matelas gonflable 2 places compte pour 2 matelas si tu es d'accord pour le partager. Ce que tu apportes n'est compté que les nuits où tu es là. »
+6. **Photos et vidéos** : « D'accord pour apparaître sur les photos et vidéos », oui ou non.
+7. **Tournois** : une case par tournoi auquel je participe. La liste viendra des pages [Tournois](../tournois/jeux.md) (voir Questions ouvertes).
+8. **Mes rôles** :
    - les rôles de type `libre` de `roles.json` (cuisine, ménage, permis, véhicule, fumeur… voir le [README](../../README.md#rôles-rolesjson)) : une case à cocher par rôle ;
    - les rôles `staff` et `automatique` que j'ai : affichés, sans pouvoir les modifier.
 
@@ -65,6 +68,9 @@ Ma fiche
 ├─ Alimentation ────────────────────────────┤
 │ Végétarien [ ]  Sans gluten [ ]  …        │
 │ Allergies     arachides                   │
+├─ Couchage ────────────────────────────────┤
+│ Matelas                    [1 ▾]          │
+│ Duvets                     [non renseigné▾]│
 ├─ Mes rôles ───────────────────────────────┤
 │ Cuisine [x]  Média [ ]                    │
 │ Clés (attribué par le staff)              │
@@ -91,6 +97,7 @@ Le thème et le mode sombre restent dans **Réglages**, comme dans le squelette,
 - les catégories facultatives cochées (leurs identifiants) ;
 - les régimes cochés ;
 - les allergies (texte) ;
+- la literie apportée : le nombre de matelas et le nombre de duvets, chacun vide tant qu'il n'est pas renseigné ;
 - le consentement photo (oui ou non) ;
 - les tournois cochés (leurs identifiants).
 
@@ -113,6 +120,7 @@ Le thème et le mode sombre restent dans **Réglages**, comme dans le squelette,
   - il est affiché dans le carnet d'adresses ;
   - il est rappelé dans la Drop box, avec la liste des personnes qui préfèrent ne pas apparaître, au moment d'envoyer des photos.
 - **On ne demande pas de quantités** (combien de Monster par jour, par exemple). Pour prévoir les achats, on s'appuie sur les années précédentes ([Prévisionnel](../staff/previsionnel.md)).
+- **La literie** : « non renseigné » n'est pas zéro. Zéro veut dire « je n'apporte rien », « non renseigné » veut dire « je n'ai pas encore répondu ». Les deux comptent pour zéro dans le stock de [Lits](../gite/lits.md), mais seuls les « non renseigné » sont signalés, et visés par le filtre d'[Annonces](../staff/annonces.md).
 - **Seul le nom est obligatoire**, et il est donné à l'inscription. Tant que le prénom ou le téléphone manquent, un bandeau invite à compléter la fiche.
 
 ## Notifications
@@ -124,6 +132,7 @@ Le thème et le mode sombre restent dans **Réglages**, comme dans le squelette,
 - **Une catégorie facultative cochée par personne** : une dépense de cette catégorie n'aurait aucun concerné. L'envoi de la dépense est refusé, avec un message qui propose « NON GÉRÉ » ou une autre catégorie (voir [Dépenses](../budget/depenses.md)).
 - **Le staff supprime une catégorie** que des personnes avaient cochée : si au moins une dépense l'utilise, sa case reste dans la fiche, pour que chacun voie pourquoi il a payé. Sinon, elle disparaît. Les dépenses déjà validées ne changent pas (voir [Réglages compta](../staff/reglages-compta.md)).
 - **Le staff fait passer une catégorie de facultative à obligatoire** : tout le monde y participe à partir de ce moment.
+- **Un nombre de matelas ou de duvets négatif** est refusé.
 - **Un téléphone mal formé** est refusé (seulement des chiffres, des espaces et un « + » au début).
 - **Un membre muet** peut toujours modifier sa fiche.
 

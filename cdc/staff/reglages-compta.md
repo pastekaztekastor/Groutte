@@ -4,12 +4,10 @@
 
 # Staff > Réglages compta
 
-- **Priorité** : 2
-- **Statut** : décrite
 
 ## But
 <!-- À quoi sert la page, en une ou deux phrases. -->
-- Gérer les catégories de dépenses et le mode de remboursement.
+- Gérer les catégories de dépenses, le mode de remboursement, les repas gérés par la communauté, et la clôture des comptes.
 - Le nom n'est pas tout à fait juste, mais c'est celui qu'on utilise entre nous. Le LLM est à part, dans [Réglages LLM](reglages-llm.md).
 
 ## Qui voit, qui agit
@@ -23,6 +21,8 @@
    - **NON GÉRÉ** est toujours en bas, sans bouton de modification.
    - Un bouton **Ajouter une catégorie**.
 3. **Les catégories supprimées** encore utilisées par des dépenses, repliées, pour mémoire.
+4. **Les repas gérés par la communauté** : une ligne par créneau (matin, midi, soir), avec deux cases, **Géré** et **Coché par défaut** (voir [Mes repas](../repas/mes-repas.md)).
+5. **La clôture des comptes**, tout en bas, à part : le bouton **Clôturer les comptes**, ou la date de clôture si c'est fait.
 
 ```
 ┌───────────────────────────────────────────┐
@@ -37,6 +37,12 @@
 │                     [+ Ajouter catégorie] │
 ├───────────────────────────────────────────┤
 │ > Supprimées, encore utilisées (0)        │
+├─ Repas gérés ─────────────────────────────┤
+│ Matin   [ ] géré   [ ] coché par défaut   │
+│ Midi    [ ] géré   [ ] coché par défaut   │
+│ Soir    [x] géré   [x] coché par défaut   │
+├─ Clôture ─────────────────────────────────┤
+│                  [Clôturer les comptes]   │
 └───────────────────────────────────────────┘
 ```
 
@@ -46,6 +52,8 @@
 - **Ajouter une catégorie** : un nom, un type, une règle de répartition, et pour une catégorie facultative la case « Propose d'être SAM ».
 - **Modifier une catégorie** : les mêmes champs. Le changement ne vaut que pour les dépenses validées après.
 - **Supprimer une catégorie**, avec une confirmation. Elle n'est plus proposée dans les nouvelles dépenses (voir Règles et calculs).
+- **Changer les repas gérés** : cocher ou décocher Géré et Coché par défaut pour un créneau. Seuls les repas pas encore commencés changent, dans [Mes repas](../repas/mes-repas.md) et [Menu](../repas/menu.md).
+- **Clôturer les comptes**, après le séjour, avec une confirmation où l'on retape le mot « CLÔTURER ». C'est irréversible. Ce que la clôture fige est décrit dans [Mes comptes](../budget/mes-comptes.md).
 - Chaque action est inscrite dans le journal du staff (voir [Staff > Comptes](comptes.md)).
 
 ## Données
@@ -66,7 +74,10 @@
 | Alcool | facultative | à parts égales | oui |
 | NON GÉRÉ | spéciale | le payeur seul | - |
 
-**Le mode de remboursement**, dans `data/reglages-compta.json` : `direct` ou `minimum`.
+**Dans `data/reglages-compta.json`** :
+- le mode de remboursement : `direct` ou `minimum` ;
+- pour chaque créneau (matin, midi, soir) : géré ou non, et coché par défaut ou non. Par défaut, seul le soir est géré, et coché ;
+- la date de clôture des comptes, vide tant qu'ils ne sont pas clôturés.
 
 **Ce qui est lu ailleurs** : les dépenses qui utilisent chaque catégorie, dans [Dépenses](../budget/depenses.md).
 
@@ -86,6 +97,7 @@
 ## Notifications
 <!-- Qui reçoit quoi, et quand. -->
 - **Tout le monde**, quand le mode de remboursement change : « Le mode de remboursement passe à Minimum de virements : regarde qui tu dois rembourser ».
+- **Tout le monde**, à la clôture des comptes : son plan final de virements (envoyé par [Mes comptes](../budget/mes-comptes.md)).
 - **Tout le monde**, quand une catégorie devient obligatoire : « Tu participes maintenant aux dépenses Monster ».
 - **Ceux qui avaient coché une catégorie facultative**, quand elle est supprimée.
 
@@ -98,12 +110,13 @@ Sont refusés :
 
 - **Une catégorie facultative que personne n'a cochée** : acceptée ici. C'est l'envoi d'une dépense de cette catégorie qui sera refusé (voir [Ma fiche](../compte/ma-fiche.md)).
 - **Changer de mode alors que des remboursements sont en attente** : ils restent en attente avec leur montant (voir [Mes comptes](../budget/mes-comptes.md)).
-- **Après la clôture des comptes**, les catégories ne se modifient plus.
+- **Après la clôture des comptes**, les catégories et les repas gérés ne se modifient plus. [Suivi des dépenses](suivi-depenses.md), lui, marche comme avant.
+- **Un créneau coché par défaut mais pas géré** : impossible, la case Coché par défaut est grisée tant que Géré n'est pas coché.
 
 ## Questions ouvertes
 <!-- Ce qui n'est pas encore tranché. -->
 -
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Literie](../gite/literie.md)
+[Menu](../../README.md#les-pages) · [Suivant : Validation des dépenses](../staff/validation-depenses.md)
 <!-- /nav -->

@@ -4,8 +4,6 @@
 
 # Communauté > Forum
 
-- **Priorité** : 2
-- **Statut** : décrite
 
 ## But
 <!-- À quoi sert la page, en une ou deux phrases. -->

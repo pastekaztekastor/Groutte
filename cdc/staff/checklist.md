@@ -4,8 +4,6 @@
 
 # Staff > Checklist d'avancement
 
-- **Priorité** : 5
-- **Statut** : à décrire
 
 ## But
 <!-- À quoi sert la page, en une ou deux phrases. -->

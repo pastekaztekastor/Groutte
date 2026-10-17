@@ -1,11 +1,9 @@
 <!-- nav -->
-[Précédent : POV du tournoi](../dropbox/pov-tournoi.md) · [Menu](../../README.md#les-pages)
+[Précédent : SAM](../gite/sam.md) · [Menu](../../README.md#les-pages)
 <!-- /nav -->
 
 # Gîte > Clés
 
-- **Priorité** : 5
-- **Statut** : à décrire
 
 ## But
 <!-- À quoi sert la page, en une ou deux phrases. -->

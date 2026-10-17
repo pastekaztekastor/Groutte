@@ -4,8 +4,6 @@
 
 # Compte > Inscription et connexion
 
-- **Priorité** : 1
-- **Statut** : décrite
 
 ## But
 <!-- À quoi sert la page, en une ou deux phrases. -->

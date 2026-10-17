@@ -4,8 +4,6 @@
 
 # Staff > Gîte et salle
 
-- **Priorité** : 2
-- **Statut** : décrite
 
 ## But
 <!-- À quoi sert la page, en une ou deux phrases. -->
@@ -36,11 +34,11 @@
 3. **Le bloc Salle** : les mêmes éléments ; sa répartition est à parts égales par défaut.
 4. **Les exemptions** : la liste des personnes exemptées, avec pour chacune trois cases, Gîte, Salle et Communauté. Un bouton pour en ajouter une.
 5. **Les couchages** :
-   - les lits : une ligne par lit, avec sa lettre, sa description et son nombre de places, et un bouton **Ajouter un lit** ;
+   - les lits : une ligne par lit, avec sa lettre, sa description, son nombre de places et s'il est complet, et un bouton **Ajouter un lit** ;
    - la capacité du gîte, calculée : la somme des places ;
    - le plan du gîte : l'image, et un bouton pour l'envoyer ou la remplacer ;
    - la case **La salle sert aussi de couchage** ;
-   - la literie fournie par le gîte, au jalon 3 avec [Literie](../gite/literie.md).
+   - **la literie fournie par le gîte**, en plus de celle des lits : un nombre de matelas d'appoint et un nombre de duvets (couettes ou couvertures).
 6. **L'acompte**, seulement s'il est activé dans [Prévisionnel](previsionnel.md) : ses paramètres (voir Données).
 7. **Le suivi par personne** : une ligne par plouc, avec ses nuits, sa part du gîte et de la salle, ce qu'il a payé (confirmé et en attente), son reste à payer, et les reports acceptés. On peut trier par reste à payer.
 8. **Les inscriptions tardives à accepter** : une ligne par compte créé après la date limite d'inscription, avec le bouton **Accepter l'inscription**.
@@ -71,6 +69,7 @@
 │ B  Lit sous l'escalier       1 place    > │
 │ …                      [+ Ajouter un lit] │
 │ Capacité du gîte : 10 places              │
+│ Literie du gîte  [2] matelas  [4] duvets  │
 │ Plan  [aperçu]               [Remplacer]  │
 │ [x] La salle sert aussi de couchage       │
 ├─ Suivi ───────────────────────────────────┤
@@ -90,7 +89,8 @@
 - **Fixer les dates limites** d'inscription et de paiement.
 - **Ajouter, modifier ou retirer une exemption** : une personne, et ce dont elle est exemptée (gîte, salle, dépenses de la communauté). Les parts des autres sont recalculées. L'exemption de la communauté ne vaut que pour les dépenses validées ensuite (voir [Dépenses](../budget/depenses.md)).
 - **Ouvrir les paiements** du gîte ou de la salle, avec une confirmation qui rappelle que l'hébergeur ne pourra plus changer : le bouton Payer apparaît dans Créances, et tous les ploucs non exemptés sont prévenus. L'ouverture est définitive.
-- **Ajouter, modifier ou supprimer un lit** : une lettre, une description et un nombre de places.
+- **Ajouter, modifier ou supprimer un lit** : une lettre, une description, un nombre de places, et la case **Couchage complet (couette fournie)**, cochée par défaut. Le texte d'aide : « Décoche-la pour un canapé, ou un lit sans couette : celui qui y dort devra avoir un duvet. Sinon, il en prend un aux autres sans que l'appli le sache. »
+- **Saisir la literie fournie par le gîte** : les matelas d'appoint et les duvets. Le matériel qu'un staff apporte lui-même se déclare dans [Ma fiche](../compte/ma-fiche.md), comme pour tout le monde.
 - **Envoyer ou remplacer le plan du gîte** : une image où les lettres des lits sont déjà dessinées.
 - **Activer ou désactiver la salle comme couchage** : elle apparaît, ou disparaît, comme colonne à places illimitées dans [Lits](../gite/lits.md).
 - **Régler l'acompte**, s'il est activé (voir Données).
@@ -106,7 +106,8 @@
 - les exemptions : pour chaque personne, gîte oui ou non, salle oui ou non, communauté oui ou non ;
 - les lits : pour chacun, une lettre (A, B, C…), une description (« grande chambre du RdC ») et un nombre de places (1 pour un simple, 2 pour un double) ;
 - la salle comme couchage : oui ou non ;
-- la literie fournie par le gîte (jalon 3, voir [Literie](../gite/literie.md)) ;
+- pour chaque lit, s'il est complet (oui par défaut) ;
+- la literie fournie par le gîte : un nombre de matelas et un nombre de duvets, valables pour toutes les nuits ;
 - les paramètres de l'acompte, s'il est activé dans [Prévisionnel](previsionnel.md) : le pourcentage du prévisionnel demandé (par exemple 80 %) et la date limite de l'acompte. Cette liste est une première proposition.
 
 **Le plan du gîte** est une image dans `data/medias/`.
@@ -120,7 +121,7 @@
 - les moyens de paiement des hébergeurs, dans [Me rembourser](../compte/me-rembourser.md) ;
 - les réservations de lits, dans [Lits](../gite/lits.md).
 
-**Les données lues par les autres pages** : [Créances](../budget/creances.md) (tout), [Comment ça marche](../budget/comment-ca-marche.md) (la répartition de la salle), [Carnet d'adresses](../compte/carnet.md) (les hébergeurs), [Inscription](../compte/inscription.md) (la date limite d'inscription), [Présence](../gite/presence.md) (le montant du gîte, les exemptions et la capacité), [Lits](../gite/lits.md) (les lits, le plan et la salle comme couchage), [Literie](../gite/literie.md) (la literie fournie), [Contacter le staff](../communaute/contact-staff.md) (les hébergeurs).
+**Les données lues par les autres pages** : [Créances](../budget/creances.md) (tout), [Comment ça marche](../budget/comment-ca-marche.md) (la répartition de la salle), [Carnet d'adresses](../compte/carnet.md) (les hébergeurs), [Inscription](../compte/inscription.md) (la date limite d'inscription), [Présence](../gite/presence.md) (le montant du gîte, les exemptions et la capacité), [Lits](../gite/lits.md) (les lits, le plan, la salle comme couchage et la literie fournie), [Contacter le staff](../communaute/contact-staff.md) (les hébergeurs).
 
 ## Règles et calculs
 <!-- Formules, répartitions, valeurs par défaut. -->
@@ -160,6 +161,7 @@ L'ouverture des paiements est refusée si :
 - **Supprimer un lit, ou baisser son nombre de places**, alors que des places sont réservées : accepté, avec une confirmation qui dit combien de réservations sautent. Les plus récentes sont retirées d'abord (voir [Lits](../gite/lits.md)).
 - **Désactiver la salle comme couchage** alors que des ploucs y ont réservé : même chose.
 - **Une lettre déjà prise**, ou **zéro place** : refusé.
+- **Un nombre de matelas ou de duvets négatif** : refusé.
 
 ## Questions ouvertes
 <!-- Ce qui n'est pas encore tranché. -->

@@ -4,8 +4,6 @@
 
 # Staff > Comptes
 
-- **Priorité** : 1
-- **Statut** : décrite
 
 ## But
 <!-- À quoi sert la page, en une ou deux phrases. -->
@@ -82,8 +80,10 @@ Comptes
 - **Désactiver le compte** (un doublon, ou quelqu'un qui ne vient finalement pas).
   - Le compte ne peut plus se connecter, et il disparaît des listes et des suggestions `@`.
   - Il reste dans l'historique : ses dépenses, ses remboursements et ses messages sont conservés.
+  - **Si son solde n'est pas nul**, la désactivation est refusée, sauf si le staff retape le montant de ce solde pour confirmer. La confirmation affiche les montants et les personnes touchées.
+  - Dans ce cas, **toutes ses dettes sont effacées, dans les deux sens** : ce qu'il doit est absorbé par ses créanciers, et ce qu'on lui doit est perdu. Ce sont des dettes effacées par le staff, comme dans [Suivi des dépenses](suivi-depenses.md).
   - On ne supprime jamais un compte.
-- **Réactiver le compte.**
+- **Réactiver le compte.** Les dettes effacées à la désactivation ne reviennent pas.
 
 ## Données
 <!-- Ce qui est enregistré, et d'où viennent les données lues ailleurs. -->
@@ -136,6 +136,8 @@ La personne concernée est prévenue quand :
 - un rôle lui est ajouté ou retiré ;
 - son nom est corrigé.
 
+**Les personnes touchées** par les dettes effacées d'une désactivation sont prévenues : « Le compte de Bob est désactivé : ses 12,00 € envers toi sont effacés ».
+
 ## Cas limites
 <!-- Ce qui doit être refusé, et les cas bizarres. -->
 Sont refusés :
@@ -143,6 +145,7 @@ Sont refusés :
 - **retirer le droit staff à un hébergeur** du gîte ou de la salle : l'hébergeur reste staff pendant tout l'événement (voir [Gîte et salle](gite-salle.md)) ;
 - **rendre muet un staff** ;
 - **désactiver le dernier staff**, ou un hébergeur ;
+- **désactiver un compte dont le solde n'est pas nul**, sans retaper le montant ;
 - **corriger un nom pour celui d'un autre compte** ;
 - **attribuer à la main un rôle `automatique`.**
 

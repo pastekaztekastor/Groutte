@@ -4,8 +4,6 @@
 
 # Budget > Comment ça marche
 
-- **Priorité** : 2
-- **Statut** : décrite
 
 ## But
 <!-- À quoi sert la page, en une ou deux phrases. -->
@@ -85,10 +83,10 @@ Le gîte coûte 1 400 € pour 50 nuitées, soit 28 € la nuitée. Bill reste 5
 13. **Comment les courses sont-elles réparties ?** Par catégories. Une catégorie obligatoire concerne tout le monde, une facultative seulement ceux qui l'ont cochée dans [Ma fiche](../compte/ma-fiche.md). Chacune a sa règle : à parts égales, au prorata des repas ou au prorata des nuits. *Le tableau des catégories réelles, construit en direct.*
 14. **Je ne bois pas d'alcool : pourquoi je paierais ?** Tu ne paies pas : seuls ceux qui ont coché Alcool dans Ma fiche y participent. Changer une coche ne vaut que pour les dépenses validées ensuite. *Exemple : Bob achète du Monster sans en boire, les buveurs le remboursent en entier.*
 15. **C'est quoi « NON GÉRÉ » ?** Un achat perso glissé dans le panier commun : il reste à la charge de celui qui a payé. Un ticket qui mélange perso et commun se règle entre vous. *Exemple : le sandwich de Bob dans les courses.*
-16. **J'ai mangé ailleurs : pourquoi je paie ?** C'est [Mes repas](../repas/mes-repas.md) qui compte : par défaut, tu manges sur la réserve. Décoche le repas avant qu'il commence (8 h, 12 h, 19 h). Ensuite, il est figé.
+16. **J'ai mangé ailleurs : pourquoi je paie ?** C'est [Mes repas](../repas/mes-repas.md) qui compte : par défaut, tu manges sur la réserve aux repas gérés par la communauté (le soir, par exemple). Décoche le repas avant qu'il commence (8 h, 12 h, 19 h). Ensuite, il est figé. *S'inscrire à un plat du [Menu](../repas/menu.md) coche le repas ; mais tu paies les courses au prorata de tes repas, pas des plats choisis.*
 17. **Le ticket se lit tout seul ?** Oui : l'appli lit la photo et préremplit la dépense. C'est à toi de vérifier avant d'envoyer. *Affichée seulement si un LLM est configuré.*
 18. **Pourquoi 3,34 € au lieu de 3,33 € ?** Tout se compte au centime, et le centime en trop va à celui qui a payé. *Exemple : 10 € à 3, c'est 3,33 + 3,33 + 3,34 €.*
-19. **Une erreur a été validée : que faire ?** Une dépense validée est définitive. On s'arrange entre ploucs.
+19. **Une erreur a été validée : que faire ?** Une dépense validée ne se modifie plus : le plus simple, c'est de s'arranger entre ploucs. *En dernier recours, le staff peut effacer ta part d'une dépense, ou créer une dette à la main pour corriger. Tu en es prévenu, et c'est noté dans ton historique de Mes comptes.*
 
 **Après le séjour (et pendant) : on se rembourse**
 

@@ -4,8 +4,6 @@
 
 # Repas > Mes repas
 
-- **Priorité** : 2
-- **Statut** : décrite
 
 ## But
 <!-- À quoi sert la page, en une ou deux phrases. -->
@@ -20,7 +18,7 @@
 
 ## Écran
 <!-- Ce qu'on voit, de haut en bas. Un croquis ASCII est bienvenu. -->
-1. **Mes repas** : une ligne par jour de ma présence, trois cases (matin, midi, soir). Seuls les créneaux compris dans mes dates de [Présence](../gite/presence.md) sont proposés. En dessous, mon total de repas pris.
+1. **Mes repas** : une ligne par jour de ma présence, trois cases (matin, midi, soir). Seuls les créneaux compris dans mes dates de [Présence](../gite/presence.md) sont proposés, et seuls les repas **gérés par la communauté** sont modifiables (voir Règles et calculs) : les autres colonnes sont grisées. En dessous, mon total de repas pris.
 2. **Le groupe** : une ligne par jour, une colonne par repas, avec le nombre de ploucs qui mangent sur la réserve. Toucher une case donne la liste des noms, et le résumé de leurs régimes et allergies ([Ma fiche](../compte/ma-fiche.md)).
 3. Un lien « Comment ça marche ? » vers la [FAQ du budget](../budget/comment-ca-marche.md), à la question « J'ai mangé ailleurs : pourquoi je paie ? ».
 
@@ -48,21 +46,29 @@
 
 ## Données
 <!-- Ce qui est enregistré, et d'où viennent les données lues ailleurs. -->
-**Dans `data/repas.json`** : seulement les **repas décochés**, une ligne par repas (compte, date, créneau, date de la modification). Tout repas de ma présence qui n'y figure pas est pris.
+**Dans `data/repas.json`** : seulement les repas **qui s'écartent du défaut**, une ligne par repas (compte, date, créneau, pris ou non, date de la modification). Un repas géré de ma présence qui n'y figure pas suit le défaut de son créneau.
 
 **Ce qui est lu ailleurs** :
 - mes dates, dans [Présence](../gite/presence.md) ;
-- les régimes et les allergies, dans [Ma fiche](../compte/ma-fiche.md).
+- les régimes et les allergies, dans [Ma fiche](../compte/ma-fiche.md) ;
+- les repas gérés par la communauté, et leur défaut, dans [Réglages compta](../staff/reglages-compta.md).
 
-**Ce qui est lu ici** : [Dépenses](../budget/depenses.md) (le nombre de repas pris par chacun, pour la catégorie au prorata des repas).
+**Ce qui est lu ici** : [Dépenses](../budget/depenses.md) (le nombre de repas pris par chacun, pour la catégorie au prorata des repas), et [Menu](menu.md) (les mangeurs de chaque repas). **Menu écrit aussi ici** (voir Règles et calculs).
 
 ## Règles et calculs
 <!-- Formules, répartitions, valeurs par défaut. -->
-- **Par défaut, je mange sur la réserve** à chaque repas de ma présence. Je n'ai rien à faire si je mange avec tout le monde.
+- **Les repas gérés par la communauté** se règlent dans [Réglages compta](../staff/reglages-compta.md) : pour chaque créneau (matin, midi, soir), s'il est géré, et s'il est coché par défaut. Par défaut, seul le soir est géré, et il est coché.
+  - **Un repas géré** se coche et se décoche ici. Il compte dans les repas pris s'il est coché.
+  - **Un repas non géré** est grisé, et ne compte jamais dans les repas pris : chacun se débrouille (les restes, dehors). Les restes ont été payés par ceux qui ont mangé le repas d'avant : on ne compte rien de plus.
+- **Par défaut, je mange sur la réserve** à chaque repas géré coché par défaut. Je n'ai rien à faire si je mange avec tout le monde.
 - **Un repas se modifie jusqu'à ce qu'il commence** : avant 8 h pour le matin, 12 h pour le midi, 19 h pour le soir. Ensuite il est figé : c'est « qui a mangé, et quand ».
-- **Mes repas pris** = les créneaux matin, midi et soir de ma présence, moins ceux que j'ai décochés.
+- **Mes repas pris** = les repas gérés de ma présence qui sont cochés.
 - **Les dépenses déjà validées ne bougent pas** : leurs parts sont figées au moment de la validation (voir [Dépenses](../budget/depenses.md)).
-- **Le réveillon et les repas organisés à part** relèvent de la page [Événements repas](repas.md), au jalon 3.
+- **Le réveillon et les plats cuisinés ensemble** s'annoncent dans [Menu](menu.md), qui parle de la même chose :
+  - m'inscrire à un menu coche le repas ici ;
+  - me désinscrire du dernier menu où j'étais inscrit pour ce repas le décoche ;
+  - décocher le repas ici me désinscrit de tous ses menus.
+- **Un resto** ne passe pas par Menu : je décoche simplement le repas.
 
 ## Notifications
 <!-- Qui reçoit quoi, et quand. -->
@@ -71,15 +77,16 @@
 ## Cas limites
 <!-- Ce qui doit être refusé, et les cas bizarres. -->
 - **Modifier un repas déjà commencé ou passé** : refusé, la case est figée.
-- **Je change mes dates dans Présence** : les repas hors de mes nouvelles dates disparaissent, et ceux que j'avais décochés avec. Les nouveaux repas sont pris par défaut.
+- **Je change mes dates dans Présence** : les repas hors de mes nouvelles dates disparaissent, avec mes coches et mes inscriptions aux menus. Les nouveaux repas suivent le défaut de leur créneau.
+- **Le staff change les repas gérés ou leur défaut** : seuls les repas pas encore commencés changent. Les dépenses déjà validées ne bougent pas.
 - **Je ne viens plus** : je n'ai plus aucun repas.
 - **Personne ne mange sur la réserve à un repas** : rien de spécial, la case du groupe affiche 0.
 - **Une dépense Alimentaire validée alors que personne n'a pris de repas** : l'envoi est refusé, faute de concernés (voir [Dépenses](../budget/depenses.md)).
 
 ## Questions ouvertes
 <!-- Ce qui n'est pas encore tranché. -->
-- **Les heures limites** (8 h, 12 h, 19 h) : à ajuster, ou à mettre dans `config.json` ?
+-
 
 <!-- nav -->
-[Menu](../../README.md#les-pages)
+[Menu](../../README.md#les-pages) · [Suivant : Réglages LLM](../staff/reglages-llm.md)
 <!-- /nav -->
