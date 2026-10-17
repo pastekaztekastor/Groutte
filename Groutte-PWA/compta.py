@@ -12,8 +12,9 @@ Les règles viennent des fiches Créances, Dépenses et Mes comptes :
   figées (« instantane », gite_salle.py) : un changement de montant, d'exemption ou de répartition recalcule les parts,
   un changement de dates non. Des nuits en plus font un retardataire, qui doit sa part à ceux qui ont une part.
 - Les dettes entre ploucs (le « grand livre ») : parts des dépenses validées, reports, avoirs (trop-payés), manques
-  (après la clôture) et dettes des retardataires. Un remboursement confirmé (ou une grâce) de A à B compte comme une
-  dette de B envers A : il annule d'autant ce que A devait.
+  (après la clôture), dettes des retardataires et dettes manuelles du staff (Suivi des dépenses). Un remboursement confirmé (ou une grâce) de A à B compte comme une
+  dette de B envers A : il annule d'autant ce que A devait. Une dette effacée par le staff est une grâce qui vise une
+  ligne précise du grand livre (« ligne ») : elle est imputée sur cette ligne avant les autres.
 - Mode direct : chaque paire de personnes a ses dettes, qui ne se compensent pas, sauf celles des retardataires
   (le « tampon » : elles se compensent d'abord avec ce que l'autre lui doit). Mode minimum de virements : le plan de
   virements est tiré des soldes nets, le plus gros débiteur payant le plus gros créancier, jusqu'à ce que tout soit quitte.
@@ -31,7 +32,7 @@ import reglages_compta
 import repas
 import sejour
 from requetes import Refus
-from stockage import PROFILS, aujourdhui, lire_json
+from stockage import DETTES_MANUELLES, PROFILS, aujourdhui, lire_json
 
 QUOI = ("gite", "salle")
 LIEU = {"gite": "du gîte", "salle": "de la salle"}
@@ -80,6 +81,7 @@ class Compta:
         self.cats = reglages_compta.lire_categories()
         self.reglages = reglages_compta.lire_reglages()
         self.remb = mes_comptes.lire()
+        self.manuelles = lire_json(DETTES_MANUELLES, {}).get("dettes", [])
         self._memo = {}
 
     def mode(self):
@@ -107,9 +109,24 @@ class Compta:
         return sejour.repas_de(self.config, self.venants().get(nom))
 
     @memo
+    def regle_repas(self, jour, creneau):
+        """{"gere", "defaut"} de ce repas : le réglage du staff en vigueur quand il commence."""
+        return reglages_compta.regle_repas(self.config, self.reglages, jour, creneau)
+
+    @memo
+    def choix_repas(self):
+        return repas.choix_de(self.repas)
+
+    @memo
     def repas_pris(self, nom):
-        decoches = {(r["date"], r["creneau"]) for r in self.repas["decoches"] if r["nom"] == nom}
-        return [x for x in self.repas_possibles(nom) if x not in decoches]
+        """Les repas gérés de ma présence que je prends : mon choix, sinon le défaut du créneau."""
+        choix = self.choix_repas()
+        pris = []
+        for jour, creneau in self.repas_possibles(nom):
+            regle = self.regle_repas(jour, creneau)
+            if regle["gere"] and choix.get((nom, jour, creneau), regle["defaut"]):
+                pris.append((jour, creneau))
+        return pris
 
     @memo
     def presents_par_nuit(self):
@@ -250,20 +267,21 @@ class Compta:
     @memo
     def obligations(self):
         """Toutes les dettes entre ploucs, hors remboursements : [{"de", "a", "montant", "type", "date", "libelle",
-        "ref", "compensable"}]. Les plus anciennes d'abord."""
+        "ref", "cle", "compensable", "par"}]. Les plus anciennes d'abord. `cle` (« type:ref ») désigne l'élément
+        d'origine ; avec de et a, elle désigne une ligne de Suivi des dépenses. `par` : le staff d'une dette manuelle."""
         lignes = []
 
-        def ajouter(de, a, montant, genre, date, libelle, ref="", compensable=False):
+        def ajouter(de, a, montant, genre, date, libelle, ref="", compensable=False, par=""):
             if de and a and de != a and montant > 0:
                 lignes.append({"de": de, "a": a, "montant": montant, "type": genre, "date": date, "libelle": libelle,
-                               "ref": ref, "compensable": compensable})
+                               "ref": ref, "cle": f"{genre}:{ref}", "compensable": compensable, "par": par})
 
         for dep in self.deps["depenses"]:
             if dep["etat"] == "validee":
                 for nom, m in dep["parts"].items():
                     ajouter(nom, dep["auteur"], m, "depense", dep["valide_le"], dep["motif"], dep["id"])
         for r in self.cr["reports"]:
-            ajouter(r["nom"], r["a"], r["montant"], "report", r["quand"], f"Report {LIEU[r['quoi']]}")
+            ajouter(r["nom"], r["a"], r["montant"], "report", r["quand"], f"Report {LIEU[r['quoi']]}", r["id"])
         for quoi in QUOI:
             if not self.ouvert(quoi):
                 continue
@@ -271,13 +289,15 @@ class Compta:
             for nom in set(self.parts(quoi)) | {p["nom"] for p in self.cr["paiements"] if p["quoi"] == quoi}:
                 reste = self.reste(nom, quoi)
                 if reste < 0:
-                    ajouter(heb, nom, -reste, "avoir", ouverture, f"Trop-payé {LIEU[quoi]}")
+                    ajouter(heb, nom, -reste, "avoir", ouverture, f"Trop-payé {LIEU[quoi]}", quoi)
                 elif reste > 0 and self.cloture():
-                    ajouter(nom, heb, reste, "manque", self.cloture(), f"Reste {LIEU[quoi]} à la clôture")
+                    ajouter(nom, heb, reste, "manque", self.cloture(), f"Reste {LIEU[quoi]} à la clôture", quoi)
             for r in self.retards(quoi):
                 ajouter(r["de"], r["a"], r["montant"], "retard", ouverture,
                         f"Nuits en plus {LIEU[quoi]}" if self.par_nuits(quoi) else f"Part {LIEU[quoi]} en retard",
-                        compensable=True)
+                        quoi, compensable=True)
+        for m in self.manuelles:
+            ajouter(m["de"], m["a"], m["montant"], "manuelle", m["quand"], "Staff · " + m["message"], m["id"], par=m["par"])
         return sorted(lignes, key=lambda l: l["date"])
 
     @memo
@@ -305,8 +325,11 @@ class Compta:
         for o in self.obligations():
             elements[(o["de"], o["a"])].append(dict(o))
         rembourse = defaultdict(int)
+        cible = defaultdict(int)   # (de, a, cle) -> ce que le staff a effacé sur cette ligne précise
         for t in self.transferts():
             rembourse[(t["de"], t["a"])] += t["montant"]
+            if t.get("ligne"):
+                cible[(t["de"], t["a"], t["ligne"])] += t["montant"]
         paires = {tuple(sorted(k)) for k in list(elements) + list(rembourse)}
         resultat = {}
         for a, b in sorted(paires):
@@ -332,9 +355,13 @@ class Compta:
                 if not liste and not montant:
                     continue
                 reste_a_repartir = regle[(de, vers)]
-                for e in liste:   # les plus anciennes d'abord
-                    e["rembourse"] = min(e["montant"], reste_a_repartir)
+                for e in liste:   # d'abord les dettes effacées par le staff, sur leur ligne
+                    e["rembourse"] = min(e["montant"], cible[(de, vers, e["cle"])], reste_a_repartir)
                     reste_a_repartir -= e["rembourse"]
+                for e in liste:   # puis le reste, des plus anciennes aux plus récentes
+                    plus = min(e["montant"] - e["rembourse"], reste_a_repartir)
+                    e["rembourse"] += plus
+                    reste_a_repartir -= plus
                     e["etat"] = ("remboursee" if e["rembourse"] == e["montant"] else "partielle" if e["rembourse"]
                                  else "a-rembourser")
                 resultat[(de, vers)] = {"montant": montant, "elements": liste}
@@ -388,13 +415,13 @@ class Compta:
             signe = 1 if o["a"] == nom else -1
             cle = (o["type"], o["ref"] or o["libelle"], signe)
             ligne = groupes.setdefault(cle, {"date": o["date"], "type": o["type"], "libelle": o["libelle"], "ref": o["ref"],
-                                             "avec": [], "montant": 0})
+                                             "avec": [], "montant": 0, "par": o["par"]})
             ligne["avec"].append(o["de"] if signe > 0 else o["a"])
             ligne["montant"] += signe * o["montant"]
         lignes = list(groupes.values())
         for t in self.transferts():
             if nom in (t["de"], t["a"]):
-                lignes.append({"date": t["le"] or t["quand"], "type": t["type"], "libelle": "", "ref": t["id"],
+                lignes.append({"date": t["le"] or t["quand"], "type": t["type"], "libelle": t.get("message", ""), "ref": t["id"],
                                "avec": [t["a"] if t["de"] == nom else t["de"]], "office": t["etat"] == "office",
-                               "montant": t["montant"] if t["de"] == nom else -t["montant"]})
+                               "par": t.get("par_staff", ""), "montant": t["montant"] if t["de"] == nom else -t["montant"]})
         return sorted(lignes, key=lambda l: l["date"], reverse=True)

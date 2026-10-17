@@ -28,11 +28,15 @@ export const presenceDe = nom => app.etat.presences[nom] || null;
 export const nuitsDe = nom => creneauxDe(presenceDe(nom)).filter(([, c]) => c === "nuit").map(([j]) => j);
 export const repasPossibles = nom => creneauxDe(presenceDe(nom)).filter(([, c]) => c !== "nuit");
 
-/* Les repas pris sur la réserve : ceux de la présence, moins ceux décochés. */
-export function repasPris(nom) {
-  const decoches = new Set((presenceDe(nom)?.decoches || []).map(([j, c]) => j + "/" + c));
-  return repasPossibles(nom).filter(([j, c]) => !decoches.has(j + "/" + c));
-}
+/* Les repas pris sur la réserve, calculés par le serveur (compta.py) : les repas gérés de la présence, cochés
+   (mon choix, sinon le défaut du créneau). */
+export const repasPris = nom => presenceDe(nom)?.repas || [];
+
+/* Un repas géré par la communauté (Réglages compta) : il se coche dans Mes repas, et le Menu peut le viser. */
+export const estGere = (jour, creneau) => app.etat.sejour.repas_geres.includes(jour + "/" + creneau);
+
+/* Ceux qui mangent sur la réserve à un repas (Mes repas). */
+export const mangeurs = (jour, creneau) => venants().filter(n => repasPris(n).some(([x, y]) => x === jour && y === creneau));
 
 /* Ceux qui viennent : un compte actif avec au moins un créneau dans le séjour. */
 export const venants = () => Object.keys(app.etat.presences).filter(n => creneauxDe(presenceDe(n)).length > 0);

@@ -1,5 +1,5 @@
 import { app, estStaff, nombreNouveautes } from "./commun.js";
-import { vueReglages, vueNotifications, vueAppli, vueAnnonce } from "./reglages.js";
+import { vueReglages, vueNotifications, vueAppli } from "./reglages.js";
 import { resumeNotifications } from "./notifs.js";
 import { estInstallee } from "./installation.js";
 import { vueFiche, resumeFiche } from "./fiche.js";
@@ -18,13 +18,19 @@ import { vueFaq } from "./faq.js";
 import { vueGiteSalle, resumeGiteSalle } from "./gite-salle.js";
 import { vueReglagesCompta, resumeReglagesCompta } from "./reglages-compta.js";
 import { vueValidation, vueValidationDepense, titreValidation, resumeValidation, enAttente } from "./validation.js";
+import { vueMenu, vueMenuDetail, vueSaisieMenu, nouveauMenu, titreMenu, resumeMenu } from "./menu.js";
+import { vuePings, resumePings, nonLus } from "./pings.js";
+import { vueAnnonces, resumeAnnonces } from "./annonces.js";
+import { vueSuivi, resumeSuivi } from "./suivi.js";
+import { vueReglagesLlm, resumeReglagesLlm } from "./reglages-llm.js";
 
 /* Les écrans de l'appli (ecran), ce que montre le panneau (groupesPanneau), ce qui se relit tout seul (A_RAFRAICHIR).
    Le reste (main.js, panneau.js) est générique.
 
    Jalon 1 : le socle (Mon compte, Staff > Comptes et Annonce). Jalon 2 : Communauté (Forum, Contacter le staff),
    Gîte (Présence, Lits), Repas (Mes repas), Budget (Mes comptes, Créances, Dépenses, Comment ça marche), et pour le
-   staff Gîte et salle, Réglages compta, Validation des dépenses. */
+   staff Gîte et salle, Réglages compta, Validation des dépenses. Jalon 3 : Pings reçus, Menu, et pour le staff
+   Réglages LLM, Suivi des dépenses, Annonces. */
 
 /* Ce qu'affiche une adresse « #rubrique/argument ». Renvoie :
    - titre       : le grand titre de la page, ou le titre de la barre du haut pour un écran poussé ;
@@ -55,11 +61,18 @@ export function ecran(rubrique, argument) {
     return { titre: "Forum", action: ["fa-ecrire", "Nouveau post", ouvrirCreation], vue: () => vueForum("") };
   }
   if (rubrique === "contact") return { titre: "Contacter le staff", vue: vueContact };
+  if (rubrique === "pings") return { titre: "Pings reçus", vue: vuePings };
 
   // Gîte et repas
   if (rubrique === "presence") return { titre: "Présence", vue: vuePresence };
   if (rubrique === "lits") return { titre: "Lits", action: app.etat.gite.lits.length ? ["fa-plan", "Plan du gîte", ouvrirPlan] : null, vue: vueLits };
   if (rubrique === "repas") return { titre: "Mes repas", vue: vueRepas };
+  if (rubrique === "menu") {
+    if (argument === "nouveau") return { titre: "Proposer un menu", retour: ["#menu", "Annuler"], vue: () => vueSaisieMenu("") };
+    if (argument) return { titre: titreMenu(argument), retour: ["#menu", "Menu"], lu: "menu/" + argument, vue: () => vueMenuDetail(argument) };
+    return { titre: "Menu", action: ["fa-ajouter", "Proposer un menu", nouveauMenu], lu: "menu", vue: vueMenu };
+  }
+  if (rubrique === "menu-modifier" && argument) return { titre: "Modifier le menu", retour: ["#menu/" + argument, "Annuler"], vue: () => vueSaisieMenu(argument) };
 
   // Budget
   if (rubrique === "comptes") return { titre: "Mes comptes", vue: vueComptes };
@@ -76,7 +89,9 @@ export function ecran(rubrique, argument) {
   // Staff
   if (estStaff()) {
     if (rubrique === "staff") return { titre: "Comptes", vue: vueStaffComptes };
-    if (rubrique === "annonce") return { titre: "Annonce", vue: vueAnnonce };
+    if (rubrique === "annonces") return { titre: "Annonces", vue: vueAnnonces };
+    if (rubrique === "suivi") return { titre: "Suivi des dépenses", vue: vueSuivi };
+    if (rubrique === "reglages-llm") return { titre: "Réglages LLM", vue: vueReglagesLlm };
     if (rubrique === "gite-salle") return { titre: "Gîte et salle", vue: vueGiteSalle };
     if (rubrique === "reglages-compta") return { titre: "Réglages compta", vue: vueReglagesCompta };
     if (rubrique === "validation") {
@@ -96,6 +111,7 @@ export function groupesPanneau() {
   return [
     { titre: "Communauté", classe: "groupe-1", entrees: [
       { lien: "#forum", icone: "fa-forum", titre: "Forum", resume: forum ? `${forum} fil${forum > 1 ? "s" : ""} avec du nouveau` : "Règles, FAQ, tâches et le reste", nouveau: forum },
+      { lien: "#pings", icone: "fa-pings", titre: "Pings reçus", resume: resumePings(), nouveau: nonLus() },
       { lien: "#contact", icone: "fa-contact", titre: "Contacter le staff", resume: "Discord, hébergeurs, staff" },
     ] },
     { titre: "Gîte", classe: "groupe-2", entrees: [
@@ -104,6 +120,7 @@ export function groupesPanneau() {
     ] },
     { titre: "Repas", classe: "groupe-4", entrees: [
       { lien: "#repas", icone: "fa-repas", titre: "Mes repas", resume: resumeRepas() },
+      { lien: "#menu", icone: "fa-menu", titre: "Menu", resume: resumeMenu(), nouveau: nombreNouveautes("menu") },
     ] },
     { titre: "Budget", classe: "groupe-3", entrees: [
       { lien: "#comptes", icone: "fa-comptes", titre: "Mes comptes", resume: resumeComptes(), nouveau: aConfirmerComptes() },
@@ -123,8 +140,10 @@ export function groupesPanneau() {
       estStaff() && { lien: "#staff", icone: "fa-staff", titre: "Comptes", resume: "Droits, codes, rôles, journal" },
       estStaff() && { lien: "#gite-salle", icone: "fa-gite", titre: "Gîte et salle", resume: resumeGiteSalle(), nouveau: tardifs },
       estStaff() && { lien: "#reglages-compta", icone: "fa-categories", titre: "Réglages compta", resume: resumeReglagesCompta() },
+      estStaff() && { lien: "#reglages-llm", icone: "fa-llm", titre: "Réglages LLM", resume: resumeReglagesLlm() },
       estStaff() && { lien: "#validation", icone: "fa-valider", titre: "Validation des dépenses", resume: resumeValidation(), nouveau: aValider },
-      estStaff() && { lien: "#annonce", icone: "fa-annonces", titre: "Annonce", resume: "Notifier tout le monde" },
+      estStaff() && { lien: "#suivi", icone: "fa-suivi", titre: "Suivi des dépenses", resume: resumeSuivi() },
+      estStaff() && { lien: "#annonces", icone: "fa-annonces", titre: "Annonces", resume: resumeAnnonces() },
     ] },
   ];
 }

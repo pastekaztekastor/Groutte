@@ -1,10 +1,10 @@
 """Ce que chacun règle sur son compte : sa fiche, ses moyens d'être remboursé, son thème, sa photo, ses notifications,
-son code ; et les annonces du staff.
+son code. (Les annonces du staff sont dans annonces.py.)
 
 data/profils.json : {nom: {
     "couleur", "avatar", "notifs": {categorie: bool},
     "prenom", "pseudo", "discord", "telephone", "regimes": [..], "allergies", "photo_ok": bool,
-    "categories": [id], "tournois": [id],
+    "categories": [id], "tournois": [id], "matelas": n, "duvets": n (absents : non renseigné),
     "paiement": {"titulaire", "iban", "paypal", "revolut", "lydia", "wero", "especes", "prefere"}}}
 Les rôles, eux, sont dans data/comptes.json (comptes_donnees.py).
 """
@@ -15,7 +15,7 @@ import comptes_donnees as cd
 import medias
 import notifications
 from notifications import notifier
-from requetes import Refus, compte, texte
+from requetes import Refus, texte
 from routes import route
 from stockage import PROFILS, ecrire_json, lire_json
 
@@ -57,6 +57,15 @@ def modifier_profil(d):
         profil["photo_ok"] = corps["photo_ok"]
     if "categories" in corps:
         profil["categories"] = categories_cochees(corps["categories"], profil.get("categories", []))
+    for objet in ("matelas", "duvets"):   # Couchage : un nombre, ou None (« non renseigné »)
+        if objet in corps:
+            n = corps[objet]
+            if n is not None and (not isinstance(n, int) or isinstance(n, bool) or not 0 <= n <= 20):
+                raise Refus(f"nombre de {objet} invalide")
+            if n is None:
+                profil.pop(objet, None)
+            else:
+                profil[objet] = n
     if "regimes" in corps:
         regimes = corps["regimes"]
         proposes = regimes_proposes(d.config)
@@ -245,18 +254,5 @@ def regler_notifications(d):
 @route("/api/notifs/test")
 def tester_notifications(d):
     exiger_notifications()
-    notifier(d.config, None, "Test", "Les notifications marchent sur cet appareil.", "#notifications", destinataires=[d.nom])
-
-
-@route("/api/notifs/annonce")
-def annoncer(d):
-    """Annonce du staff, quelles que soient les préférences : à tous, ou aux comptes choisis (`destinataires`)."""
-    d.exiger_staff()
-    exiger_notifications()
-    destinataires = d.corps.get("destinataires")
-    if destinataires is not None:
-        if not isinstance(destinataires, list) or not destinataires:
-            raise Refus("choisis au moins un destinataire")
-        destinataires = {compte(d.config, {"nom": nom}, "nom") for nom in destinataires}
-    notifier(d.config, None, "Annonce", texte(d.corps, "texte", 240, requis=True), "#",
-             destinataires=destinataires, sauf=d.nom)
+    notifier(d.config, None, "Test", "Les notifications marchent sur cet appareil.", "#notifications", destinataires=[d.nom],
+             garder=False)

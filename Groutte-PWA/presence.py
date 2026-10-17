@@ -1,13 +1,16 @@
 """Gîte > Présence : quand j'arrive et quand je pars. Mes dates donnent mes nuits et mes repas, qui servent partout :
 le prix du gîte (compta.py), les lits (lits.py), mes repas (repas.py).
 
-data/presences.json : {nom: {"arrivee": {"date", "creneau"}, "depart": {"date", "creneau"}, "modifie": horodatage}}.
-Un compte absent de ce fichier ne vient pas. Personne ne saisit les dates d'un autre, pas même le staff.
+data/presences.json : {nom: {"arrivee": {"date", "creneau"}, "depart": {"date", "creneau"}, "modifie": horodatage}}
+                      ou {nom: {"ne_vient_pas": horodatage}} quand la personne a touché « Je ne viens pas ».
+Un compte sans dates ne vient pas. Avec la mention « ne_vient_pas », il l'a dit ; sinon, il n'a pas encore répondu
+(Annonces le relance). Personne ne saisit les dates d'un autre, pas même le staff.
 """
 import comptes_donnees as cd
 import compta
 import gite_salle
 import lits
+import menu
 import repas
 import sejour
 from euros import euros
@@ -47,14 +50,15 @@ def enregistrer(d, nouvelle):
     presences = lire()
     if nouvelle:
         presences[d.nom] = dict(nouvelle, modifie=maintenant())
-    elif d.nom in presences:
-        del presences[d.nom]
+    elif "ne_vient_pas" not in presences.get(d.nom, {}):
+        presences[d.nom] = {"ne_vient_pas": maintenant()}
     else:
         return
     ecrire_json(PRESENCES, presences)
     apres = compta.Compta(d.config)
     lits.apres_presence(d.config, d.nom, apres.nuits_liste(d.nom))
     repas.apres_presence(d.nom, apres.repas_possibles(d.nom))
+    menu.apres_presence(d.config, d.nom, avant.repas_possibles(d.nom), apres.repas_possibles(d.nom))
     prevenir(d, avant, apres)
 
 
@@ -93,6 +97,7 @@ def saisir_dates(d):
 
 @route("/api/presence/absent")
 def je_ne_viens_pas(d):
+    """Efface mes dates, et enregistre que je ne viens pas (de nouvelles dates effacent la mention)."""
     enregistrer(d, None)
 
 

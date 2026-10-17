@@ -9,6 +9,7 @@
   {"id": "budget",     "nom": "Budget",     "type": "staff"},
   {"id": "activites",  "nom": "Activités",  "type": "staff"},
   {"id": "media",      "nom": "Média",      "type": "staff"},
+  {"id": "chef",       "nom": "Chef",       "type": "automatique", "source": "menu"},
   {"id": "cuisine",    "nom": "Cuisine",    "type": "libre"},
   {"id": "menage",     "nom": "Ménage",     "type": "libre"},
   {"id": "permis",     "nom": "Permis",     "type": "libre"},

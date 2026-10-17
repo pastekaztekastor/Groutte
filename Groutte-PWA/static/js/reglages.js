@@ -1,9 +1,9 @@
 import { app, el, avatar, compte, themes, couleurTheme, modeAffichage, changerMode, deconnecter, envoyer, televerser, reduireImage,
-  notifier, saisie, oublier, afficher, nouveauCode, estStaff, modeModeration, changerModeModeration } from "./commun.js";
+  notifier, afficher, nouveauCode, estStaff, modeModeration, changerModeModeration } from "./commun.js";
 import { blocNotifications, desactiverAppareil } from "./notifs.js";
 
 /* Réglages du compte, façon Réglages de l'iPhone : photo, thème, mode clair ou sombre, code ; et les pages
-   Notifications, Installer l'appli, Annonce (staff). */
+   Notifications et Installer l'appli. (Les annonces du staff : annonces.js.) */
 
 export async function seDeconnecter() {
   await desactiverAppareil();   // l'appareil ne doit plus recevoir les notifications de ce compte
@@ -97,22 +97,4 @@ export function vueAppli() {
     contenu = el("p", { class: "doux petit" }, "Dans le menu du navigateur, choisis « Installer l'application » ou « Ajouter à l'écran d'accueil ».");
   }
   return el("section", { class: "carte" }, contenu);
-}
-
-/* Staff : une annonce à tout le monde, quelles que soient les préférences de notification. */
-export function vueAnnonce() {
-  const cle = "annonce";
-  const texte = saisie(cle, { maxlength: 240, rows: 3, required: true, placeholder: "Ton message", "aria-label": "Annonce" }, true);
-  const abonnes = app.etat.notifs.abonnes;
-  return [
-    el("form", {
-      onsubmit: async ev => {
-        ev.preventDefault();
-        if (await envoyer("notifs/annonce", { texte: texte.value })) { oublier(cle); notifier("Annonce envoyée.", true); afficher(); }
-      },
-    }, el("div", { class: "carte" }, texte), el("div", { class: "actions" }, el("button", { class: "btn principal large", type: "submit" }, "Envoyer"))),
-    el("p", { class: "doux petit note" }, abonnes.length
-      ? `Reçue par ceux qui ont activé les notifications : ${abonnes.join(", ")}.`
-      : "Personne n'a encore activé les notifications."),
-  ];
 }

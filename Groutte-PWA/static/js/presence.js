@@ -51,7 +51,8 @@ async function enregistrer() {
 async function jeNeViensPas() {
   const message = ouverts()
     ? "Les paiements sont ouverts : ce qui est payé est payé, sans remboursement. Tu ne viens plus ?"
-    : "Effacer tes dates ? Tu ne compteras plus nulle part. Tu pourras revenir en saisissant de nouvelles dates.";
+    : presenceDe(app.moi) ? "Effacer tes dates ? Tu ne compteras plus nulle part. Tu pourras revenir en saisissant de nouvelles dates."
+      : "Tu ne viens pas ? C'est noté, et le staff ne te relancera plus pour tes dates. Tu pourras revenir en saisissant des dates.";
   if (confirm(message) && await envoyer("presence/absent")) saisieDates = null;
 }
 
@@ -59,7 +60,9 @@ async function jeNeViensPas() {
 function resultat() {
   const moi = presenceDe(app.moi);
   const creneaux = creneauxDe(moi);
-  if (!creneaux.length) return el("p", { class: "doux petit" }, "Tu n'as pas encore de dates : tu ne comptes nulle part.");
+  if (!creneaux.length) return el("p", { class: "doux petit" }, app.etat.ne_vient_pas
+    ? "Tu as dit que tu ne viens pas : tu ne comptes nulle part. Saisis des dates si tu changes d'avis."
+    : "Tu n'as pas encore de dates : tu ne comptes nulle part.");
   const nuits = creneaux.filter(([, c]) => c === "nuit").length;
   const repas = creneaux.length - nuits;
   const g = app.etat.creances.gite;
@@ -95,7 +98,7 @@ function mesDates() {
     moi?.hors && el("p", { class: "alerte-ligne" }, icone("info"), "Les dates du séjour ont changé : vérifie tes dates."),
     el("p", { class: "doux petit note" }, AIDE),
     el("section", { class: "carte" }, resultat(),
-      moi && el("div", { class: "rangee a-droite" }, el("button", { class: "btn danger", type: "button", onclick: jeNeViensPas }, "Je ne viens pas"))),
+      !app.etat.ne_vient_pas && el("div", { class: "rangee a-droite" }, el("button", { class: "btn danger", type: "button", onclick: jeNeViensPas }, "Je ne viens pas"))),
   ];
 }
 
@@ -153,5 +156,5 @@ export function vuePresence() {
 export function resumePresence() {
   if (app.etat.gite.tardif) return "Inscription à faire accepter";
   const nuits = creneauxDe(presenceDe(app.moi)).filter(([, c]) => c === "nuit").length;
-  return presenceDe(app.moi) ? `${pluriel(nuits, "nuit")} · ${venants().length} ploucs` : "Dis quand tu viens";
+  return presenceDe(app.moi) ? `${pluriel(nuits, "nuit")} · ${venants().length} ploucs` : app.etat.ne_vient_pas ? "Je ne viens pas" : "Dis quand tu viens";
 }

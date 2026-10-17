@@ -215,13 +215,20 @@ def envoyer_a(cibles, message, contact):
     threading.Thread(target=tache, daemon=True).start()
 
 
-def notifier(config, categorie, titre, texte, lien, destinataires=None, sauf=None):
+def notifier(config, categorie, titre, texte, lien, destinataires=None, sauf=None, genre="autre", de=None, garder=True):
     """Prévient les comptes abonnés qui ont gardé cette catégorie (tout le monde par défaut, sauf l'auteur).
 
     `categorie` None : annonce, mention ou test, envoyé quelles que soient les préférences.
     `lien` : l'adresse de la page à ouvrir (« #notes/<id> ») ; elle sert aussi d'étiquette (une notification
     remplace la précédente de la même page).
+    Chaque notification est aussi gardée dans les Pings reçus de ses destinataires (pings.py), qu'elle parte ou non :
+    `genre` (« annonce », « relance » ou « autre ») et `de` (la personne qui l'envoie) y servent. `garder` False : pas
+    de ping (la notification de test). Appelé sous le verrou, comme toute écriture.
     """
+    if garder:
+        import pings   # import ici : pings importe requetes, qui importe (de loin) ce module
+        noms = cd.noms_actifs(config) if destinataires is None else set(destinataires)
+        pings.garder(config, sorted(n for n in noms if n != sauf), titre, texte, lien, genre, de)
     if not DISPONIBLE or not config.get("notifications", True):
         return
     abonnements = lire_json(ABONNEMENTS, {})

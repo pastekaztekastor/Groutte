@@ -7,6 +7,7 @@ Les actions de groupe (rôles, muet) prennent une liste `qui` ; les actions sur 
 import acces
 import comptes_donnees as cd
 import notifications
+from euros import euros
 from notifications import notifier
 from requetes import Refus, texte
 from routes import route
@@ -161,24 +162,40 @@ def renommer(d):
 
 @route("/api/staff/desactiver")
 def desactiver(d):
-    """Désactiver (`desactive`: true) ou réactiver un compte. Il n'est jamais supprimé : son historique reste."""
+    """Désactiver (`desactive`: true) ou réactiver un compte. Il n'est jamais supprimé : son historique reste.
+    Si son solde n'est pas nul, il faut retaper ce solde (`confirmation`, en centimes). Toutes ses dettes sont alors
+    effacées, dans les deux sens. Réactiver ne les fait pas revenir."""
     d.exiger_staff()
     comptes = cd.lire_comptes(d.config)
     qui = un_compte(d, comptes)
     desactive = bool(d.corps.get("desactive"))
     if comptes[qui]["desactive"] == desactive:
         return
+    touches = []
     if desactive:
         if comptes[qui]["staff"] and cd.staffs_actifs(comptes) == [qui]:
             raise Refus("c'est le dernier staff : il ne peut pas être désactivé")
         if est_hebergeur(qui):
             raise Refus("c'est un hébergeur : désigne d'abord un autre hébergeur (Gîte et salle)")
+        import compta   # import ici : compta importe gite_salle, qui importe ce module
+        import suivi
+        solde = compta.Compta(d.config).soldes().get(qui, 0)
+        if solde and d.corps.get("confirmation") != abs(solde):
+            raise Refus(f"le solde de {qui} n'est pas nul : retape {euros(abs(solde))} pour confirmer")
+        # Toutes ses dettes sont effacées, dans les deux sens (des dettes effacées par le staff, Suivi des dépenses).
+        touches = suivi.effacer_compte(d.config, d.nom, qui)
     comptes[qui]["desactive"] = desactive
     cd.ecrire_comptes(comptes)
     if desactive:
         acces.revoquer(qui)
         notifications.oublier_compte(qui)
-    noter(d, "desactive" if desactive else "reactive", qui)
+    noter(d, "desactive" if desactive else "reactive", qui,
+          ", ".join(f"{euros(m)} {'envers' if sens == 'doit' else 'de'} {autre}" for autre, m, sens in touches))
+    for autre, montant, sens in touches:
+        notifier(d.config, None, "Compte désactivé",
+                 f"Le compte de {qui} est désactivé : ses {euros(montant)} envers toi sont effacés." if sens == "doit"
+                 else f"Le compte de {qui} est désactivé : ta dette de {euros(montant)} envers lui est effacée.",
+                 "#comptes", destinataires={autre}, sauf=d.nom)
 
 
 @cd.renommage

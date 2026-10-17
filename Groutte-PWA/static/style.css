@@ -828,3 +828,49 @@ input[type=checkbox].case-cocher:disabled { cursor: default; }
 .contexte { display: flex; flex-wrap: wrap; align-items: center; gap: var(--e1) 6px; margin-top: var(--e2); color: var(--texte-doux); text-decoration: none; font-size: var(--t-petit); overflow-wrap: anywhere; }
 .contexte strong { color: var(--texte); }
 .contexte + .carte.post.detail { margin-top: var(--e3); }
+
+/* =========================================================================================================
+   Jalon 3
+   ========================================================================================================= */
+
+/* --- Petits éléments communs ----------------------------------------------------------------------------- */
+.mono { font-family: var(--mono); }
+.compteur-texte { margin-left: auto; font-variant-numeric: tabular-nums; }
+.carte .rangee > input { flex: 1 1 160px; min-width: 0; }
+.alerte-ligne.colonne { flex-direction: column; }
+.alerte-ligne .liens-faq { gap: var(--e2) var(--e3); }
+.champ-montant.court { flex: 0 0 72px; width: 72px; }
+.ligne select.choix-couchage { flex: none; max-width: none; }
+
+/* --- Menu ------------------------------------------------------------------------------------------------ */
+.ligne-menu .qui-lien { gap: var(--e2); }
+.ligne-menu .ligne-valeur { color: var(--texte); font-weight: 600; font-variant-numeric: tabular-nums; }
+.ligne-menu.passe { opacity: .55; }
+.ligne-menu .case-cocher { flex: none; margin: 0; }
+
+/* --- Pings reçus ----------------------------------------------------------------------------------------- */
+.ligne-ping .ligne-texte { flex: 1 1 auto; min-width: 0; gap: 2px; }
+.ligne-ping.lu { opacity: .55; }
+.ligne-ping .nouveau.point { flex: none; }
+.carte.bandeau .icone { vertical-align: -4px; }
+.carte.bandeau .btn { margin-top: var(--e3); }
+
+/* --- Annonces : les filtres, chacun avec son réglage (créneau, rôle, montant) ---------------------------------- */
+.ligne-filtre { flex-wrap: wrap; }
+.ligne-filtre > .ligne-texte { flex: 1 1 160px; min-width: 0; }
+.reglage-filtre { flex: 1 0 100%; display: flex; gap: var(--e2); align-items: center; padding-bottom: var(--e2); }
+.reglage-filtre select { flex: 1 1 auto; width: auto; min-width: 0; min-height: 36px; padding: 0 var(--e2); }
+.ligne-filtre.grise { opacity: .5; }
+.puce .icone { width: 14px; height: 14px; }
+
+/* --- Suivi des dépenses ------------------------------------------------------------------------------------ */
+.filtres-suivi { display: grid; gap: var(--e2); }
+.tableau-dettes tr.regle td { opacity: .5; }
+.tableau-dettes td s { text-decoration-thickness: 1.5px; }
+.lien-montant { padding: 0; border: none; background: none; color: var(--texte); font-weight: 600; font-variant-numeric: tabular-nums; text-align: left; }
+.tableau-dettes .discret { min-height: 32px; }
+
+/* --- Réglages LLM ----------------------------------------------------------------------------------------- */
+.aide-llm ol { margin: var(--e2) 0 0; padding-left: var(--e5); font-size: var(--t-second); }
+.aide-llm li + li { margin-top: var(--e1); }
+.segments button:disabled { opacity: .45; }

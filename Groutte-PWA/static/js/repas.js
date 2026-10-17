@@ -1,8 +1,9 @@
 import { app, el, avatar, compte, envoyer, ouvrirFeuille, dateCourte, jourCourt, lienContact } from "./commun.js";
-import { REPAS, LIBELLES, presenceDe, repasPossibles, repasPris, venants, commence } from "./sejour.js";
+import { REPAS, LIBELLES, presenceDe, repasPossibles, repasPris, mangeurs, estGere, commence } from "./sejour.js";
 
-/* #repas : Repas > Mes repas. Par défaut, je mange sur la réserve à chaque repas de ma présence : je décoche ceux que
-   je prends ailleurs, avant qu'ils commencent. En dessous, le nombre de mangeurs de chaque repas, avec leurs régimes. */
+/* #repas : Repas > Mes repas. Seuls les repas gérés par la communauté (Réglages compta, par défaut le soir) se cochent :
+   je décoche ceux que je prends ailleurs, avant qu'ils commencent. Les autres sont grisés, et ne comptent jamais. En
+   dessous, le nombre de mangeurs de chaque repas, avec leurs régimes. Décocher un repas me désinscrit de ses menus. */
 
 const cle = (j, c) => j + "/" + c;
 
@@ -19,20 +20,23 @@ function mesRepas() {
         el("th", { scope: "row" }, dateCourte(j)),
         REPAS.map(c => {
           if (!ouverts.has(cle(j, c))) return el("td", {}, "–");
+          if (!estGere(j, c)) return el("td", { class: "fige", title: "Pas géré par la communauté" }, "·");
           const fige = commence(j, c);
           const coche = el("input", { type: "checkbox", class: "case-cocher", checked: pris.has(cle(j, c)), disabled: fige,
             "aria-label": `${dateCourte(j)}, ${LIBELLES[c].toLowerCase()} : ${pris.has(cle(j, c)) ? "je mange sur la réserve" : "je mange ailleurs"}` });
-          coche.onchange = () => envoyer("repas", { date: j, creneau: c, pris: coche.checked });
+          coche.onchange = () => {
+            const menus = app.etat.menus.filter(m => m.date === j && m.creneau === c && m.inscrits.includes(app.moi));
+            if (!coche.checked && menus.length && !confirm(`Tu es inscrit à ${menus.map(m => m.plat).join(", ")} : décocher ce repas t'en désinscrit. Continuer ?`)) {
+              coche.checked = true;
+              return;
+            }
+            envoyer("repas", { date: j, creneau: c, pris: coche.checked });
+          };
           return el("td", { class: fige ? "fige" : "" }, coche);
         })))))),
-    el("p", { class: "note" }, el("strong", {}, `${pris.size} repas`), " sur la réserve, sur ", `${possibles.length} possibles.`),
-    el("p", { class: "doux petit note" }, `Décoche un repas que tu prends ailleurs, avant qu'il commence (${REPAS.map(c => app.etat.sejour.heures_repas[c].replace(/^0/, "").replace(":00", " h").replace(":", " h ")).join(", ")}). Ensuite, il est figé.`),
+    el("p", { class: "note" }, el("strong", {}, `${pris.size} repas`), " sur la réserve, sur ", `${possibles.filter(([j, c]) => estGere(j, c)).length} gérés par la communauté.`),
+    el("p", { class: "doux petit note" }, `Décoche un repas que tu prends ailleurs (un resto, par exemple), avant qu'il commence (${REPAS.map(c => app.etat.sejour.heures_repas[c].replace(/^0/, "").replace(":00", " h").replace(":", " h ")).join(", ")}). Ensuite, il est figé. Les repas grisés ne sont pas gérés par la communauté : chacun se débrouille, et ils ne comptent pas.`),
   ];
-}
-
-/* Les mangeurs d'un repas : leurs noms, et le résumé de leurs régimes et allergies. */
-function mangeurs(j, c) {
-  return venants().filter(n => repasPris(n).some(([x, y]) => x === j && y === c));
 }
 
 function resumeRegimes(noms) {
@@ -60,6 +64,7 @@ function groupe() {
     el("tbody", {}, jours.map(j => el("tr", {},
       el("th", { scope: "row" }, dateCourte(j)),
       REPAS.map(c => {
+        if (!estGere(j, c)) return el("td", {}, "·");
         const n = mangeurs(j, c).length;
         return el("td", {}, el("button", {
           type: "button", class: "case" + (n ? "" : " vide"), "aria-label": `${dateCourte(j)} ${LIBELLES[c]} : ${n} mangeurs`,
@@ -74,7 +79,7 @@ export function vueRepas() {
     mesRepas(),
     el("h2", {}, "Le groupe"),
     groupe(),
-    el("p", { class: "note" }, el("a", { href: "#faq/mange-ailleurs" }, "Comment ça marche ?")),
+    el("p", { class: "note" }, el("a", { href: "#menu" }, "Ce qu'on cuisine : le Menu"), " · ", el("a", { href: "#faq/mange-ailleurs" }, "Comment ça marche ?")),
   ];
 }
 

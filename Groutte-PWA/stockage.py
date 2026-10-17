@@ -34,6 +34,12 @@ CATEGORIES = DOSSIER_DONNEES / "categories.json"   # Staff > Réglages compta : 
 REGLAGES_COMPTA = DOSSIER_DONNEES / "reglages-compta.json"   # mode de remboursement, clôture
 REMBOURSEMENTS = DOSSIER_DONNEES / "remboursements.json"     # Budget > Mes comptes : remboursements, grâces, relances
 TACHES = DOSSIER_DONNEES / "taches.json"      # rappels datés : dernière vérification (taches.py)
+MENUS = DOSSIER_DONNEES / "menus.json"        # Repas > Menu : les plats proposés et leurs inscrits (menu.py)
+PINGS = DOSSIER_DONNEES / "pings.json"        # Communauté > Pings reçus : chaque notification, par personne (pings.py)
+ANNONCES = DOSSIER_DONNEES / "annonces.json"  # Staff > Annonces, et les messages courts au staff (annonces.py)
+DETTES_MANUELLES = DOSSIER_DONNEES / "dettes-manuelles.json"   # Staff > Suivi des dépenses (suivi.py)
+REGLAGES_LLM = DOSSIER_DONNEES / "reglages-llm.json"   # Staff > Réglages LLM : fournisseur actif, compteur (llm.py)
+DOSSIER_SECRETS = ICI / "secrets"             # hors de data/ et de git : les clés d'API des LLM (llm.py)
 VERROU = DOSSIER_DONNEES / ".verrou"
 
 

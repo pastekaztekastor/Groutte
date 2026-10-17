@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="460" viewBox="0 0 360 460">
+  <!-- Faux ticket de caisse : l'image d'essai de Staff > Réglages LLM (Tester). Refaire le PNG :
+       rsvg-convert -w 360 outils/ticket-essai.svg -o llm-essai.png -->
+  <rect width="360" height="460" fill="#fffef8"/>
+  <g font-family="DejaVu Sans Mono, monospace" fill="#222" font-size="17">
+    <text x="180" y="44" text-anchor="middle" font-size="20" font-weight="bold">SUPERETTE DU BOURG</text>
+    <text x="180" y="70" text-anchor="middle" font-size="14">12 rue de la Gare</text>
+    <text x="24" y="110">Date : 29/12/2026  18:42</text>
+    <text x="24" y="150">PATES COQUILLETTES</text><text x="336" y="150" text-anchor="end">2,50</text>
+    <text x="24" y="180">FROMAGE RACLETTE</text><text x="336" y="180" text-anchor="end">6,00</text>
+    <text x="24" y="210">PACK BIERE 6X25CL</text><text x="336" y="210" text-anchor="end">4,00</text>
+    <line x1="24" y1="236" x2="336" y2="236" stroke="#222" stroke-dasharray="4 4"/>
+    <text x="24" y="268" font-weight="bold" font-size="20">TOTAL</text><text x="336" y="268" text-anchor="end" font-weight="bold" font-size="20">12,50 EUR</text>
+    <text x="24" y="306" font-size="14">CB SANS CONTACT          12,50</text>
+    <text x="180" y="420" text-anchor="middle" font-size="14">MERCI DE VOTRE VISITE</text>
+  </g>
+</svg>

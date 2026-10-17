@@ -134,6 +134,7 @@ export function blocNotifications() {
       return el("label", { class: "ligne" }, el("span", { class: "ligne-texte" }, libelle), coche);
     })),
     el("h2", {}, "Toujours reçues"),
-    el("p", { class: "doux petit note" }, "Même si tu coupes tout : les mentions @, les annonces du staff, les paiements du gîte et de la salle, ce qui fait bouger ton argent sans toi, et les actions du staff sur ton compte."));
+    el("p", { class: "doux petit note" }, "Même si tu coupes tout : les mentions @, les annonces du staff, les paiements du gîte et de la salle, ce qui fait bouger ton argent sans toi, et les actions du staff sur ton compte (dont une dette effacée ou créée par le staff)."),
+    el("p", { class: "doux petit note" }, "Chaque notification est aussi gardée dans ", el("a", { href: "#pings" }, "Pings reçus"), ", qu'elle soit partie ou non."));
   return blocs;
 }

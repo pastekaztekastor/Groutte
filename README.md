@@ -109,29 +109,29 @@ Chaque page a sa fiche dans `cdc/<groupe>/`, décrite avec précision : but, qui
 
 | Groupe     | Page                                                        | Priorité | Statut   |
 | ---------- | ----------------------------------------------------------- | -------- | -------- |
-| Staff      | [Comptes](cdc/staff/comptes.md)                             | 1        | à revoir |
+| Staff      | [Comptes](cdc/staff/comptes.md)                             | 1        | validé   |
 | Compte     | [Inscription et connexion](cdc/compte/inscription.md)       | 1        | validé   |
-| Compte     | [Ma fiche](cdc/compte/ma-fiche.md)                          | 1        | à revoir |
+| Compte     | [Ma fiche](cdc/compte/ma-fiche.md)                          | 1        | validé   |
 | Compte     | [Me rembourser](cdc/compte/me-rembourser.md)                | 1        | validé   |
-| Compte     | [Notifications](cdc/compte/notifications.md)                | 1        | à revoir |
+| Compte     | [Notifications](cdc/compte/notifications.md)                | 1        | validé   |
 | Compte     | [Carnet d'adresses](cdc/compte/carnet.md)                   | 1        | validé   |
 | Communauté | [Forum](cdc/communaute/forum.md)                            | 2        | validé   |
-| Gîte       | [Présence](cdc/gite/presence.md)                            | 2        | à revoir |
-| Gîte       | [Lits](cdc/gite/lits.md)                                    | 2        | à revoir |
-| Budget     | [Mes comptes](cdc/budget/mes-comptes.md)                    | 2        | à revoir |
+| Gîte       | [Présence](cdc/gite/presence.md)                            | 2        | validé   |
+| Gîte       | [Lits](cdc/gite/lits.md)                                    | 2        | validé   |
+| Budget     | [Mes comptes](cdc/budget/mes-comptes.md)                    | 2        | validé   |
 | Budget     | [Créances gîte et salle](cdc/budget/creances.md)            | 2        | validé   |
-| Budget     | [Dépenses](cdc/budget/depenses.md)                          | 2        | à revoir |
-| Budget     | [Comment ça marche](cdc/budget/comment-ca-marche.md)        | 2        | à revoir |
-| Staff      | [Gîte et salle](cdc/staff/gite-salle.md)                    | 2        | à revoir |
-| Staff      | [Réglages compta](cdc/staff/reglages-compta.md)             | 2        | à revoir |
-| Staff      | [Validation des dépenses](cdc/staff/validation-depenses.md) | 2        | à revoir |
-| Communauté | [Contacter le staff](cdc/communaute/contact-staff.md)       | 2        | à revoir |
-| Repas      | [Mes repas](cdc/repas/mes-repas.md)                         | 2        | à revoir |
-| Staff      | [Réglages LLM](cdc/staff/reglages-llm.md)                   | 3        | a dev    |
-| Repas      | [Menu](cdc/repas/menu.md)                                   | 3        | a dev    |
-| Staff      | [Suivi des dépenses](cdc/staff/suivi-depenses.md)           | 3        | a dev    |
-| Staff      | [Annonces](cdc/staff/annonces.md)                           | 3        | a dev    |
-| Communauté | [Pings reçus](cdc/communaute/pings.md)                      | 3        | a dev    |
+| Budget     | [Dépenses](cdc/budget/depenses.md)                          | 2        | validé   |
+| Budget     | [Comment ça marche](cdc/budget/comment-ca-marche.md)        | 2        | validé   |
+| Staff      | [Gîte et salle](cdc/staff/gite-salle.md)                    | 2        | validé   |
+| Staff      | [Réglages compta](cdc/staff/reglages-compta.md)             | 2        | validé   |
+| Staff      | [Validation des dépenses](cdc/staff/validation-depenses.md) | 2        | validé   |
+| Communauté | [Contacter le staff](cdc/communaute/contact-staff.md)       | 2        | validé   |
+| Repas      | [Mes repas](cdc/repas/mes-repas.md)                         | 2        | validé   |
+| Staff      | [Réglages LLM](cdc/staff/reglages-llm.md)                   | 3        | validé   |
+| Repas      | [Menu](cdc/repas/menu.md)                                   | 3        | validé   |
+| Staff      | [Suivi des dépenses](cdc/staff/suivi-depenses.md)           | 3        | validé   |
+| Staff      | [Annonces](cdc/staff/annonces.md)                           | 3        | validé   |
+| Communauté | [Pings reçus](cdc/communaute/pings.md)                      | 3        | validé   |
 | Communauté | [Messages](cdc/communaute/messages.md)                      | 4        |          |
 | Tournois   | [Jeux](cdc/tournois/jeux.md)                                | 4        |          |
 | Tournois   | [Planning](cdc/tournois/planning.md)                        | 4        |          |

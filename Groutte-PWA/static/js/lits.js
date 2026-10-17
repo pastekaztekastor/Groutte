@@ -3,7 +3,9 @@ import { nuitsDe } from "./sejour.js";
 import { ouvrirVisionneuse } from "./visionneuse.js";
 
 /* #lits : Gîte > Lits. Le tableau des nuits (lignes) et des lits (colonnes) : toucher une case libre la réserve,
-   toucher la sienne la libère. Sans réservation, on dort par terre. La bulle Plan ouvre le plan et sa légende. */
+   toucher la sienne la libère. Sans réservation, on dort par terre. La bulle Plan ouvre le plan et sa légende.
+   En bout de ligne : les lits libres, et ce qui reste de matelas et de duvets cette nuit-là une fois servis ceux qui
+   dorment par terre ou dans un lit incomplet (lits.py, bilan). Ce que chacun apporte se dit dans Ma fiche. */
 
 const SALLE = "salle";
 const prenom = nom => (app.etat.comptes.find(c => c.nom === nom)?.prenom || nom).split(" ")[0];
@@ -26,7 +28,7 @@ function infoLit(l) {
   const mesNuits = nuitsDe(app.moi);
   ouvrirFeuille(l.lettre === SALLE ? "Salle" : `Lit ${l.lettre}`, [
     el("p", {}, l.description || (l.lettre === SALLE ? "La salle des fêtes, places illimitées." : "Pas de description.")),
-    l.places && el("p", { class: "doux petit" }, pluriel(l.places, "place")),
+    l.places && el("p", { class: "doux petit" }, pluriel(l.places, "place"), l.complet === false && " · sans couette : il faut un duvet"),
     mesNuits.length > 0 && el("button", {
       class: "btn principal large", type: "button",
       onclick: async () => {
@@ -60,7 +62,7 @@ function tableau() {
     el("thead", {}, el("tr", {}, el("th", {}, "Nuit"),
       colonnes.map(l => el("th", {}, el("button", { type: "button", class: "entete-lit", onclick: () => infoLit(l) },
         l.lettre === SALLE ? "Salle" : l.lettre, l.places > 1 && el("span", { class: "doux" }, `(${l.places})`)))),
-      el("th", {}, "Libres"))),
+      el("th", {}, "Lits libres"), el("th", {}, "Matelas"), el("th", {}, "Duvets"))),
     el("tbody", {}, app.etat.sejour.nuits.map(nuit => {
       const absent = !mesNuits.includes(nuit);
       const libres = lits.reduce((n, l) => n + Math.max(0, l.places - occupants(nuit, l.lettre).length), 0);
@@ -76,8 +78,22 @@ function tableau() {
             onclick: () => toucher(nuit, l.lettre, l.places),
           }, noms.map(n => el("span", {}, n === app.moi ? "Moi" : prenom(n)))));
         }),
-        el("td", { class: "libres" + (libres ? "" : " aucun") }, String(libres)));
+        el("td", { class: "libres" + (libres ? "" : " aucun") }, String(libres)),
+        ["matelas", "duvets"].map(objet => {
+          const reste = app.etat.literie[nuit]?.[objet] ?? 0;
+          return el("td", { class: "libres" + (reste < 0 ? " aucun" : ""), title: reste < 0 ? `Il en manque ${-reste}` : null }, reste < 0 ? `${reste} !` : String(reste));
+        }));
     }))));
+}
+
+/* Sous le tableau : ceux qui n'ont pas dit ce qu'ils apportent (comptés pour zéro). */
+function literie() {
+  const muets = app.etat.sans_literie;
+  const moi = muets.includes(app.moi);
+  return el("p", { class: "doux petit note" },
+    muets.length ? `${muets.length > 1 ? `${muets.length} ploucs n'ont` : "1 plouc n'a"} pas dit ce qu'${muets.length > 1 ? "ils apportent" : "il apporte"} pour dormir : ${muets.length > 1 ? "ils comptent" : "il compte"} pour zéro. ` : "",
+    moi && el("a", { href: "#fiche" }, "Dis-le dans Ma fiche. "),
+    "Matelas et Duvets : ce qui reste chaque nuit pour ceux qui dorment par terre (un matelas et un duvet) ou dans un lit sans couette (un duvet). Négatif : il en manque.");
 }
 
 function mesNuits() {
@@ -101,6 +117,7 @@ export function vueLits() {
   return [
     el("p", { class: "doux petit note" }, "Touche une case libre pour réserver ce lit cette nuit-là, ta case pour la libérer, une lettre pour sa description. Sans lit, on dort par terre."),
     tableau(),
+    literie(),
     complet.map(n => el("p", { class: "alerte-ligne" }, icone("info"), `Nuit du ${dateCourte(n)} : plus de lit au gîte, il faudra dormir par terre.`)),
     el("h2", {}, "Mes nuits"),
     mesNuits(),

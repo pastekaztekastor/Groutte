@@ -107,6 +107,7 @@ function modifierLit(l) {
   const lettre = el("input", { value: l?.lettre || "", maxlength: 3, required: true, placeholder: "A" });
   const description = el("input", { value: l?.description || "", maxlength: 80, placeholder: "Grande chambre du RdC" });
   const places = el("input", { type: "number", min: 1, max: 20, value: l?.places || 1, required: true });
+  const complet = el("input", { type: "checkbox", checked: l ? l.complet !== false : true });
   const supprimer = l && el("button", { class: "btn danger large separe", type: "button", onclick: async () => {
     const n = reservationsDuLit(l.lettre);
     if (!confirm(`Supprimer le lit ${l.lettre} ?${n ? ` ${pluriel(n, "réservation")} sauteront, et les personnes seront prévenues.` : ""}`)) return;
@@ -116,6 +117,8 @@ function modifierLit(l) {
     el("label", { class: "champ" }, "Lettre", lettre),
     el("label", { class: "champ" }, "Description", description),
     el("label", { class: "champ" }, "Places (1 simple, 2 double)", places),
+    el("label", { class: "coche-ligne" }, "Couchage complet (couette fournie)", complet),
+    el("p", { class: "doux petit" }, "Décoche-la pour un canapé, ou un lit sans couette : celui qui y dort devra avoir un duvet. Sinon, il en prend un aux autres sans que l'appli le sache."),
     supprimer,
   ], "Enregistrer", async () => {
     const n = parseInt(places.value, 10);
@@ -123,7 +126,7 @@ function modifierLit(l) {
       const parNuit = Math.max(0, ...app.etat.sejour.nuits.map(nuit => app.etat.reservations.filter(r => r.lit === l.lettre && r.nuit === nuit).length));
       if (parNuit > n && !confirm("Des places réservées vont sauter (les plus récentes d'abord), et les personnes seront prévenues. Continuer ?")) return false;
     }
-    return envoyer("gite/lit", { ancienne: l?.lettre || "", lettre: lettre.value, description: description.value, places: n });
+    return envoyer("gite/lit", { ancienne: l?.lettre || "", lettre: lettre.value, description: description.value, places: n, complet: complet.checked });
   });
 }
 
@@ -149,9 +152,19 @@ function couchages() {
     el("div", { class: "liste-groupee" },
       g.lits.map(l => el("button", { type: "button", class: "ligne entree", onclick: () => modifierLit(l) },
         el("strong", { class: "lettre-lit" }, l.lettre), el("span", { class: "ligne-texte" }, l.description || el("span", { class: "doux" }, "Sans description")),
-        el("span", { class: "ligne-valeur" }, pluriel(l.places, "place")), icone("chevron-droite"))),
+        el("span", { class: "ligne-valeur" }, pluriel(l.places, "place") + (l.complet === false ? " · incomplet" : "")), icone("chevron-droite"))),
       el("button", { type: "button", class: "ligne entree", onclick: () => modifierLit(null) }, icone("plus"), el("span", { class: "ligne-texte" }, "Ajouter un lit"))),
     el("p", { class: "note" }, `Capacité du gîte : ${pluriel(g.capacite, "place")}.`),
+    el("div", { class: "liste-groupee" }, ["matelas", "duvets"].map(objet => {
+      const champ = el("input", { type: "number", min: 0, max: 200, value: g.literie[objet], class: "champ-montant", "aria-label": `Literie du gîte : ${objet}` });
+      champ.onchange = () => {
+        const n = parseInt(champ.value || "0", 10);
+        if (!(n >= 0)) return notifier("Un nombre, zéro ou plus.");
+        envoyer("gite/literie", { [objet]: n });
+      };
+      return el("label", { class: "ligne" }, el("span", { class: "ligne-texte" }, objet === "matelas" ? "Matelas d'appoint du gîte" : "Duvets du gîte (couettes, couvertures)"), champ);
+    })),
+    el("p", { class: "doux petit note" }, "En plus de la literie des lits, valable pour toutes les nuits. Ce qu'un staff apporte lui-même se déclare dans Ma fiche, comme pour tout le monde."),
     el("div", { class: "liste-groupee" },
       el("div", { class: "ligne" },
         g.plan ? el("button", { type: "button", class: "miniature-plan", onclick: () => ouvrirVisionneuse([g.plan], 0) }, el("img", { src: urlApercu(g.plan), alt: "Plan du gîte" }))
@@ -160,7 +173,7 @@ function couchages() {
         el("label", { class: "discret" }, g.plan ? "Remplacer" : "Envoyer le plan", planEntree),
         g.plan && el("button", { type: "button", class: "discret danger", onclick: () => { if (confirm("Retirer le plan ?")) envoyer("gite/plan", { image: "" }); } }, "Retirer")),
       el("label", { class: "ligne" }, el("span", { class: "ligne-texte" }, "La salle sert aussi de couchage"), salle)),
-    el("p", { class: "doux petit note" }, "Le plan : une image où les lettres des lits sont déjà dessinées. La literie fournie arrivera avec la page Literie."),
+    el("p", { class: "doux petit note" }, "Le plan : une image où les lettres des lits sont déjà dessinées."),
   ];
 }
 

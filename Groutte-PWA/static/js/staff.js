@@ -1,4 +1,5 @@
 import { app, el, avatar, compte, sansAccent, envoyer, ouvrirModale, afficher, ilYa } from "./commun.js";
+import { euros, enSaisie, lireEuros } from "./paiement.js";
 
 /* #staff : Staff > Comptes. On choisit des membres en tapant leur nom (pastilles, comme les destinataires d'un mail),
    puis une action. Actions de groupe : rôles, muet. Actions sur une seule personne (avec confirmation) : droit
@@ -61,6 +62,26 @@ async function remettreCode(nom) {
   ], "C'est noté", async () => true);
 }
 
+/* Désactiver : si le solde n'est pas nul, on retape ce solde. Toutes les dettes du compte sont alors effacées, dans les
+   deux sens (Suivi des dépenses), et les personnes touchées sont prévenues. */
+function desactiver(nom) {
+  const solde = app.etat.annonces.soldes?.[nom] || 0;
+  const touches = (app.etat.suivi?.lignes || []).filter(l => l.reste > 0 && l.action && (l.de === nom || l.a === nom))
+    .map(l => l.de === nom ? `${euros(l.reste)} envers ${l.a}` : `${euros(l.reste)} de ${l.de}`);
+  const texte = `${nom} ne pourra plus se connecter, mais son historique reste.`;
+  if (!solde && !touches.length) {
+    if (confirm(`Désactiver le compte de ${nom} ? ${texte}`)) envoyer("staff/desactiver", { qui: nom, desactive: true });
+    return;
+  }
+  const retape = el("input", { inputmode: "decimal", placeholder: enSaisie(Math.abs(solde)), "aria-label": "Solde retapé" });
+  ouvrirModale(`Désactiver ${nom}`, [
+    el("section", { class: "carte attention" }, el("h3", {}, "SES DETTES SERONT EFFACÉES"),
+      el("p", { class: "petit" }, `${texte} ${solde < 0 ? `Il doit ${euros(-solde)}` : solde > 0 ? `On lui doit ${euros(solde)}` : "Son solde est nul"} : toutes ses dettes seront effacées, dans les deux sens, et ne reviendront pas s'il est réactivé. Les personnes touchées seront prévenues.`),
+      touches.length > 0 && el("p", { class: "petit" }, touches.join(" · "))),
+    solde !== 0 && el("label", { class: "champ" }, `Retape ${enSaisie(Math.abs(solde))} pour confirmer`, retape),
+  ], "Désactiver", () => envoyer("staff/desactiver", { qui: nom, desactive: true, confirmation: solde ? lireEuros(retape.value) : 0 }));
+}
+
 function actions() {
   const choisis = [...selection].map(compte).filter(Boolean);
   if (!choisis.length) return null;
@@ -86,8 +107,8 @@ function actions() {
       bouton("Remettre le code à zéro", () => remettreCode(un.nom), Boolean(un && !un.desactive)),
       bouton("Corriger le nom", () => corrigerNom(un.nom), Boolean(un)),
       bouton(un?.desactive ? "Réactiver le compte" : "Désactiver le compte",
-        () => un && confirmer(un.desactive ? `Réactiver le compte de ${un.nom} ?` : `Désactiver le compte de ${un.nom} ? Il ne pourra plus se connecter, mais son historique reste.`,
-          "staff/desactiver", { qui: un.nom, desactive: !un.desactive })(),
+        () => un && (un.desactive ? confirmer(`Réactiver le compte de ${un.nom} ? Les dettes effacées à la désactivation ne reviennent pas.`,
+          "staff/desactiver", { qui: un.nom, desactive: false })() : desactiver(un.nom)),
         Boolean(un), !un?.desactive)),
   ];
 }
@@ -100,7 +121,7 @@ const PHRASES = {
   "plus-staff": l => `a retiré le droit staff à ${l.qui}`,
   code: l => `a remis le code de ${l.qui} à zéro`,
   nom: l => `a corrigé un nom (${l.detail})`,
-  desactive: l => `a désactivé le compte de ${l.qui}`,
+  desactive: l => `a désactivé le compte de ${l.qui}${l.detail ? ` (dettes effacées : ${l.detail})` : ""}`,
   reactive: l => `a réactivé le compte de ${l.qui}`,
   "gite-date": l => `a fixé une date limite (${l.detail})`,
   "gite-montant": l => `a changé un montant (${l.detail})`,
@@ -117,6 +138,16 @@ const PHRASES = {
   "compta-mode": l => `a changé le mode de remboursement (${l.detail})`,
   "compta-categorie": l => `a réglé une catégorie (${l.detail})`,
   "compta-categorie-supprimee": l => `a supprimé la catégorie ${l.detail}`,
+  "compta-repas": l => `a réglé un repas géré (${l.detail})`,
+  "compta-cloture": () => "a clôturé les comptes",
+  "gite-literie": l => `a réglé la literie du gîte (${l.detail})`,
+  "suivi-effacer": l => `a effacé une dette de ${l.qui} (${l.detail})`,
+  "suivi-dette": l => `a créé une dette manuelle de ${l.qui} (${l.detail})`,
+  annonce: l => `a envoyé une annonce (${l.detail})`,
+  "llm-cle": l => `a posé une clé ${l.detail}`,
+  "llm-test": l => `a testé la clé ${l.detail}`,
+  "llm-actif": l => `a choisi ${l.detail} pour lire les tickets`,
+  "llm-retirer": l => `a retiré la clé ${l.detail}`,
 };
 
 export function vueStaffComptes() {

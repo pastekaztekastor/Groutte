@@ -69,6 +69,20 @@ function partage(m) {
       el("span", { class: "ligne-texte" }, c.nom, el("span", { class: "doux petit" }, "Catégorie supprimée : tu y participais")))));
 }
 
+/* Couchage : ce que j'apporte pour dormir. « Non renseigné » n'est pas zéro : seuls les non renseignés sont signalés
+   (Lits, Annonces). */
+function couchage(m) {
+  const choix = (objet, libelle, detail) => {
+    const valeur = m[objet];
+    const liste = el("select", { class: "choix-couchage", "aria-label": libelle },
+      el("option", { value: "", selected: valeur === null || valeur === undefined }, "non renseigné"),
+      Array.from({ length: 11 }, (_, n) => el("option", { value: String(n), selected: valeur === n }, String(n))));
+    liste.onchange = () => envoyer("profil", { [objet]: liste.value === "" ? null : Number(liste.value) });
+    return el("label", { class: "ligne" }, el("span", { class: "ligne-texte" }, libelle, detail && el("span", { class: "doux petit" }, detail)), liste);
+  };
+  return el("div", { class: "liste-groupee" }, choix("matelas", "Matelas"), choix("duvets", "Duvets", "ou couettes, couvertures"));
+}
+
 export function vueFiche() {
   const m = compte(app.moi);
   const regimes = app.etat.regimes;
@@ -102,6 +116,11 @@ export function vueFiche() {
         envoyer("profil", { regimes: choisis });
       })),
       champ(m, "allergies", "Allergies", { maxlength: 300 })),
+
+    el("h2", {}, "Couchage"),
+    couchage(m),
+    el("p", { class: "doux petit note" }, "Ce que tu apportes pour dormir. Un matelas gonflable 2 places compte pour 2 matelas si tu es d'accord pour le partager. Ce que tu apportes n'est compté que les nuits où tu es là. ",
+      el("a", { href: "#lits" }, "Voir les Lits")),
 
     el("h2", {}, "Photos et vidéos"),
     el("div", { class: "liste-groupee" },

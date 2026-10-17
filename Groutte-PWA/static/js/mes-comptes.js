@@ -1,4 +1,4 @@
-import { app, el, icone, avatar, envoyer, ouvrirModale, ouvrirFeuille, notifier, dateCourte, ilYa } from "./commun.js";
+import { app, el, icone, avatar, compte, envoyer, ouvrirModale, ouvrirFeuille, notifier, dateCourte, ilYa, lienContact } from "./commun.js";
 import { euros, enSaisie, lireEuros } from "./paiement.js";
 import { pagePaiement } from "./creances.js";
 
@@ -8,7 +8,7 @@ import { pagePaiement } from "./creances.js";
 
 const MODES = { direct: "Direct", minimum: "Minimum de virements" };
 const ETATS = { remboursee: "remboursée", partielle: "remboursée en partie", "a-rembourser": "à rembourser" };
-const TYPES = { depense: "", report: "Report", avoir: "Avoir", manque: "Manque", retard: "Nuits en plus", remboursement: "Remboursement", grace: "Grâce" };
+const TYPES = { depense: "", report: "Report", avoir: "Avoir", manque: "Manque", retard: "Nuits en plus", remboursement: "Remboursement", grace: "Grâce", manuelle: "" };
 
 /* Le solde, en grand : rouge si je dois, vert si on me doit, gris si quitte ; le dégradé entre les deux (Flux le reprendra). */
 function solde(c) {
@@ -45,6 +45,16 @@ function faireGrace(ligne) {
   });
 }
 
+/* Relancer : sans notifications, la personne ne verra la relance qu'à sa prochaine ouverture de l'appli (Pings reçus). */
+async function relancer(l) {
+  const go = async () => { if (await envoyer("comptes/relancer", { qui: l.nom })) { notifier(`${l.nom} a reçu un petit rappel.`, true); return true; } return false; };
+  if (compte(l.nom)?.notifs) return go();
+  ouvrirModale(`Relancer ${l.nom}`, [
+    el("p", {}, `${l.nom} n'a pas les notifications. Il verra ta relance à sa prochaine ouverture de l'appli, mais tu ferais mieux de le prévenir aussi autrement.`),
+    el("a", { class: "btn large", href: lienContact(l.nom) }, "Son contact"),
+  ], "Relancer quand même", go);
+}
+
 function jeDois(c) {
   return el("div", { class: "liste-groupee" }, c.je_dois.map(l => el("div", { class: "ligne ligne-dette" },
     el("button", { type: "button", class: "qui-lien", onclick: () => detail(l, "je-dois"), disabled: !l.detail.length },
@@ -66,7 +76,7 @@ function onMeDoit(c) {
       el("button", { class: "btn principal petit-bouton", type: "button", onclick: () => envoyer("comptes/confirmer", { id: r.id, recu: true }) }, "Confirmer"))),
     l.montant > 0 && el("div", { class: "rangee a-droite" },
       el("button", { class: "discret", type: "button", disabled: !l.relance, title: l.relance ? null : "Une relance par 24 h au plus",
-        onclick: async () => { if (await envoyer("comptes/relancer", { qui: l.nom })) notifier(`${l.nom} a reçu un petit rappel.`, true); } }, "Relancer"),
+        onclick: () => relancer(l) }, "Relancer", compte(l.nom)?.notifs === false && icone("cloche-barree")),
       el("button", { class: "discret", type: "button", onclick: () => faireGrace(l) }, "Faire grâce")))));
 }
 
@@ -83,7 +93,9 @@ function historique(c) {
   return el("div", { class: "liste-groupee" }, c.historique.slice(0, 80).map(h => {
     const avec = h.avec.join(", ");
     const texte = h.type === "remboursement" ? (h.montant > 0 ? `Remboursement à ${avec}` : `Remboursement de ${avec}`)
+      : h.type === "grace" && h.par ? `Dette ${h.montant > 0 ? `envers ${avec}` : `de ${avec}`} effacée par le staff (${h.par})${h.libelle ? ` : ${h.libelle}` : ""}`
       : h.type === "grace" ? (h.montant > 0 ? `Grâce de ${avec}` : `Grâce à ${avec}`)
+      : h.type === "manuelle" ? `${h.libelle} (${avec}), par le staff (${h.par})`
       : h.type === "depense" ? `${h.libelle} (${h.montant > 0 ? "j'ai payé" : `${avec} a payé`})`
       : `${h.libelle} (${avec})`;
     return el(h.type === "depense" ? "a" : "div", { class: "ligne", href: h.type === "depense" ? "#depenses/" + h.ref : null },

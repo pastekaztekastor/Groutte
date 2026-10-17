@@ -142,6 +142,48 @@ function choixTicket(f) {
       apercu && el("button", { type: "button", class: "discret danger", onclick: () => { f.fichier = null; f.ticket = ""; afficher(); } }, "Retirer")));
 }
 
+/* Préremplir avec le ticket (Réglages LLM) : la photo est envoyée au fournisseur, qui rend la date, le total et les
+   lignes par catégorie. Une seule lecture par dépense ; une nouvelle dépense devient un brouillon à ce moment-là. */
+async function preremplir(id, f) {
+  let ticket = f.ticket;
+  if (f.fichier) {
+    notifier("Envoi de la photo...", true);
+    ticket = await televerserImage({ type: "image" }, f.fichier);
+    if (!ticket) return;
+    f.ticket = ticket;
+    f.fichier = null;
+  }
+  if (!ticket) return notifier("Ajoute d'abord la photo du ticket.");
+  notifier("Lecture du ticket... (jusqu'à 30 s)", true);
+  if (!await envoyer("depenses/lire", { id, ticket })) return;
+  const { lecture, lecture_erreur: erreur, depense } = app.etat;
+  if (lecture) {
+    Object.assign(f, {
+      mode: "communaute", montant: enSaisie(lecture.montant), date: lecture.date || f.date, motif: f.motif || lecture.motif,
+      categories: lecture.lignes.map(l => ({ categorie: l.categorie, montant: enSaisie(l.montant) })),
+    });
+    notifier(lecture.ecart ? `Ticket lu, mais les lignes ne tombent pas juste (écart de ${euros(Math.abs(lecture.ecart))}) : vérifie.` : "Ticket lu : vérifie avant d'envoyer.", !lecture.ecart);
+  } else {
+    notifier(erreur.charAt(0).toUpperCase() + erreur.slice(1) + ".");
+  }
+  if (!id) {
+    formulaires[depense] = f;
+    delete formulaires.nouvelle;
+    location.replace("#depenses/" + depense);
+  } else afficher();
+}
+
+function boutonLecture(d, f) {
+  const llm = app.etat.llm;
+  if (!llm) return null;
+  const deja = Boolean(d?.lu_llm);
+  return [
+    el("button", { class: "btn large", type: "button", disabled: deja || (!f.fichier && !f.ticket), onclick: () => preremplir(d?.id || "", f) },
+      deja ? "Ce ticket a déjà été lu" : "Préremplir avec le ticket"),
+    el("p", { class: "doux petit" }, `La photo est envoyée à ${llm.fournisseur} pour être lue. Cache ta carte de fidélité si tu préfères. C'est un préremplissage : vérifie tout avant d'envoyer.`),
+  ];
+}
+
 async function sauver(id, f, envoi) {
   const montant = lireEuros(f.montant);
   if (montant === null && (envoi || f.montant)) return notifier("Indique un montant valable, par exemple 12,50.");
@@ -184,6 +226,7 @@ export function vueSaisie(d) {
       })())),
     el("h2", {}, "Photo du ticket"),
     choixTicket(f),
+    boutonLecture(d, f),
     el("h2", {}, "Répartition"),
     mode,
     f.mode === "egales" && [el("p", { class: "doux petit note" }, "Le montant est divisé entre les personnes concernées. Les centimes en trop sont pour toi."), choixPersonnes(f)],

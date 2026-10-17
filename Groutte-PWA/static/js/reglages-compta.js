@@ -1,7 +1,8 @@
-import { app, el, icone, envoyer, ouvrirModale, fermerModale } from "./commun.js";
+import { app, el, icone, envoyer, ouvrirModale, fermerModale, notifier, ilYa } from "./commun.js";
 
-/* #reglages-compta : Staff > Réglages compta. Le mode de remboursement (Direct ou Minimum de virements) et les
-   catégories de dépenses (type, règle de répartition, repère SAM). NON GÉRÉ est toujours en bas, sans modification. */
+/* #reglages-compta : Staff > Réglages compta. Le mode de remboursement (Direct ou Minimum de virements), les
+   catégories de dépenses (type, règle de répartition, repère SAM ; NON GÉRÉ toujours en bas, sans modification), les
+   repas gérés par la communauté (Mes repas, Menu), et la clôture des comptes, irréversible. */
 
 export const MODES = { direct: "Direct", minimum: "Minimum de virements" };
 export const TYPES = { obligatoire: "obligatoire", facultative: "facultative" };
@@ -36,6 +37,36 @@ function modifier(cat) {
   ], "Enregistrer", () => envoyer("compta/categorie", { id: cat?.id || "", libelle: nom.value, type: type.value, regle: regle.value, sam: sam.checked }));
 }
 
+const CRENEAUX = { matin: "Matin", midi: "Midi", soir: "Soir" };
+
+/* Pour chaque créneau : géré par la communauté, et coché par défaut (grisé tant qu'il n'est pas géré). Seuls les repas
+   pas encore commencés changent. */
+function repasGeres(clos) {
+  const regles = app.etat.categories.repas;
+  return el("div", { class: "liste-groupee" }, Object.entries(CRENEAUX).map(([c, libelle]) => {
+    const r = regles[c];
+    const gere = el("input", { type: "checkbox", checked: r.gere, disabled: clos, "aria-label": `${libelle} : géré` });
+    const defaut = el("input", { type: "checkbox", checked: r.defaut, disabled: clos || !r.gere, "aria-label": `${libelle} : coché par défaut` });
+    const regler = () => envoyer("compta/repas", { creneau: c, gere: gere.checked, defaut: gere.checked && defaut.checked });
+    gere.onchange = defaut.onchange = regler;
+    return el("div", { class: "ligne ligne-exemption" }, el("span", { class: "ligne-texte" }, libelle),
+      el("span", { class: "coches" }, el("label", { class: "coche-courte" }, "Géré", gere), el("label", { class: "coche-courte" }, "Coché par défaut", defaut)));
+  }));
+}
+
+function cloturer() {
+  const mot = el("input", { autocomplete: "off", placeholder: "CLÔTURER", required: true });
+  ouvrirModale("Clôturer les comptes", [
+    el("section", { class: "carte attention" }, el("h3", {}, "IRRÉVERSIBLE"),
+      el("p", { class: "petit" }, "Après le séjour : plus de nouvelle dépense, plus de changement de présence ni de repas, les catégories et les repas gérés sont figés. Ce qui reste à payer du gîte et de la salle devient une dette envers l'hébergeur. Chacun reçoit son plan final de virements. Les remboursements, les grâces et Suivi des dépenses restent possibles.")),
+    el("label", { class: "champ" }, "Tape CLÔTURER pour confirmer", mot),
+  ], "Clôturer", async () => {
+    if (!await envoyer("compta/cloturer", { mot: mot.value })) return false;
+    notifier("Comptes clôturés : chacun a reçu son plan de virements.", true);
+    return true;
+  });
+}
+
 export function vueReglagesCompta() {
   const mode = app.etat.compta.mode;
   const { categories, supprimees } = app.etat.categories;
@@ -58,6 +89,13 @@ export function vueReglagesCompta() {
       el("summary", {}, `Supprimées, encore utilisées (${supprimees.length})`),
       el("div", { class: "liste-groupee" }, supprimees.map(c => el("div", { class: "ligne" },
         el("span", { class: "ligne-texte" }, c.nom, el("span", { class: "doux petit" }, `${TYPES[c.type]} · ${REGLES[c.regle]} · supprimée`)))))),
+    el("h2", {}, "Repas gérés par la communauté"),
+    repasGeres(clos),
+    el("p", { class: "doux petit note" }, "Un repas géré se coche dans Mes repas, et le Menu peut le viser. Un repas non géré ne compte jamais : chacun se débrouille. Un changement ne vaut que pour les repas pas encore commencés."),
+    el("h2", {}, "Clôture des comptes"),
+    el("div", { class: "liste-groupee" }, el("div", { class: "ligne" }, clos
+      ? el("span", { class: "ligne-texte" }, `Comptes clôturés ${ilYa(app.etat.compta.cloture)}.`)
+      : el("button", { class: "btn danger large", type: "button", onclick: cloturer }, "Clôturer les comptes"))),
   ];
 }
 

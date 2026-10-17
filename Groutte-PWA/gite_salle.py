@@ -8,7 +8,11 @@ data/gite-salle.json : {
               "repartition": "nuits" | "egale"},
     "salle": {... la même chose},
     "exemptions": {nom: {"gite": bool, "salle": bool, "communaute": bool}},
-    "lits": [{"lettre", "description", "places"}], "salle_couchage": bool, "plan": média ou ""}
+    "lits": [{"lettre", "description", "places", "complet"}], "salle_couchage": bool, "plan": média ou "",
+    "literie": {"matelas": n, "duvets": n}}
+
+« complet » : le lit a sa couette (vrai par défaut) ; sinon celui qui y dort a besoin d'un duvet (Lits). « literie » : les
+matelas d'appoint et les duvets fournis par le gîte, en plus des lits, valables pour toutes les nuits.
 
 « instantane » : les nuits de chacun au moment de l'ouverture des paiements. Les parts sont figées sur ces nuits :
 les changements de dates qui suivent font des retardataires (compta.py), pas de nouvelles parts.
@@ -48,6 +52,11 @@ def lire():
     donnees.setdefault("lits", [])
     donnees.setdefault("salle_couchage", False)
     donnees.setdefault("plan", "")
+    for lit in donnees["lits"]:
+        lit.setdefault("complet", True)
+    literie = donnees.setdefault("literie", {})
+    literie.setdefault("matelas", 0)
+    literie.setdefault("duvets", 0)
     return donnees
 
 
@@ -292,13 +301,28 @@ def regler_lit(d):
             raise Refus("trop de lits")
         lit = {}
         donnees["lits"].append(lit)
-    lit.update(lettre=lettre, description=description, places=places)
+    lit.update(lettre=lettre, description=description, places=places, complet=d.corps.get("complet", True) is not False)
     donnees["lits"].sort(key=lambda l: l["lettre"])
     ecrire_json(GITE_SALLE, donnees)
     if ancienne and ancienne != lettre:
         lits.renommer_lit(ancienne, lettre)
     lits.ajuster(d.config, donnees, f"le lit {lettre} a changé")
-    noter(d, "gite-lit", detail=f"{lettre} ({places} place{'s' if places > 1 else ''})")
+    noter(d, "gite-lit", detail=f"{lettre} ({places} place{'s' if places > 1 else ''}{'' if lit['complet'] else ', incomplet'})")
+
+
+@route("/api/gite/literie")
+def regler_literie(d):
+    """La literie fournie par le gîte : des matelas d'appoint et des duvets (couettes, couvertures)."""
+    d.exiger_staff()
+    donnees = lire()
+    for objet in ("matelas", "duvets"):
+        if objet in d.corps:
+            n = d.corps[objet]
+            if not isinstance(n, int) or isinstance(n, bool) or not 0 <= n <= 200:
+                raise Refus(f"nombre de {objet} invalide")
+            donnees["literie"][objet] = n
+    ecrire_json(GITE_SALLE, donnees)
+    noter(d, "gite-literie", detail=f"{donnees['literie']['matelas']} matelas, {donnees['literie']['duvets']} duvets")
 
 
 @route("/api/gite/lit/supprimer")
@@ -384,6 +408,7 @@ def vue(c, nom, staff):
         "capacite": capacite(donnees),
         "salle_couchage": donnees["salle_couchage"],
         "plan": donnees["plan"],
+        "literie": donnees["literie"],
         "tardif": est_tardif(c.config, nom, c.comptes, donnees),
         "nb_exemptes": {quoi: sum(1 for e in donnees["exemptions"].values() if e.get(quoi)) for quoi in EXEMPTIONS},
         "exempte_communaute": bool(donnees["exemptions"].get(nom, {}).get("communaute")),

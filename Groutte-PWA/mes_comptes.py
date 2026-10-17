@@ -3,7 +3,8 @@ remboursements reçus, on relance et on fait grâce. Les dettes elles-mêmes son
 
 data/remboursements.json : {
     "remboursements": [{"id", "de", "a", "montant", "quand", "type": "remboursement" | "grace",
-                        "etat": "declare" | "confirme" | "office" | "refuse", "le", "rappel"}],
+                        "etat": "declare" | "confirme" | "office" | "refuse", "le", "rappel",
+                        "par_staff", "message", "ligne"}],   (une dette effacée par le staff : Suivi des dépenses)
     "relances": [{"de", "a", "quand"}]}
 
 Un remboursement est un simple transfert d'argent entre deux personnes : il marche dans les deux modes. Seuls les
@@ -15,12 +16,11 @@ from datetime import datetime, timedelta
 
 import comptes_donnees as cd
 import compta
-import notifications
 from euros import centimes, euros
 from notifications import notifier
 from requetes import Refus, interdit
 from routes import route
-from stockage import PROFILS, REMBOURSEMENTS, ecrire_json, lire_json, maintenant, nouvel_id
+from stockage import REMBOURSEMENTS, ecrire_json, lire_json, maintenant, nouvel_id
 
 SANS_REPONSE = timedelta(days=7)
 DERNIER_DELAI = timedelta(hours=24)
@@ -115,13 +115,11 @@ def relancer(d):
     seuil = (datetime.now() - RELANCE).isoformat(timespec="seconds")
     if any(x["de"] == d.nom and x["a"] == qui and x["quand"] > seuil for x in donnees["relances"]):
         raise Refus(f"tu as déjà relancé {qui} : une relance par 24 h au plus")
-    profil = lire_json(PROFILS, {}).get(qui, {})
-    if not notifications.preferences(d.config, profil).get("comptes", True):
-        raise Refus(f"{qui} a coupé les notifications « Mes comptes » : relance-le autrement")
     donnees["relances"] = [x for x in donnees["relances"] if x["quand"] > seuil] + [{"de": d.nom, "a": qui, "quand": maintenant()}]
     ecrire_json(REMBOURSEMENTS, donnees)
+    # Gardée dans ses Pings reçus : sans notifications (ou catégorie coupée), il la verra à sa prochaine ouverture.
     notifier(d.config, "comptes", "Petit rappel", f"Petit rappel : tu dois {euros(du)} à {d.nom}.", "#comptes",
-             destinataires={qui}, sauf=d.nom)
+             destinataires={qui}, sauf=d.nom, genre="relance", de=d.nom)
 
 
 def rappeler(config):
@@ -158,7 +156,7 @@ def rappeler(config):
 
 @cd.renommage
 def renommer(ancien, nouveau):
-    cd.renommer_fichier(REMBOURSEMENTS, ancien, nouveau, {"de", "a"})
+    cd.renommer_fichier(REMBOURSEMENTS, ancien, nouveau, {"de", "a", "par_staff"})
 
 
 # --- Ce que la page reçoit -------------------------------------------------------------------------

@@ -56,8 +56,9 @@ def rang(point):
 
 
 def creneaux_de(config, presence):
-    """Les créneaux comptés pour une présence, bornés au séjour (si ses dates ont changé depuis)."""
-    if not presence:
+    """Les créneaux comptés pour une présence, bornés au séjour (si ses dates ont changé depuis). Une présence sans
+    dates (« ne vient pas ») n'en a aucun."""
+    if not presence or "arrivee" not in presence:
         return []
     debut, fin = rang(presence["arrivee"]), rang(presence["depart"])
     return [c for c in creneaux_sejour(config) if debut <= rang(c) <= fin]
@@ -74,7 +75,7 @@ def repas_de(config, presence):
 
 def hors_sejour(config, presence):
     """La présence déborde des dates du séjour (elles ont changé dans config.json après la saisie)."""
-    if not presence:
+    if not presence or "arrivee" not in presence:
         return False
     tous = creneaux_sejour(config)
     return rang(presence["arrivee"]) < rang(tous[0]) or rang(presence["depart"]) > rang(tous[-1])

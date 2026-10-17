@@ -12,7 +12,8 @@ data/depenses.json : {"depenses": [{
               [{"categorie", "nom_categorie", "montant"}]   (communauté)
     "parts": {nom: centimes}   calculées et figées à la validation (compta.py), pour tous les modes
     "etat": "brouillon" | "attente" | "validee", "refus": motif du dernier refus, "valide_le",
-    "historique": [{"quand", "par", "action": "envoyee" | "validee" | "refusee", "detail"}]}]}
+    "historique": [{"quand", "par", "action": "envoyee" | "validee" | "refusee", "detail"}],
+    "lu_llm": horodatage de la lecture du ticket par le LLM, ou "" (une seule lecture par dépense : llm.py)}]}
 
 Le gîte et la salle ne passent pas par ici (Créances). Un staff ne valide pas sa propre dépense, sauf s'il est seul.
 """
@@ -38,7 +39,7 @@ def lire():
     donnees.setdefault("depenses", [])
     for dep in donnees["depenses"]:
         for cle, valeur in (("ticket", ""), ("concernes", []), ("lignes", []), ("parts", {}), ("refus", ""),
-                            ("valide_le", ""), ("historique", [])):
+                            ("valide_le", ""), ("historique", []), ("lu_llm", "")):
             dep.setdefault(cle, valeur)
     return donnees
 
@@ -145,7 +146,7 @@ def enregistrer(d):
         if len(donnees["depenses"]) >= MAX_DEPENSES:
             raise Refus("trop de dépenses")
         dep = {"id": nouvel_id(), "auteur": d.nom, "saisie": maintenant(), "ticket": "", "etat": "brouillon",
-               "parts": {}, "refus": "", "valide_le": "", "historique": []}
+               "parts": {}, "refus": "", "valide_le": "", "historique": [], "lu_llm": ""}
         donnees["depenses"].append(dep)
     dep.update(lire_contenu(d, dep))
     ancien, dep["ticket"] = dep.get("ticket", ""), ticket_valide(d.corps.get("ticket"))

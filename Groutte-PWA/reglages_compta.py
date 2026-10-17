@@ -1,18 +1,28 @@
-"""Staff > Réglages compta : les catégories de dépenses et le mode de remboursement.
+"""Staff > Réglages compta : les catégories de dépenses, le mode de remboursement, les repas gérés par la communauté et
+la clôture des comptes.
 
 data/categories.json : {"categories": [{"id", "nom", "type": "obligatoire" | "facultative",
                                         "regle": "egale" | "repas" | "nuits", "sam": bool, "supprimee": date ou ""}]}
-data/reglages-compta.json : {"mode": "direct" | "minimum", "cloture": horodatage ou ""}
+data/reglages-compta.json : {"mode": "direct" | "minimum", "cloture": horodatage ou "",
+                             "repas": {"matin" | "midi" | "soir": {"gere": bool, "defaut": bool}},
+                             "repas_historique": [{"depuis": horodatage, "repas": {...}}]}
+
+Les repas gérés : un repas géré se coche dans Mes repas et compte dans les repas pris ; un repas non géré ne compte
+jamais. « defaut » : coché tant que la personne n'a rien choisi. Par défaut, seul le soir est géré, et coché.
+Un changement ne vaut que pour les repas pas encore commencés : chaque réglage est daté (« repas_historique »), et un
+repas suit le réglage en vigueur à l'heure où il commence (regle_repas).
 
 Sans fichier, les catégories de base (Alimentaire, Monster, Alcool). « NON GÉRÉ » n'est pas dans le fichier : elle est
 toujours là, ne se modifie pas, et reste à la charge du payeur. Changer une catégorie ne vaut que pour les dépenses
 validées ensuite : leurs parts sont figées à la validation (depenses.py).
-La clôture des comptes se fera depuis Suivi des dépenses (jalon 3) : ici, on ne fait que la respecter.
+La clôture des comptes (irréversible) fige les dépenses, les présences, les catégories et les repas gérés.
 """
+import sejour
+from euros import euros
 from notifications import notifier
 from requetes import Refus, texte
 from routes import route
-from stockage import CATEGORIES, PROFILS, REGLAGES_COMPTA, ecrire_json, lire_json, nouvel_id, sans_accent
+from stockage import CATEGORIES, PROFILS, REGLAGES_COMPTA, ecrire_json, lire_json, maintenant, nouvel_id, sans_accent
 
 NON_GERE = {"id": "non-gere", "nom": "NON GÉRÉ", "type": "speciale", "regle": "payeur", "sam": False, "supprimee": ""}
 DE_BASE = [
@@ -23,6 +33,9 @@ DE_BASE = [
 TYPES = ("obligatoire", "facultative")
 REGLES = {"egale": "à parts égales", "repas": "au prorata des repas", "nuits": "au prorata des nuits"}
 MODES = {"direct": "Direct", "minimum": "Minimum de virements"}
+REPAS_DEFAUT = {"matin": {"gere": False, "defaut": False}, "midi": {"gere": False, "defaut": False},
+                "soir": {"gere": True, "defaut": True}}
+MOT_CLOTURE = "CLÔTURER"
 
 
 def lire_categories():
@@ -39,7 +52,21 @@ def lire_reglages():
     donnees = lire_json(REGLAGES_COMPTA, {})
     donnees.setdefault("mode", "direct")
     donnees.setdefault("cloture", "")
+    repas = donnees.setdefault("repas", {})
+    for creneau, regle in REPAS_DEFAUT.items():
+        repas.setdefault(creneau, dict(regle))
+    donnees.setdefault("repas_historique", [])
     return donnees
+
+
+def regle_repas(config, reglages, jour, creneau):
+    """{"gere", "defaut"} du repas (jour, créneau) : le réglage en vigueur à l'heure où il commence."""
+    debut = sejour.heure_debut(config, jour, creneau).isoformat(timespec="seconds")
+    regle = REPAS_DEFAUT[creneau]
+    for etape in reglages["repas_historique"]:
+        if etape["depuis"] <= debut:
+            regle = etape["repas"].get(creneau, regle)
+    return regle
 
 
 def categorie(ident, donnees=None):
@@ -70,6 +97,50 @@ def changer_mode(d):
     staff.noter(d, "compta-mode", detail=MODES[mode])
     notifier(d.config, "comptes", "Mode de remboursement",
              f"Le mode de remboursement passe à {MODES[mode]} : regarde qui tu dois rembourser.", "#comptes", sauf=d.nom)
+
+
+@route("/api/compta/repas")
+def regler_repas(d):
+    """Un créneau (matin, midi, soir) : géré par la communauté ou non, et coché par défaut ou non. Seuls les repas pas
+    encore commencés changent (regle_repas)."""
+    exiger_ouvert(d)
+    creneau = d.corps.get("creneau")
+    if creneau not in REPAS_DEFAUT:
+        raise Refus("créneau inconnu")
+    gere, defaut = bool(d.corps.get("gere")), bool(d.corps.get("defaut"))
+    reglages = lire_reglages()
+    regle = {"gere": gere, "defaut": defaut and gere}
+    if reglages["repas"][creneau] == regle:
+        return
+    reglages["repas"][creneau] = regle
+    reglages["repas_historique"].append({"depuis": maintenant(), "repas": {c: dict(r) for c, r in reglages["repas"].items()}})
+    ecrire_json(REGLAGES_COMPTA, reglages)
+    import staff
+    staff.noter(d, "compta-repas", detail=f"{creneau} : {'géré' if gere else 'pas géré'}{', coché par défaut' if regle['defaut'] else ''}")
+
+
+@route("/api/compta/cloturer")
+def cloturer(d):
+    """Irréversible, confirmé en retapant le mot. Chacun reçoit son plan final de virements."""
+    d.exiger_staff()
+    reglages = lire_reglages()
+    if reglages["cloture"]:
+        raise Refus("les comptes sont déjà clôturés")
+    if str(d.corps.get("mot", "")).strip().upper() != MOT_CLOTURE:
+        raise Refus(f"tape {MOT_CLOTURE} pour confirmer")
+    reglages["cloture"] = maintenant()
+    ecrire_json(REGLAGES_COMPTA, reglages)
+    import staff
+    import compta   # import ici : compta importe ce module
+    staff.noter(d, "compta-cloture")
+    c = compta.Compta(d.config)
+    dettes = c.dettes()
+    for nom in sorted(c.actifs):
+        doit = [f"{euros(m)} à {a}" for (de, a), m in sorted(dettes.items()) if de == nom]
+        recoit = [f"{euros(m)} de {de}" for (de, a), m in sorted(dettes.items()) if a == nom]
+        texte = (("Tu dois " + ", ".join(doit) + ". ") if doit else "") + (("Tu dois recevoir " + ", ".join(recoit) + ".") if recoit else "")
+        notifier(d.config, None, "Comptes clôturés", texte.strip() or "Tu es quitte : personne ne te doit rien, et tu ne dois rien.",
+                 "#comptes", destinataires={nom})
 
 
 @route("/api/compta/categorie")
@@ -134,11 +205,12 @@ def supprimer_categorie(d):
                  destinataires=cocheurs, sauf=d.nom)
 
 
-def vue(utilisees):
-    """Pour l'état : les catégories proposées (NON GÉRÉ en dernier) et les supprimées encore utilisées.
-    `utilisees` : les identifiants utilisés par au moins une dépense."""
+def vue(utilisees, reglages):
+    """Pour l'état : les catégories proposées (NON GÉRÉ en dernier), les supprimées encore utilisées, et le réglage
+    actuel des repas gérés. `utilisees` : les identifiants utilisés par au moins une dépense."""
     toutes = lire_categories()["categories"]
     return {
         "categories": [c for c in toutes if not c["supprimee"]] + [NON_GERE],
         "supprimees": [c for c in toutes if c["supprimee"] and c["id"] in utilisees],
+        "repas": reglages["repas"],
     }

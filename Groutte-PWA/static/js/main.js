@@ -2,6 +2,7 @@ import { app, $, el, icone, titreAppli, compte, themeDe, appliquerMode, charger,
 import { majEcrans } from "./installation.js";
 import { telephone, bulleCompte, dessinerPanneau } from "./panneau.js";
 import { ecran, A_RAFRAICHIR } from "./rubriques.js";
+import { fenetrePings } from "./pings.js";
 
 /* Point d'entrée : le rendu de toute la page, à chaque changement (état reçu, adresse changée, action).
    Rien ici n'est propre à une appli : les écrans sont déclarés dans rubriques.js.
@@ -85,6 +86,8 @@ function dessiner() {
     telephone.matches && action,
   ];
   $("vue").replaceChildren(...[entete, e.vue()].flat(3).filter(Boolean));
+  // À l'ouverture : les annonces du staff et les relances pas encore lues (Pings reçus), une fois par chargement.
+  if (!app.etat.moi.code_provisoire) fenetrePings();
 }
 
 /* La pastille sur l'icône de l'appli s'efface quand on ouvre l'appli. */

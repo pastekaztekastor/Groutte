@@ -8,6 +8,8 @@ C'est une petite appli de groupe, mobile first et installable. Elle a les notifi
 
 **Jalon 2 (l'essentiel)** : Forum (repris de NextSession), Contacter le staff, Présence, Lits, Mes repas, Mes comptes, Créances gîte et salle, Dépenses, Comment ça marche ; pour le staff, Gîte et salle, Réglages compta, Validation des dépenses. Tout l'argent est calculé par `compta.py` (section 14).
 
+**Jalon 3 (ensuite)** : Pings reçus, Menu ; pour le staff, Réglages LLM (lecture des tickets), Suivi des dépenses, Annonces (section 15). Et les changements des fiches *à revoir* : repas gérés par la communauté, literie dans Lits, « Je ne viens pas » enregistré, message court au staff, clôture des comptes, garde-fou de la désactivation.
+
 ```
 python3 app.py                 # http://127.0.0.1:8000
 PORT=9124 python3 app.py       # autre port
@@ -40,19 +42,25 @@ Comptes de départ dans `config.json` (premier démarrage seulement) : Alice (st
 | `comptes_donnees.py` | Les comptes (`data/comptes.json`) : codes hachés, staff, rôles, muet, désactivé ; les rôles (`roles.json`) ; le renommage d'un compte partout (`@renommage`). |
 | `acces.py` | Connexion avec le code de chaque compte, inscription, code provisoire, jetons, blocage après 5 essais. |
 | `comptes.py` | Ma fiche, rôles libres, changer son code, Me rembourser (IBAN vérifié...), photo, notifications, annonce du staff. |
-| `staff.py` | Staff > Comptes : droit staff, code à zéro, rôles, muet, nom, désactivation, journal (`data/journal-staff.json`). |
+| `staff.py` | Staff > Comptes : droit staff, code à zéro, rôles, muet, nom, désactivation (avec effacement des dettes), journal (`data/journal-staff.json`). |
+| `annonces.py` | Staff > Annonces (filtres, envoi, `data/annonces.json`) et le message court au staff de Contacter le staff. |
+| `pings.py` | Communauté > Pings reçus : chaque notification, gardée par personne (`data/pings.json`), appelé par `notifier()`. |
+| `menu.py` | Repas > Menu : les plats proposés et leurs inscrits (`data/menus.json`), liés à Mes repas ; le rôle automatique Chef. |
+| `suivi.py` | Staff > Suivi des dépenses : toutes les dettes d'origine, dette effacée (grâce du staff), dette manuelle (`data/dettes-manuelles.json`). |
+| `llm.py` | Staff > Réglages LLM et la lecture des tickets : clés dans `secrets/llm.json` (hors de `data/`), appels HTTP à Claude, ChatGPT ou Mistral. |
+| `llm-essai.png` | Le faux ticket du bouton Tester (fait depuis `outils/ticket-essai.svg`). |
 | `forum.py` | Communauté > Forum, repris de NextSession : posts, commentaires en arbre, votes, réactions, suivi des fils, modération par le staff (`data/forum.json`). |
 | `flairs.json`, `reactions.json` | Les flairs du forum (certains réservés au staff) et les réactions en texte. Modifiés par le webmaster, versionnés. |
 | `sejour.py` | Les dates du séjour (`config.json > sejour`) et le modèle de présence : créneaux, nuits, repas, heures des repas. |
 | `presence.py` | Gîte > Présence : arrivée et départ de chacun (`data/presences.json`). Prévient les hébergeurs, les créanciers d'un retardataire, le staff si la capacité est dépassée. |
-| `lits.py` | Gîte > Lits : les réservations nuit par nuit (`data/lits.json`), retirées quand les dates ou les lits changent. |
-| `repas.py` | Repas > Mes repas : les repas décochés (`data/repas.json`). |
+| `lits.py` | Gîte > Lits : les réservations nuit par nuit (`data/lits.json`), retirées quand les dates ou les lits changent ; le bilan de literie et l'alerte de manque au staff. |
+| `repas.py` | Repas > Mes repas : les choix de chacun (`data/repas.json`) ; seuls les repas gérés par la communauté comptent. |
 | `gite_salle.py` | Staff > Gîte et salle (`data/gite-salle.json`) : montants, hébergeurs, dates limites, exemptions, ouverture des paiements (avec l'instantané des nuits), lits, plan, inscriptions tardives. |
 | `compta.py` | **Le calcul de l'argent**, sans rien enregistrer : parts du gîte et de la salle, retardataires, parts des dépenses, grand livre, soldes, dettes (direct ou minimum de virements). |
 | `creances.py` | Budget > Créances : paiements à l'hébergeur, confirmations, reports, rappels datés (`data/creances.json`). |
 | `depenses.py` | Budget > Dépenses et Staff > Validation : brouillon, envoi, validation (parts figées) ou refus (`data/depenses.json`). |
 | `mes_comptes.py` | Budget > Mes comptes : remboursements, grâces, relances, confirmation d'office (`data/remboursements.json`). |
-| `reglages_compta.py` | Staff > Réglages compta : catégories (`data/categories.json`), mode de remboursement et clôture (`data/reglages-compta.json`). |
+| `reglages_compta.py` | Staff > Réglages compta : catégories (`data/categories.json`), mode de remboursement, repas gérés (datés) et clôture (`data/reglages-compta.json`). |
 | `taches.py` | Les rappels datés, vérifiés au chargement de l'état au plus toutes les 5 minutes (`data/taches.json`). |
 | `euros.py` | Montants en centimes : écriture en euros (notifications), lecture d'un montant reçu. |
 | `notifications.py` | Web Push (VAPID et chiffrement RFC 8291), `notifier()`, mentions `@Nom`. |
@@ -84,7 +92,9 @@ Comptes de départ dans `config.json` (premier démarrage seulement) : Alice (st
 | `static/js/depenses.js`, `validation.js` | Dépenses (liste, saisie, détail) et Staff > Validation, qui reprend le détail. |
 | `static/js/faq.js`, `static/faq.json` | Comment ça marche : le texte de la FAQ du budget (modifié par le webmaster), les réglages lus en direct. |
 | `static/js/gite-salle.js`, `reglages-compta.js` | Staff > Gîte et salle, Staff > Réglages compta. |
-| `static/js/reglages.js` | Photo, thème, mode, changer son code, Installer l'appli, Annonce, déconnexion. |
+| `static/js/reglages.js` | Photo, thème, mode, changer son code, Installer l'appli, déconnexion. |
+| `static/js/menu.js`, `pings.js` | Menu (liste, détail, saisie), Pings reçus et la fenêtre des annonces et relances non lues à l'ouverture. |
+| `static/js/annonces.js`, `suivi.js`, `reglages-llm.js` | Staff > Annonces, Suivi des dépenses, Réglages LLM. |
 | `static/js/notifs.js` | Activer les notifications sur l'appareil, choisir ce qu'on reçoit. |
 | `static/js/installation.js` | Écrans d'arrivée : guide d'installation (iPhone ou Android), puis activation des notifications. |
 | `static/js/images.js` | Choix d'images avant envoi, envoi, galerie qu'on fait défiler. |
@@ -125,6 +135,7 @@ Lecture seule : `GET /api/etat?nom=` (tout) et, pour un détail trop lourd pour 
 - Les identifiants viennent de `nouvel_id()` : 8 caractères hexadécimaux. `lus.py` s'y attend.
 - Les dates sont des textes ISO (`maintenant()` donne `2026-10-15T21:16:26`, `aujourdhui()` donne `2026-10-15`). On les compare comme du texte.
 - **Médias** : la page envoie le fichier brut (`POST /api/televerser?type=image`) et reçoit son nom (`televerse`). Elle joint ensuite ce nom à l'action (`images: [...]`), et le serveur vérifie qu'il existe (`images_valides`). La page envoie aussi un aperçu léger (`<id>-a.jpg`, 1280 px), qui sert dans les listes ; l'original sert à la visionneuse. Quand on retire une image, il faut **l'effacer du disque** (`medias.supprimer`). Ne l'efface pas si elle sert encore ailleurs, par exemple comme couverture.
+- `secrets/` (les clés des LLM) n'est ni dans `data/`, ni dans git, ni dans les sauvegardes : si on le perd, on repose les clés.
 - `data/` ne se publie jamais : l'appli le protège en ne le servant pas. **À sauvegarder** : tout `data/`, dont `vapid.json`, les clés des notifications. Si on les perd, tous les appareils doivent se réabonner.
 
 ---
@@ -258,7 +269,8 @@ Pour chaque nouvelle page du cahier des charges. Le modèle complet (Notes) est 
    - URL : le sous-domaine ;
    - startup file : `passenger_wsgi.py`, entry point : `application`.
 3. En FTP (FileZilla, « FTP explicite sur TLS »), envoie dans ce dossier :
-   - les `.py`, les `.json` du dossier (`config.json`, `roles.json`, `flairs.json`, `reactions.json`), `requirements.txt` et `static/` ;
+   - les `.py`, les `.json` du dossier (`config.json`, `roles.json`, `flairs.json`, `reactions.json`), `llm-essai.png`, `requirements.txt` et `static/` ;
+   - jamais `secrets/` : les clés des LLM se posent depuis Staff > Réglages LLM, sur le serveur ;
    - `data/` seulement au premier déploiement. **Ne l'écrase jamais ensuite.**
 4. Setup Python App :
    - ajoute `requirements.txt` puis clique « Run Pip Install » (pour les notifications) ;
@@ -339,5 +351,18 @@ Le guide pas à pas complet est dans `../Nextsession/DEPLOIEMENT.md`.
 - **Les dettes** : `dettes_directes()` (par paire, sans compensation, sauf le tampon des retardataires) ou `dettes_minimum()` (le plus gros débiteur paie le plus gros créancier). `dettes()` donne celles du mode actif.
 - **Les parts d'une dépense sont figées à la validation** (`depenses.valider` les enregistre). Avant, `Compta.parts_depense` donne l'aperçu affiché au staff.
 - **Les rappels datés** (paiements du gîte, confirmation d'office d'un remboursement) partent au chargement de l'état, sous le verrou, au plus toutes les 5 minutes (`taches.py`). Chaque envoi est noté pour ne jamais partir deux fois.
-- **La clôture des comptes** arrive avec Suivi des dépenses (jalon 3) : `reglages-compta.json > cloture` est déjà respecté partout (plus de dépense, plus de changement de présence, les restes deviennent des manques).
+- **La clôture des comptes** (Staff > Réglages compta, en retapant CLÔTURER) : `reglages-compta.json > cloture` est respecté partout (plus de dépense, plus de changement de présence ni de repas, les restes deviennent des manques), et chacun reçoit son plan final de virements.
 - **Piège** : dans une action, `nom` est toujours le compte qui agit. Le nom d'une catégorie s'envoie donc sous `libelle`.
+
+---
+
+## 15. Le jalon 3
+
+- **Routes lentes** : une action qui appelle un LLM (jusqu'à 30 s) se déclare `@route(..., sans_verrou=True)` (`routes.py`). `app.py` l'appelle hors du verrou ; elle prend `verrou()` seulement pour écrire. Attention : `verrou()` n'est pas réentrant (deux `flock` du même processus se bloquent), donc jamais de `verrou()` dans une fonction appelée sous le verrou.
+- **Pings reçus** : `notifier()` garde chaque notification dans `data/pings.json` pour chacun de ses destinataires (tous les comptes actifs si `destinataires` vaut `None`), qu'elle parte ou non. `genre` (« annonce », « relance », « autre ») et `de` servent à la fenêtre des non lus à l'ouverture (`fenetrePings`, appelée par `main.js`). `garder=False` pour la notification de test.
+- **Repas gérés** : `reglages-compta.json > repas_historique` date chaque réglage ; un repas suit celui en vigueur à son heure de début (`reglages_compta.regle_repas`). Les repas passés ne bougent donc jamais. `data/repas.json` garde les choix explicites (`pris`), le reste suit le défaut du créneau ; `Compta.repas_pris` fait le calcul, et l'état envoie la liste à la page (`presences[nom].repas`).
+- **Menu et Mes repas** : s'inscrire coche le repas (`repas.poser`), se désinscrire du dernier menu le décoche, décocher le repas désinscrit (`menu.desinscrire_repas`).
+- **Literie** : `lits.bilan(c)` nuit par nuit ; `lits.verifier_manques` tourne après chaque action POST (dans `app.py`) et prévient le staff des nouveaux manques, en un message, une fois par nuit et par objet. Rien tant que les lits ne sont pas déclarés.
+- **Dettes effacées** : une grâce du staff (`par_staff`, `message`, `ligne`) dans `remboursements.json`. `Compta.dettes_directes` l'impute d'abord sur sa ligne (`cle` = « type:ref » de l'obligation), puis le reste des remboursements de la plus ancienne à la plus récente. La désactivation d'un compte efface ses dettes par paire (`suivi.effacer_compte`).
+- **LLM** : `llm.py` parle aux trois API en HTTP (urllib), sans SDK : Anthropic (`/v1/messages`, sortie JSON imposée par `output_config.format`), OpenAI et Mistral (`/chat/completions`, `response_format: json_object`). Les modèles sont dans `config.json > llm_modeles`. La clé ne sort jamais du serveur, ni dans l'état, ni dans le journal, ni dans les erreurs (les messages des fournisseurs ne sont jamais recopiés). Pour tester sans clé, remplacer `llm.appeler` par une fonction qui renvoie un JSON.
+

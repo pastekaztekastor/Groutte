@@ -12,16 +12,20 @@ Organisation :
 - routes.py        registre des actions POST (@route)
 - comptes_donnees.py  comptes (data/comptes.json), codes hachés, rôles (roles.json), renommage
 - acces.py         connexion, inscription, codes provisoires, jetons
-- comptes.py       ma fiche, me rembourser, photo, notifications, annonces
+- comptes.py       ma fiche, me rembourser, photo, notifications
+- annonces.py      Staff > Annonces, et le message court au staff (Contacter le staff)
+- pings.py         Communauté > Pings reçus : chaque notification, gardée pour chacun
 - staff.py         Staff > Comptes : droits, codes, rôles, muet, noms, désactivation, journal
 - forum.py         Communauté > Forum (repris de NextSession)
 - sejour.py        dates du séjour et modèle de présence (créneaux, nuits, repas)
-- presence.py      Gîte > Présence ; lits.py Gîte > Lits ; repas.py Repas > Mes repas
+- presence.py      Gîte > Présence ; lits.py Gîte > Lits (et la literie) ; repas.py Repas > Mes repas ; menu.py Repas > Menu
 - gite_salle.py    Staff > Gîte et salle : montants, hébergeurs, exemptions, lits, inscriptions tardives
 - compta.py        le calcul de l'argent : parts, retardataires, dépenses, soldes, dettes
 - creances.py      Budget > Créances gîte et salle ; depenses.py Budget > Dépenses et Staff > Validation
 - mes_comptes.py   Budget > Mes comptes : remboursements, grâces, relances
-- reglages_compta.py  Staff > Réglages compta : catégories, mode de remboursement
+- reglages_compta.py  Staff > Réglages compta : catégories, mode de remboursement, repas gérés, clôture
+- suivi.py         Staff > Suivi des dépenses : toutes les dettes, dette effacée, dette manuelle
+- llm.py           Staff > Réglages LLM, et la lecture des tickets de caisse (clés dans secrets/, hors de data/)
 - taches.py        rappels datés, vérifiés au chargement de l'état
 - notifications.py Web Push (seule dépendance : cryptography, facultative)
 - lus.py           ce que chacun a vu : pastilles « nouveau »
@@ -33,29 +37,36 @@ Organisation :
 import json
 import os
 import re
+import sys
+import traceback
 from socketserver import ThreadingMixIn
 from urllib.parse import parse_qs, quote
 from wsgiref.simple_server import WSGIServer, make_server
 
 import acces
+import annonces  # noqa: F401  (routes /api/annonces/..., /api/contact/staff)
 import comptes  # noqa: F401  (routes /api/profil, /api/notifs/...)
 import creances  # noqa: F401  (routes /api/creances/...)
 import depenses  # noqa: F401  (routes /api/depenses/...)
 import forum
 import gite_salle  # noqa: F401  (routes /api/gite/...)
-import lits  # noqa: F401  (routes /api/lits/...)
+import lits  # (routes /api/lits/... ; les manques de literie, vérifiés après chaque action)
+import llm  # noqa: F401  (routes /api/llm/..., /api/depenses/lire)
 import lus  # noqa: F401  (route /api/lu)
 import medias
+import menu  # noqa: F401  (routes /api/menu/...)
 import mes_comptes  # noqa: F401  (routes /api/comptes/...)
+import pings  # noqa: F401  (route /api/pings/lu)
 import presence  # noqa: F401  (routes /api/presence...)
 import reglages_compta  # noqa: F401  (routes /api/compta/...)
 import repas  # noqa: F401  (route /api/repas)
 import staff  # noqa: F401  (routes /api/staff/...)
+import suivi  # noqa: F401  (routes /api/suivi/...)
 import taches
 from environnement import environnement
 from etat import etat
 from requetes import Demande, Refus, lire_corps
-from routes import ROUTES
+from routes import ROUTES, SANS_VERROU
 from stockage import ICI, lire_config, verrou
 
 
@@ -260,12 +271,21 @@ def application(environ, start_response):
         if methode == "POST" and chemin == "/api/televerser":
             nom, fichier = televerser(environ, parametres)
             return repondre(start_response, "200 OK", dict(etat(nom), televerse=fichier))
+        if methode == "POST" and chemin in SANS_VERROU:
+            # Action lente (un LLM) : hors du verrou, elle le prend elle-même pour écrire (routes.py).
+            demande = Demande(lire_config(), lire_corps(environ), jeton, chemin)
+            complement = ROUTES[chemin](demande) or {}
+            return repondre(start_response, "200 OK", dict(etat(demande.nom), **complement))
         if methode == "POST" and chemin in ROUTES:
             corps = lire_corps(environ)
             with verrou():
                 demande = Demande(lire_config(), corps, jeton, chemin)
                 # Une action peut renvoyer un petit complément (ex. le code provisoire, montré une seule fois).
                 complement = ROUTES[chemin](demande) or {}
+                try:
+                    lits.verifier_manques(demande.config)   # une nuit en manque de matelas ou de duvets : le staff le sait
+                except Exception:   # une alerte ratée ne doit jamais faire échouer l'action
+                    traceback.print_exc(file=sys.stderr)
             return repondre(start_response, "200 OK", dict(etat(demande.nom), **complement))
     except Refus as refus:
         return repondre(start_response, refus.statut, {"erreur": str(refus)})

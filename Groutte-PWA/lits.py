@@ -1,8 +1,14 @@
-"""Gîte > Lits : réserver un lit, nuit par nuit. Sans réservation, on dort par terre au gîte.
+"""Gîte > Lits : réserver un lit, nuit par nuit. Sans réservation, on dort par terre au gîte. Et la literie : assez de
+matelas et de duvets, nuit par nuit, pour ceux qui dorment par terre ?
 
-data/lits.json : {"reservations": [{"nuit": date du soir, "lit": lettre ou "salle", "nom", "quand"}]}.
-Les lits (lettre, description, places), le plan et la salle comme couchage sont réglés dans Gîte et salle.
+data/lits.json : {"reservations": [{"nuit": date du soir, "lit": lettre ou "salle", "nom", "quand"}],
+                  "manques": ["<nuit>/matelas", "<nuit>/duvets"]}   (les manques déjà signalés au staff)
+Les lits (lettre, description, places, complet), le plan, la salle comme couchage et la literie fournie par le gîte sont
+réglés dans Gîte et salle ; ce que chacun apporte, dans Ma fiche (profil « matelas », « duvets » : absent = non renseigné).
 Une personne a au plus une place par nuit. Premier arrivé, premier servi.
+
+La literie (bilan) : le stock d'une nuit = ce qu'apportent les présents cette nuit-là + ce que fournit le gîte ; le besoin :
+rien dans un lit complet, un duvet dans un lit incomplet, un matelas et un duvet par terre (au gîte ou en salle).
 """
 import comptes_donnees as cd
 import compta
@@ -16,10 +22,71 @@ from stockage import LITS, ecrire_json, lire_json, maintenant
 SALLE = "salle"
 
 
+OBJETS = {"matelas": "matelas", "duvets": "duvet"}
+
+
 def lire():
     donnees = lire_json(LITS, {})
     donnees.setdefault("reservations", [])
+    donnees.setdefault("manques", [])
     return donnees
+
+
+def bilan(c):
+    """{nuit: {"matelas": reste, "duvets": reste}} : ce qui reste une fois servis ceux qui en ont besoin (négatif : il en
+    manque). Ceux qui n'ont pas dit ce qu'ils apportent comptent pour zéro."""
+    lits = {l["lettre"]: l for l in c.gs["lits"]}
+    places = {(r["nuit"], r["nom"]): r["lit"] for r in c.lits["reservations"]}
+    resultat = {}
+    for nuit in sejour.nuits(c.config):
+        reste = {objet: c.gs["literie"][objet] for objet in OBJETS}
+        for nom in c.venants():
+            if nuit not in c.nuits_liste(nom):
+                continue
+            profil = c.profils.get(nom, {})
+            for objet in OBJETS:
+                reste[objet] += profil.get(objet) or 0
+            lit = lits.get(places.get((nuit, nom)))
+            if lit and lit.get("complet", True):
+                continue
+            reste["duvets"] -= 1
+            if not lit:   # par terre, au gîte ou en salle
+                reste["matelas"] -= 1
+        resultat[nuit] = reste
+    return resultat
+
+
+def sans_literie(c):
+    """Ceux qui viennent et n'ont pas dit ce qu'ils apportent (matelas ou duvets « non renseigné »)."""
+    return sorted(n for n in c.venants() if any(c.profils.get(n, {}).get(objet) is None for objet in OBJETS))
+
+
+def verifier_manques(config):
+    """Sous le verrou, après chaque action (app.py) : le staff apprend qu'une nuit passe en manque de matelas ou de
+    duvets, une seule fois par nuit et par objet, jusqu'à ce que le manque disparaisse. Les nouveaux manques partent en
+    un seul message. Rien tant que le staff n'a pas déclaré les lits : tout le monde serait par terre."""
+    c = compta.Compta(config)
+    manques = {}
+    if c.gs["lits"]:
+        for nuit, reste in bilan(c).items():
+            for objet, n in reste.items():
+                if n < 0:
+                    manques[f"{nuit}/{objet}"] = -n
+    donnees = lire()
+    if set(donnees["manques"]) == set(manques):
+        return
+    nouveaux = sorted(cle for cle in manques if cle not in donnees["manques"])
+    donnees["manques"] = sorted(manques)
+    ecrire_json(LITS, donnees)
+    if not nouveaux:
+        return
+    phrases = []
+    for cle in nouveaux:
+        nuit, objet = cle.split("/")
+        n = manques[cle]
+        phrases.append(f"{n} {OBJETS[objet]}{'s' if n > 1 and objet == 'duvets' else ''} la nuit du {sejour.date_courte(nuit)}")
+    notifier(config, "gite", "Literie", "Il manque " + ", ".join(phrases) + ".", "#lits",
+             destinataires=set(cd.staffs_actifs(c.comptes)))
 
 
 def occupants(donnees, nuit, lit):

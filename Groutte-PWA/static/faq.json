@@ -188,12 +188,14 @@
         {
           "id": "mange-ailleurs",
           "question": "J'ai mangé ailleurs : pourquoi je paie ?",
-          "court": "C'est Mes repas qui compte : par défaut, tu manges sur la réserve. Décoche le repas avant qu'il commence (8 h, 12 h, 19 h) ; ensuite, il est figé.",
+          "court": "C'est Mes repas qui compte : par défaut, tu manges sur la réserve aux repas gérés par la communauté (le soir, par exemple). Décoche le repas avant qu'il commence (8 h, 12 h, 19 h) ; ensuite, il est figé.",
           "detail": [
             "La catégorie Alimentaire se répartit au prorata des repas pris sur la réserve. Un repas que tu n'as pas décoché est compté, même si tu as mangé ailleurs.",
+            "Seuls les repas gérés par la communauté comptent (le staff les choisit). Les autres, chacun se débrouille : les restes ont été payés par ceux qui ont mangé le repas d'avant.",
+            "S'inscrire à un plat du Menu coche le repas ; mais tu paies les courses au prorata de tes repas, pas des plats choisis.",
             "Les heures limites sont celles où le repas commence. Passé ce moment, c'est « qui a mangé, et quand »."
           ],
-          "liens": [["#repas", "Mes repas"]]
+          "liens": [["#repas", "Mes repas"], ["#menu", "Menu"]]
         },
         {
           "id": "ticket-llm",
@@ -217,9 +219,10 @@
         {
           "id": "erreur-validee",
           "question": "Une erreur a été validée : que faire ?",
-          "court": "Une dépense validée est définitive. On s'arrange entre ploucs.",
+          "court": "Une dépense validée ne se modifie plus : le plus simple, c'est de s'arranger entre ploucs.",
           "detail": [
-            "Les comptes ne bougent jamais tout seuls après coup : c'est ce qui les rend fiables. Une erreur se corrige par un arrangement, un remboursement ou une grâce."
+            "Les comptes ne bougent jamais tout seuls après coup : c'est ce qui les rend fiables. Une erreur se corrige par un arrangement, un remboursement ou une grâce.",
+            "En dernier recours, le staff peut effacer ta part d'une dépense, ou créer une dette à la main pour corriger. Tu en es prévenu, et c'est noté dans ton historique de Mes comptes."
           ]
         }
       ]
@@ -296,7 +299,7 @@
           "question": "Quand est-ce que tout est fini ?",
           "court": "Après le séjour, le staff clôture les comptes : plus de nouvelle dépense, et chacun reçoit son plan final de virements. Les remboursements restent possibles jusqu'à ce que tout le monde soit quitte.",
           "detail": [
-            "À la clôture, les présences ne changent plus, et ce qui reste à payer du gîte et de la salle devient une dette envers l'hébergeur."
+            "À la clôture (Staff > Réglages compta), les présences ne changent plus, et ce qui reste à payer du gîte et de la salle devient une dette envers l'hébergeur."
           ]
         }
       ]
