@@ -42,7 +42,7 @@ import { vueInscription, resumeInscription } from "./tournois.js";
    - action      : [icône, libellé, fonction] : la bulle ronde en bas à droite sur téléphone, en haut à droite sinon ;
    - avecEnvoi   : l'écran finit par une zone d'envoi collée en bas (zone-message.js) ;
    - lu          : la clé de nouveautés que cet écran marque comme lue ;
-   - sansPanneau : ni panneau latéral ni bulle de compte (le guide de bienvenue : on n'en sort que par ses boutons) ;
+   - sansPanneau : ni panneau latéral ni burger (le guide de bienvenue : on n'en sort que par ses boutons) ;
    - vue         : la fonction qui renvoie le contenu (éléments, tableaux d'éléments, ou rien). */
 export function ecran(rubrique, argument) {
   if (rubrique === "fiche") return { titre: "Ma fiche", vue: vueFiche };

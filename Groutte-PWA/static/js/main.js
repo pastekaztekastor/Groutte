@@ -1,6 +1,6 @@
 import { app, $, el, icone, titreAppli, compte, themeDe, appliquerMode, charger, fermerModale, afficherConnexion, nouveauCode, marquerLu, definirRendu, afficher } from "./commun.js";
 import { majEcrans } from "./installation.js";
-import { telephone, bulleCompte, dessinerPanneau, fermerPanneau } from "./panneau.js";
+import { telephone, boutonMenu, boutonFiche, dessinerPanneau, fermerPanneau } from "./panneau.js";
 import { ecran, A_RAFRAICHIR } from "./rubriques.js";
 import { fenetrePings, nonLus } from "./pings.js";
 
@@ -9,7 +9,8 @@ import { fenetrePings, nonLus } from "./pings.js";
 
    Navigation par l'adresse (#rubrique/argument) : un lien change l'adresse, la page se redessine. Le bouton retour
    du téléphone et du navigateur marche donc partout. Deux sortes d'écrans :
-   - écran de rubrique : la bulle de compte (téléphone), un grand titre, l'action éventuelle ;
+   - écran de rubrique : un grand titre, l'action éventuelle ; sur téléphone, la barre du haut à la place :
+     [burger] Titre ........ [photo → Ma fiche], toujours visible ;
    - écran poussé (avec `retour`) : une barre en haut avec la flèche, le titre au centre. */
 
 $("modale").addEventListener("click", ev => { if (ev.target === $("modale")) fermerModale(); });
@@ -58,27 +59,33 @@ function dessiner() {
   if (e.lu && aDuNouveau(e.lu)) marquerLu(e.lu);
   dessinerPanneau();
 
-  // Écran sans panneau (le guide de bienvenue) : ni panneau, ni bulle de compte, ni voile.
+  // Écran sans panneau (le guide de bienvenue) : ni panneau, ni burger, ni voile.
   document.body.classList.toggle("sans-panneau", Boolean(e.sansPanneau));
   if (e.sansPanneau) fermerPanneau();
-  const bulle = taille => !e.sansPanneau && telephone.matches && bulleCompte(taille);
+  // Téléphone : burger à gauche et photo (Ma fiche) à droite de la barre du haut. Pas sur un écran d'écriture
+  // (« Annuler ») : on n'en sort que par Annuler ou en validant.
+  const menu = !e.sansPanneau && telephone.matches;
+  const avecMenu = menu && e.retour?.[1] !== "Annuler";
 
   const pousse = Boolean(e.retour);
-  $("barre-nav").hidden = !pousse;
-  document.body.classList.toggle("avec-nav", pousse);
+  const barreHaut = !pousse && menu;   // écran de rubrique sur téléphone : la barre du haut remplace le grand titre
+  $("barre-nav").hidden = !pousse && !barreHaut;
+  $("barre-nav").classList.toggle("barre-haut", barreHaut);
+  document.body.classList.toggle("avec-nav", pousse || barreHaut);
   document.body.classList.toggle("avec-envoi", Boolean(e.avecEnvoi));
   if (pousse) {
     const [lien, libelle] = e.retour;
     $("retour").href = lien || "#";
     $("retour").dataset.lien = lien || "";
-    // Téléphone : la bulle de compte reste à gauche du retour, pour aller ailleurs sans revenir en arrière
-    // (sauf sur un écran d'écriture, « Annuler » : on n'en sort que par Annuler ou en validant).
-    const b = libelle !== "Annuler" && bulle(30);
-    $("gauche-nav").replaceChildren(...(b ? [b] : []), $("retour"));
+    // Le burger reste à gauche du retour, pour aller ailleurs sans revenir en arrière.
+    $("gauche-nav").replaceChildren(...(avecMenu ? [boutonMenu()] : []), $("retour"));
     // « Annuler » : en toutes lettres, sans flèche (comme sur iPhone). Sinon flèche + nom de l'écran parent,
-    // nom caché sur téléphone (la place va à la bulle et au titre).
+    // nom caché sur téléphone (la place va au burger et au titre).
     $("retour").replaceChildren(...(libelle === "Annuler" ? [libelle] : [icone("chevron-gauche"), el("span", { class: "libelle-retour" }, libelle)]));
     $("retour").setAttribute("aria-label", libelle === "Annuler" ? "Annuler" : `Retour : ${libelle}`);
+    $("titre-nav").textContent = e.titre;
+  } else if (barreHaut) {
+    $("gauche-nav").replaceChildren(boutonMenu());
     $("titre-nav").textContent = e.titre;
   }
   // Action de l'écran : sur téléphone, une bulle ronde en bas à droite (pour le pouce) ; sinon une icône en haut à droite.
@@ -87,9 +94,9 @@ function dessiner() {
     "aria-label": e.action[1], title: e.action[1], onclick: e.action[2],
   }, icone(e.action[0]));
   const actionEnHaut = action && !telephone.matches ? action : null;
-  $("action-nav").replaceChildren(...(pousse && actionEnHaut ? [actionEnHaut] : []));
+  $("action-nav").replaceChildren(...[pousse && actionEnHaut, avecMenu && boutonFiche()].filter(Boolean));
   const entete = [
-    !pousse && el("div", { class: "entete-titre" }, bulle(), el("h1", { class: "grand-titre" }, e.titre), actionEnHaut),
+    !pousse && !barreHaut && el("div", { class: "entete-titre" }, el("h1", { class: "grand-titre" }, e.titre), actionEnHaut),
     telephone.matches && action,
   ];
   $("vue").replaceChildren(...[entete, e.vue()].flat(3).filter(Boolean));

@@ -3,7 +3,7 @@ import { groupesPanneau } from "./rubriques.js";
 import { seDeconnecter } from "./reglages.js";
 
 /* Le panneau latéral : toutes les rubriques, chaque entrée avec un résumé dessous (comme les Réglages de l'iPhone).
-   - Téléphone (moins de 900 px) : la bulle de compte, toujours en haut à gauche, l'ouvre par-dessus la page.
+   - Téléphone (moins de 900 px) : le burger, toujours en haut à gauche, l'ouvre par-dessus la page.
      Ouvert = une entrée de l'historique : le retour du téléphone le referme. Pas d'ouverture en glissant depuis
      le bord : sur Android (navigation par gestes) et dans Safari, ce geste veut déjà dire « retour ».
    - Paysage (900 px et plus : ordinateur, tablette) : toujours affiché en colonne à gauche, la page ouverte surlignée.
@@ -61,11 +61,16 @@ document.addEventListener("touchend", ev => {
   if (dx < -60 && Math.abs(dx) > 1.5 * Math.abs(dy)) fermerPanneau();
 });
 
-/* La bulle de compte : la photo, avec une pastille s'il y a du nouveau quelque part (le détail est dans le panneau). */
-export function bulleCompte(taille = 36) {
+/* Barre du haut (téléphone) : le burger ouvre le panneau, avec une pastille s'il y a du nouveau quelque part
+   (le détail est dans le panneau) ; la photo, à droite, mène à Ma fiche. */
+export function boutonMenu() {
   const nouveau = groupesPanneau().some(g => g.entrees.some(e => e && e.nouveau));
-  return el("button", { type: "button", class: "bulle-compte", "aria-label": "Ouvrir le menu", onclick: ouvrirPanneau },
-    avatar(app.moi, taille), pastilleNouveau(nouveau));
+  return el("button", { type: "button", class: "bouton-menu", "aria-label": "Ouvrir le menu", onclick: ouvrirPanneau },
+    icone("burger"), pastilleNouveau(nouveau));
+}
+
+export function boutonFiche(taille = 32) {
+  return el("a", { class: "bouton-fiche", href: "#fiche", "aria-label": "Ma fiche" }, avatar(app.moi, taille));
 }
 
 /* Une entrée : l'icône dans la couleur de son groupe, le titre, un résumé dessous, la pastille, le chevron. */

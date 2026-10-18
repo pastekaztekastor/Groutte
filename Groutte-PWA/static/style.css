@@ -306,8 +306,8 @@ body.sans-defilement { overflow: hidden; }
 .v-fleche.droite { right: var(--e3); }
 @media (hover: none) { .v-fleche { display: none; } }
 
-/* --- Téléphone : la bulle de compte (en haut à gauche) ouvre le panneau latéral ---------------------------------- */
-/* Ligne du grand titre : [bulle de compte] Titre ............ [action]. */
+/* --- Téléphone : le burger (en haut à gauche) ouvre le panneau latéral ---------------------------------------- */
+/* Ligne du grand titre (paysage) : Titre ............ [action]. */
 .entete-titre { display: flex; align-items: center; gap: var(--e3); margin: var(--e1) 0 var(--e3); }
 .entete-titre .grand-titre { margin: 0; flex: 1; min-width: 0; }
 /* Action de l'écran (« Nouvelle note ») : une icône en couleur de thème, comme sur iPhone. */
@@ -325,8 +325,16 @@ body.sans-defilement { overflow: hidden; }
   .barre-nav .retour { min-width: var(--cible); justify-content: center; }
   .barre-nav .titre { max-width: 52vw; }
 }
-.bulle-compte { position: relative; flex: none; display: inline-flex; padding: 0; border: none; background: none; border-radius: 50%; }
-.bulle-compte .nouveau { position: absolute; top: -2px; right: -4px; box-shadow: 0 0 0 2px var(--fond); }
+/* Barre du haut d'un écran de rubrique (téléphone) : [burger] Titre ............ [photo → Ma fiche]. */
+.barre-nav.barre-haut { grid-template-columns: auto minmax(0, 1fr) auto; gap: var(--e2); }
+.barre-nav.barre-haut .titre { max-width: none; text-align: left; font-size: var(--t-titre); font-weight: 700; }
+.bouton-menu {
+  position: relative; flex: none; display: inline-flex; align-items: center; justify-content: center;
+  width: var(--cible); height: var(--cible); padding: 0; border: none; background: none; color: var(--c11);
+}
+.bouton-menu .icone { width: 24px; height: 24px; }
+.bouton-menu .nouveau { position: absolute; top: 6px; right: 4px; box-shadow: 0 0 0 2px var(--fond); }
+.bouton-fiche { text-decoration: none; display: inline-flex; align-items: center; justify-content: center; min-width: var(--cible); min-height: var(--cible); border-radius: 50%; }
 .voile-panneau {
   position: fixed; inset: 0; z-index: 44; background: rgba(0, 0, 0, .35); opacity: 0; pointer-events: none; transition: opacity .25s;
 }
@@ -369,7 +377,7 @@ body.sans-defilement { overflow: hidden; }
 }
 /* Paysage (900 px et plus) : le même panneau, toujours ouvert, en colonne à gauche ; plus de bulle ni de voile. */
 @media (min-width: 900px) {
-  .voile-panneau, .bulle-compte { display: none; }
+  .voile-panneau, .bouton-menu { display: none; }
   .panneau-lateral {
     width: 320px; transform: none; transition: none; box-shadow: none; z-index: 30;
     border-right: .5px solid var(--separateur); padding-top: var(--e5);
