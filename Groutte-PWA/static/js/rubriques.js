@@ -25,6 +25,7 @@ import { vueSuivi, resumeSuivi } from "./suivi.js";
 import { vueReglagesLlm, resumeReglagesLlm } from "./reglages-llm.js";
 import { vueAccueil } from "./accueil.js";
 import { vueBienvenue, titreBienvenue } from "./bienvenue.js";
+import { vueInscription, resumeInscription } from "./tournois.js";
 
 /* Les écrans de l'appli (ecran), ce que montre le panneau (groupesPanneau), ce qui se relit tout seul (A_RAFRAICHIR).
    Le reste (main.js, panneau.js) est générique.
@@ -91,6 +92,7 @@ export function ecran(rubrique, argument) {
     if (argument) return { titre: titreDepense(argument), retour: ["", "Retour"], vue: () => vueDepense(argument) };
     return { titre: "Dépenses", action: ["fa-ajouter", "Nouvelle dépense", nouvelleDepense], vue: vueDepenses };
   }
+  if (rubrique === "tournois") return { titre: "Inscription", vue: vueInscription };
   if (rubrique === "faq") return { titre: "FAQ", vue: () => vueFaq(argument) };
 
   // Staff
@@ -135,6 +137,9 @@ export function groupesPanneau() {
     { titre: "Repas", classe: "groupe-4", entrees: [
       { lien: "#repas", icone: "fa-repas", titre: "Mes repas", resume: resumeRepas() },
       { lien: "#menu", icone: "fa-menu", titre: "Menu", resume: resumeMenu(), nouveau: nombreNouveautes("menu") },
+    ] },
+    { titre: "Tournois", classe: "groupe-5", entrees: [
+      { lien: "#tournois", icone: "fa-tournois", titre: "Inscription", resume: resumeInscription() },
     ] },
     { titre: "Gîte", classe: "groupe-2", entrees: [
       { lien: "#presence", icone: "fa-presence", titre: "Présence", resume: resumePresence() },

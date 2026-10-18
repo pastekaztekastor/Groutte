@@ -2,6 +2,7 @@ import { app, el, compte, envoyer } from "./commun.js";
 import { tete, blocIdentite, blocPartage, blocAlimentation, blocCouchage } from "./fiche.js";
 import { mesDates } from "./presence.js";
 import { vueRembourser } from "./rembourser.js";
+import { blocsTournois } from "./tournois.js";
 
 /* #bienvenue/<étape> : le guide de la première connexion, une page par sujet. Les champs sont ceux de Ma fiche,
    Présence et Moyen de paiement : ce que le staff a déjà rempli (pendant l'orga, avant l'appli) est déjà là, il
@@ -14,6 +15,7 @@ const ETAPES = [
   ["dates", "Quand viens-tu ?"],
   ["manger", "Manger et participer"],
   ["dormir", "Pour dormir"],
+  ["tournois", "Les tournois"],
   ["rembourser", "Te rembourser"],
   ["fin", "C'est prêt"],
 ];
@@ -35,7 +37,7 @@ function contenu(etape, m) {
   if (etape === "") {
     return [
       el("section", { class: "contact-tete" }, el("h1", {}, `Salut ${m.prenom || m.nom} !`)),
-      el("p", {}, "Quelques pages pour que tout soit prêt : qui tu es, quand tu viens, ce que tu manges, où tu dors, et comment on te rembourse."),
+      el("p", {}, "Quelques pages pour que tout soit prêt : qui tu es, quand tu viens, ce que tu manges, où tu dors, les tournois, et comment on te rembourse."),
       el("p", { class: "doux" }, dejaRempli(m)
         ? "On a déjà noté ce que tu nous as dit pendant l'orga : vérifie, et complète ce qui manque."
         : "Tout s'enregistre au fur et à mesure. Tu pourras tout changer plus tard."),
@@ -45,9 +47,10 @@ function contenu(etape, m) {
   if (etape === "dates") return mesDates();
   if (etape === "manger") return [blocAlimentation(m), blocPartage(m)];
   if (etape === "dormir") return blocCouchage(m);
+  if (etape === "tournois") return [el("p", { class: "doux" }, "Coche ceux qui te tentent : tu pourras changer d'avis plus tard."), blocsTournois()];
   if (etape === "rembourser") return vueRembourser();
   return [
-    el("p", {}, "C'est tout bon ! Tout ce que tu viens de voir se retrouve dans le menu : Ma fiche, Présence, Moyen de paiement."),
+    el("p", {}, "C'est tout bon ! Tout ce que tu viens de voir se retrouve dans le menu : Ma fiche, Présence, Tournois, Moyen de paiement."),
     el("p", { class: "doux" }, "L'accueil te dira s'il te reste quelque chose à faire."),
   ];
 }

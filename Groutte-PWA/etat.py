@@ -23,6 +23,7 @@ import reglages_compta
 import sejour
 import staff
 import suivi
+import tournois
 from comptes import regimes_proposes
 from lus import non_lus
 from stockage import ICI, PROFILS, lire_config, lire_flairs, lire_json, lire_reactions, lire_themes
@@ -70,7 +71,7 @@ def etat(nom):
     moi = comptes.get(nom) if nom else None
     connecte = bool(moi and not moi["desactive"])
     est_staff = connecte and moi["staff"]
-    automatiques = {"hebergeur": set(gite_salle.hebergeurs().values()), "chef": menu.chefs()} if connecte else {}
+    automatiques = {"hebergeur": set(gite_salle.hebergeurs().values()), "chef": menu.chefs(), **tournois.automatiques(profils)} if connecte else {}
     abonnes = set(lire_json(notifications.ABONNEMENTS, {})) if connecte else set()
     cartes = [carte_compte(n, c, profils.get(n, {}), connecte, automatiques, abonnes)
               for n, c in sorted(comptes.items(), key=lambda x: cd.sans_accent(x[0]))
@@ -94,9 +95,9 @@ def etat(nom):
             "paiement": profil.get("paiement", {}),
         },
         "pings": pings.vue(nom),
-        "roles": cd.lire_roles(),
+        "roles": cd.lire_roles() + tournois.roles(),
         "regimes": regimes_proposes(config),
-        "tournois": [],             # Tournois (jalon 4) : [{"id", "nom"}]
+        "tournois": tournois.vue(profils),   # Tournois > Inscription : [{..., "inscrits": [noms]}]
         "non_lus": non_lus(nom),
         "discord_gestion": config.get("discord_gestion", ""),
         "forum": forum.resumes(forum.lire_forum(), nom),

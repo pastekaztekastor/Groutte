@@ -1,0 +1,36 @@
+{
+ "_aide": "Tournois > Inscription : les tournois proposés (exemples à remplacer). id : identifiant fixe (ne pas le changer une fois les inscriptions ouvertes). role : le rôle donné aux inscrits, affiché dans le carnet d'adresses (ni le nom du tournoi ni le jeu). jeux : nom et page Steam (lien vide si pas sur Steam). Pris en compte sans redémarrer.",
+ "tournois": [
+  {
+   "id": "plouc-supreme",
+   "nom": "Tournoi du plouc suprême",
+   "role": {"id": "tournoi-guiltygear", "nom": "GuiltyGear"},
+   "description": "Le tournoi de jeu de baston de la semaine : poules le premier soir, arbre final le 31 avant minuit.",
+   "prerequis": ["Une manette (ou un stick) à toi si tu en as une", "Avoir fait le tutoriel du jeu", "Être là le 29 au soir pour les poules"],
+   "jeux": [
+    {"nom": "Guilty Gear -Strive-", "steam": "https://store.steampowered.com/app/1384160/GUILTY_GEARSTRIVE/"}
+   ]
+  },
+  {
+   "id": "course-folle",
+   "nom": "La course folle",
+   "role": {"id": "tournoi-kart", "nom": "Pilote"},
+   "description": "Des courses en écran partagé, par équipes de deux. Le classement se fait aux points sur trois manches.",
+   "prerequis": ["Trouver un coéquipier (ou on t'en trouve un)", "Une manette"],
+   "jeux": [
+    {"nom": "Trackmania", "steam": "https://store.steampowered.com/app/2225070/Trackmania/"},
+    {"nom": "Rocket League", "steam": ""}
+   ]
+  },
+  {
+   "id": "cerveau-groutte",
+   "nom": "Le cerveau de la Groutte",
+   "role": {"id": "tournoi-quiz", "nom": "Cerveau"},
+   "description": "Quiz et jeux d'ambiance en équipes, le dernier soir. Pas besoin d'être bon aux jeux vidéo.",
+   "prerequis": ["Un téléphone pour répondre"],
+   "jeux": [
+    {"nom": "Jackbox Party Pack 7", "steam": "https://store.steampowered.com/app/1211630/The_Jackbox_Party_Pack_7/"}
+   ]
+  }
+ ]
+}

@@ -6,6 +6,7 @@ import { aConfirmer } from "./creances.js";
 import { resumeLits } from "./lits.js";
 import { nonLus } from "./pings.js";
 import { enAttente } from "./validation.js";
+import { widgetTournois } from "./tournois.js";
 
 /* # : l'accueil, des widgets qui montrent l'essentiel d'un coup d'œil : le compte à rebours, qui vient, mes nuits, le
    prochain repas, mon solde, le gîte et la salle, les nouveautés, ce qui m'attend, et pour le staff ce qui est à
@@ -155,5 +156,6 @@ export function vueAccueil() {
     estStaff() && staff(),
     quiVient(), mesNuits(),
     prochainRepas(), monSolde(),
-    giteSalle(), nouveautes());
+    giteSalle(), nouveautes(),
+    widgetTournois(widget));
 }

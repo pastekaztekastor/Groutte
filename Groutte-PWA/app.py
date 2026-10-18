@@ -63,6 +63,7 @@ import repas  # noqa: F401  (route /api/repas)
 import staff  # noqa: F401  (routes /api/staff/...)
 import suivi  # noqa: F401  (routes /api/suivi/...)
 import taches
+import tournois  # noqa: F401  (route /api/tournois/inscription)
 from environnement import environnement
 from etat import etat
 from requetes import Demande, Refus, lire_corps
