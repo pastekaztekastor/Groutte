@@ -37,7 +37,7 @@ function choixPhoto() {
 }
 
 /* La photo, qu'on touche pour la changer, et le nom en lecture seule. */
-function tete(m) {
+export function tete(m) {
   return el("section", { class: "contact-tete" },
     el("label", { class: "photo-modifiable", title: "Changer la photo" }, avatar(m.nom, 112), choixPhoto()),
     el("h1", {}, m.nom),
@@ -83,9 +83,43 @@ function couchage(m) {
   return el("div", { class: "liste-groupee" }, choix("matelas", "Matelas"), choix("duvets", "Duvets", "ou couettes, couvertures"));
 }
 
+/* Les blocs de la fiche, repris tels quels par le guide de la première connexion (bienvenue.js). */
+export const blocIdentite = m => [
+  el("h2", {}, "Identité"),
+  el("div", { class: "liste-groupee" },
+    champ(m, "prenom", "Prénom", { maxlength: 40, autocomplete: "given-name" }),
+    champ(m, "pseudo", "Pseudo", { maxlength: 40, autocomplete: "nickname" })),
+  el("h2", {}, "Contact"),
+  el("div", { class: "liste-groupee" },
+    champ(m, "discord", "Discord", { maxlength: 40, autocomplete: "off", spellcheck: "false" }),
+    champ(m, "telephone", "Téléphone", { maxlength: 20, type: "tel", autocomplete: "tel" })),
+];
+
+export const blocPartage = m => [
+  el("h2", {}, "Ce que je partage"),
+  partage(m),
+  el("p", { class: "doux petit note" }, "Une coche ne vaut que pour les dépenses validées ensuite. ", el("a", { href: "#faq/categories" }, "Comment ça marche ?")),
+];
+
+export const blocAlimentation = m => [
+  el("h2", {}, "Alimentation"),
+  el("div", { class: "liste-groupee" },
+    app.etat.regimes.map(r => interrupteur(r, m.regimes.includes(r), actif => {
+      const choisis = actif ? [...m.regimes, r] : m.regimes.filter(x => x !== r);
+      envoyer("profil", { regimes: choisis });
+    })),
+    champ(m, "allergies", "Allergies", { maxlength: 300 })),
+];
+
+export const blocCouchage = m => [
+  el("h2", {}, "Couchage"),
+  couchage(m),
+  el("p", { class: "doux petit note" }, "Ce que tu apportes pour dormir. Un matelas gonflable 2 places compte pour 2 matelas si tu es d'accord pour le partager. Ce que tu apportes n'est compté que les nuits où tu es là. ",
+    el("a", { href: "#lits" }, "Voir les Lits")),
+];
+
 export function vueFiche() {
   const m = compte(app.moi);
-  const regimes = app.etat.regimes;
   const rolesLibres = app.etat.roles.filter(r => r.type === "libre");
   const autresRoles = app.etat.roles.filter(r => r.type !== "libre" && m.roles.includes(r.id));
   const incomplete = !m.prenom || !m.telephone;
@@ -95,32 +129,10 @@ export function vueFiche() {
     incomplete && el("section", { class: "carte bandeau" },
       el("p", {}, "Complète ta fiche : ton prénom et ton téléphone aident les autres à te joindre.")),
 
-    el("h2", {}, "Identité"),
-    el("div", { class: "liste-groupee" },
-      champ(m, "prenom", "Prénom", { maxlength: 40, autocomplete: "given-name" }),
-      champ(m, "pseudo", "Pseudo", { maxlength: 40, autocomplete: "nickname" })),
-
-    el("h2", {}, "Contact"),
-    el("div", { class: "liste-groupee" },
-      champ(m, "discord", "Discord", { maxlength: 40, autocomplete: "off", spellcheck: "false" }),
-      champ(m, "telephone", "Téléphone", { maxlength: 20, type: "tel", autocomplete: "tel" })),
-
-    el("h2", {}, "Ce que je partage"),
-    partage(m),
-    el("p", { class: "doux petit note" }, "Une coche ne vaut que pour les dépenses validées ensuite. ", el("a", { href: "#faq/categories" }, "Comment ça marche ?")),
-
-    el("h2", {}, "Alimentation"),
-    el("div", { class: "liste-groupee" },
-      regimes.map(r => interrupteur(r, m.regimes.includes(r), actif => {
-        const choisis = actif ? [...m.regimes, r] : m.regimes.filter(x => x !== r);
-        envoyer("profil", { regimes: choisis });
-      })),
-      champ(m, "allergies", "Allergies", { maxlength: 300 })),
-
-    el("h2", {}, "Couchage"),
-    couchage(m),
-    el("p", { class: "doux petit note" }, "Ce que tu apportes pour dormir. Un matelas gonflable 2 places compte pour 2 matelas si tu es d'accord pour le partager. Ce que tu apportes n'est compté que les nuits où tu es là. ",
-      el("a", { href: "#lits" }, "Voir les Lits")),
+    blocIdentite(m),
+    blocPartage(m),
+    blocAlimentation(m),
+    blocCouchage(m),
 
     el("h2", {}, "Photos et vidéos"),
     el("div", { class: "liste-groupee" },

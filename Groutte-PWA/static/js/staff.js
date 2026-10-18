@@ -138,6 +138,7 @@ const PHRASES = {
   "compta-mode": l => `a changé le mode de remboursement (${l.detail})`,
   "compta-categorie": l => `a réglé une catégorie (${l.detail})`,
   "compta-categorie-supprimee": l => `a supprimé la catégorie ${l.detail}`,
+  "compta-depenses": l => `a rendu la page Dépenses ${l.detail}`,
   "compta-repas": l => `a réglé un repas géré (${l.detail})`,
   "compta-cloture": () => "a clôturé les comptes",
   "gite-literie": l => `a réglé la literie du gîte (${l.detail})`,

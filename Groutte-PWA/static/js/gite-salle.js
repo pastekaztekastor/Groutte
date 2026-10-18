@@ -4,7 +4,7 @@ import { suivi } from "./creances.js";
 import { ouvrirVisionneuse } from "./visionneuse.js";
 
 /* #gite-salle : Staff > Gîte et salle. Les dates limites, le gîte et la salle (montant, hébergeur, ouverture des
-   paiements, répartition de la salle), les exemptions, les couchages (lits, plan, salle), le suivi par personne et
+   paiements ; la répartition se règle dans Réglages compta), les exemptions, les couchages (lits, plan, salle), le suivi par personne et
    les inscriptions tardives. Les calculs sont ceux de Créances : cette page ne fait que fournir les réglages. */
 
 const LIEU = { gite: "Gîte", salle: "Salle" };
@@ -48,18 +48,14 @@ function blocLieu(quoi) {
   const sansMoyen = r.hebergeur && app.etat.gite.sans_moyen?.includes(r.hebergeur);
   const recu = (b.suivi || []).reduce((t, s) => t + s.confirme, 0);
   const manque = (b.suivi || []).filter(s => !s.hebergeur).reduce((t, s) => t + Math.max(0, s.reste), 0);
-  const repartition = el("div", { class: "segments large", role: "radiogroup", "aria-label": `Répartition ${quoi === "gite" ? "du gîte" : "de la salle"}` },
-    [["nuits", "Au prorata des nuits"], ["egale", "Parts égales"]].map(([v, libelle]) => el("button", {
-      type: "button", class: r.repartition === v ? "choisi" : "", role: "radio", "aria-checked": String(r.repartition === v),
-      onclick: () => { if (v !== r.repartition && (!ouvert || confirm("Les paiements sont ouverts : les parts vont changer, et les écarts se régleront dans Mes comptes. Continuer ?"))) envoyer("gite/repartition", { quoi, repartition: v }); },
-    }, libelle)));
   return [
     el("h2", {}, LIEU[quoi]),
     el("div", { class: "liste-groupee" },
       ligne("Montant", montant, el("span", { class: "doux" }, "€")),
       ligne("Hébergeur", hebergeur),
       sansMoyen && el("p", { class: "alerte-ligne dans-liste" }, icone("info"), `${r.hebergeur} n'a aucun moyen de paiement dans Me rembourser.`),
-      el("div", { class: "ligne" }, el("span", { class: "ligne-texte" }, "Répartition"), repartition),
+      el("a", { class: "ligne", href: "#reglages-compta" }, el("span", { class: "ligne-texte" }, "Répartition",
+        el("span", { class: "doux petit" }, r.repartition === "egale" ? "parts égales" : "au prorata des nuits")), icone("chevron-droite")),
       el("div", { class: "ligne" }, ouvert
         ? el("span", { class: "ligne-texte" }, `Paiements ouverts ${ilYa(r.ouverture)}`)
         : el("button", { class: "btn principal large", type: "button", onclick: () => {

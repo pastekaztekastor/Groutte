@@ -741,6 +741,17 @@ input[type=checkbox].case-cocher:disabled { cursor: default; }
 .ligne-exemption { flex-wrap: wrap; }
 .ligne-exemption .coches { display: flex; flex-wrap: wrap; gap: var(--e2) var(--e3); }
 .replie-supprimees { margin-top: var(--e6); }
+
+/* Annonces : les groupes de filtres, dépliables comme les questions de la FAQ. */
+.liste-filtres { display: grid; gap: var(--e2); margin-bottom: var(--e4); }
+.groupe-filtres > summary { display: flex; align-items: center; gap: var(--e2); min-height: var(--cible); padding: var(--e2) var(--e4);
+  background: var(--surface); border-radius: var(--r-carte); cursor: pointer; font-weight: 600; list-style: none; }
+.groupe-filtres > summary::-webkit-details-marker { display: none; }
+.groupe-filtres > summary::before { content: "\203A"; display: inline-block; width: 12px; color: var(--texte-pale); transition: transform .2s; }
+.groupe-filtres[open] > summary::before { transform: rotate(90deg); }
+.groupe-filtres[open] > summary { border-radius: var(--r-carte) var(--r-carte) 0 0; }
+.groupe-filtres > .liste-groupee { margin-top: 0; border-top-left-radius: 0; border-top-right-radius: 0; }
+@media (prefers-reduced-motion: reduce) { .groupe-filtres > summary::before { transition: none; } }
 .replie-supprimees summary { cursor: pointer; padding: var(--e2) var(--e4); color: var(--texte-doux); font-size: var(--t-second); }
 
 /* --- Comment ça marche ------------------------------------------------------------------------------------------- */
@@ -874,3 +885,60 @@ input[type=checkbox].case-cocher:disabled { cursor: default; }
 .aide-llm ol { margin: var(--e2) 0 0; padding-left: var(--e5); font-size: var(--t-second); }
 .aide-llm li + li { margin-top: var(--e1); }
 .segments button:disabled { opacity: .45; }
+
+/* --- Accueil : les widgets (accueil.js) ---------------------------------------------------------------------- */
+.widgets { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: var(--e3); margin-top: var(--e2); }
+.widget { display: flex; flex-direction: column; gap: var(--e1); min-width: 0; padding: var(--e3) var(--e4); border-radius: var(--r-carte);
+  background: var(--surface); color: var(--texte); text-decoration: none; }
+a.widget:active { background: var(--surface-2); }
+.widget.large { grid-column: 1 / -1; }
+.widget-titre { display: flex; align-items: center; gap: var(--e2); margin-bottom: var(--e1); color: var(--texte-doux); font-size: var(--t-petit); font-weight: 600; }
+.widget-titre .icone { width: 16px; height: 16px; color: var(--c9); }
+.widget-chiffre { font-size: var(--t-grand); font-weight: 700; line-height: 1.1; }
+.widget-chiffre small { margin-left: var(--e1); font-size: var(--t-second); font-weight: 400; color: var(--texte-doux); }
+.widget-valeur { font-weight: 600; }
+.widget-sous { color: var(--texte-doux); font-size: var(--t-petit); }
+.widget-annonce { font-size: var(--t-second); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+/* Le compte à rebours : le seul grand chiffre de la page. */
+.widget-hero { align-items: flex-start; padding: var(--e4); background: var(--c9); color: var(--sur-c); }
+.widget-hero .widget-sous { color: inherit; opacity: .85; font-size: var(--t-second); }
+.hero-chiffre { font-size: 52px; font-weight: 700; line-height: 1; letter-spacing: -.02em; }
+/* Solde : un mot d'état coloré, le chiffre reste dans la couleur du texte. */
+.widget-etat { align-self: flex-start; padding: 1px var(--e2); border-radius: var(--r-pilule); font-size: var(--t-petit); font-weight: 600; background: var(--surface-2); color: var(--texte-doux); }
+.widget-etat.doit { background: var(--vert-fond); color: var(--vert-texte); }
+.widget-etat.dois { background: var(--rouge-fond); color: var(--rouge-texte); }
+.pile-avatars { display: flex; align-items: center; margin-top: var(--e1); }
+.pile-avatars > * { margin-right: -6px; box-shadow: 0 0 0 2px var(--surface); border-radius: 50%; }
+.pile-plus { display: inline-grid; place-items: center; width: 28px; height: 28px; background: var(--surface-2); color: var(--texte-doux); font-size: var(--t-mini); font-weight: 600; }
+/* Mes nuits : une pastille par nuit du séjour, pleine si j'y dors. */
+.frise-nuits { display: flex; gap: 4px; margin: var(--e1) 0; }
+.frise-nuits span { flex: 1; max-width: 22px; height: 8px; border-radius: var(--r-pilule); background: var(--surface-2); }
+.frise-nuits span.pleine { background: var(--c9); }
+.jauge { display: block; }
+.jauge-texte { display: flex; justify-content: space-between; gap: var(--e2); font-size: var(--t-second); }
+.jauge .barre-progres { display: block; margin: var(--e1) 0 var(--e2); height: 6px; }
+.jauge .barre-progres span { display: block; }
+/* À faire : une petite liste à cocher. */
+.widget-liste ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 2px; }
+.widget-liste li a { display: flex; align-items: center; gap: var(--e2); min-height: 36px; color: var(--texte); text-decoration: none; }
+.widget-liste .case { flex: none; width: 16px; height: 16px; border: 2px solid var(--texte-pale); border-radius: 5px; }
+/* Staff : trois chiffres côte à côte. */
+.trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--e2); }
+.trio a { display: flex; flex-direction: column; color: var(--texte); text-decoration: none; }
+.trio a.zero { opacity: .45; }
+
+/* --- Guide de la première connexion (bienvenue.js) -------------------------------------------------------------- */
+/* Écran sans panneau (rubriques.js, sansPanneau) : la page prend toute la largeur, même en paysage. */
+body.sans-panneau .panneau-lateral, body.sans-panneau .voile-panneau { display: none; }
+@media (min-width: 900px) { body.sans-panneau { padding-left: 0; } }
+.progression-guide { display: flex; gap: 4px; margin: 0 0 var(--e4); }
+.progression-guide span { flex: 1; height: 4px; border-radius: var(--r-pilule); background: var(--surface-2); }
+.progression-guide span.faite { background: var(--c9); }
+.guide-actions { margin-top: var(--e5); }
+.guide-actions .lien-discret { justify-self: center; }
+
+/* Suivi des dépenses sur téléphone : trois colonnes, toute la ligne s'ouvre (suivi.js, detail). */
+.tableau-dettes.court { width: 100%; }
+.tableau-dettes.court tr { cursor: pointer; }
+.tableau-dettes.court td { white-space: normal; }
+.tableau-dettes.court .montant-court { font-weight: 600; font-variant-numeric: tabular-nums; }

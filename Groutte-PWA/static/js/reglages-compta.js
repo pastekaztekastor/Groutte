@@ -1,6 +1,8 @@
 import { app, el, icone, envoyer, ouvrirModale, fermerModale, notifier, ilYa } from "./commun.js";
 
-/* #reglages-compta : Staff > Réglages compta. Le mode de remboursement (Direct ou Minimum de virements), les
+/* #reglages-compta : Staff > Réglages compta. Le mode de remboursement (Direct ou Minimum de virements), la page
+   Dépenses visible ou non (cachée jusqu'à l'arrivée au gîte ; le staff la voit toujours), la
+   répartition du gîte et de la salle (au prorata des nuits ou à parts égales ; le reste est dans Gîte et salle), les
    catégories de dépenses (type, règle de répartition, repère SAM ; NON GÉRÉ toujours en bas, sans modification), les
    repas gérés par la communauté (Mes repas, Menu), et la clôture des comptes, irréversible. */
 
@@ -13,6 +15,26 @@ function choisirMode(mode) {
   if (confirm(`Passer en mode ${MODES[mode]} ? Les listes « Je dois » et « On me doit » seront recalculées (les soldes ne changent pas), et tout le monde sera prévenu.`)) {
     envoyer("compta/mode", { mode });
   }
+}
+
+const LIEUX = { gite: "Gîte", salle: "Salle" };
+const REPARTITIONS = { nuits: "Au prorata des nuits", egale: "Parts égales" };
+
+/* Gîte et salle : chacun au prorata des nuits ou à parts égales. Après l'ouverture des paiements, les parts changent. */
+function repartitions(clos) {
+  return el("div", { class: "liste-groupee" }, Object.entries(LIEUX).map(([quoi, libelle]) => {
+    const r = app.etat.gite[quoi];
+    const choisir = v => {
+      if (v === r.repartition) return;
+      if (r.ouverture && !confirm("Les paiements sont ouverts : les parts vont changer, et les écarts se régleront dans Remboursement. Continuer ?")) return;
+      envoyer("gite/repartition", { quoi, repartition: v });
+    };
+    return el("div", { class: "ligne" }, el("span", { class: "ligne-texte" }, libelle),
+      el("div", { class: "segments", role: "radiogroup", "aria-label": `Répartition ${quoi === "gite" ? "du gîte" : "de la salle"}` },
+        Object.entries(REPARTITIONS).map(([v, l]) => el("button", {
+          type: "button", class: r.repartition === v ? "choisi" : "", role: "radio", "aria-checked": String(r.repartition === v), disabled: clos, onclick: () => choisir(v),
+        }, l))));
+  }));
 }
 
 function modifier(cat) {
@@ -71,12 +93,23 @@ export function vueReglagesCompta() {
   const mode = app.etat.compta.mode;
   const { categories, supprimees } = app.etat.categories;
   const clos = Boolean(app.etat.compta.cloture);
+  const visibles = el("input", { type: "checkbox", role: "switch", checked: app.etat.compta.depenses_visibles });
+  visibles.onchange = () => {
+    if (visibles.checked && !confirm("Ouvrir la page Dépenses à tout le monde ? Tout le monde sera prévenu.")) return (visibles.checked = false);
+    envoyer("compta/depenses-visibles", { visibles: visibles.checked });
+  };
   return [
     el("h2", {}, "Remboursement"),
     el("div", { class: "liste-groupee" },
       el("div", { class: "ligne" }, el("div", { class: "segments large", role: "radiogroup", "aria-label": "Mode de remboursement" },
         Object.entries(MODES).map(([v, l]) => el("button", { type: "button", class: mode === v ? "choisi" : "", role: "radio", "aria-checked": String(mode === v), onclick: () => choisirMode(v) }, l)))),
       el("a", { class: "ligne", href: "#faq/direct-ou-minimum" }, el("span", { class: "ligne-texte" }, "Quelle différence ?"), icone("chevron-droite"))),
+    el("h2", {}, "Page Dépenses"),
+    el("div", { class: "liste-groupee" }, el("label", { class: "ligne" }, el("span", { class: "ligne-texte" }, "Visible par tout le monde"), visibles)),
+    el("p", { class: "doux petit note" }, "À ouvrir en arrivant au gîte : tout le monde est prévenu. Cachée, personne ne peut saisir de dépense, sauf le staff, qui la voit toujours."),
+    el("h2", {}, "Gîte et salle"),
+    repartitions(clos),
+    el("p", { class: "doux petit note" }, "Comment le prix se partage entre ceux qui viennent. Montants, hébergeurs et exemptions : ", el("a", { href: "#gite-salle" }, "Gîte et salle"), "."),
     el("h2", {}, "Catégories"),
     el("div", { class: "liste-groupee" },
       categories.map(c => c.id === "non-gere"

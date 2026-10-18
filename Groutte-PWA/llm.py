@@ -378,6 +378,7 @@ def image_du_ticket(ticket):
 def lire_ticket(d):
     """Préremplir une dépense avec la photo de son ticket (`ticket`). Sans `id`, un brouillon est créé avec la photo.
     Renvoie {"depense", "lecture"} ou {"depense", "lecture_erreur"}."""
+    reglages_compta.exiger_depenses_visibles(d)
     with verrou():
         secrets, reglages = lire_secrets(), lire_reglages()
         f = actif(reglages, secrets)
@@ -394,8 +395,7 @@ def lire_ticket(d):
         ident = d.corps.get("id")
         if ident:
             dep = depenses.trouver(donnees, ident)
-            if dep["auteur"] != d.nom or dep["etat"] != "brouillon":
-                raise Refus("seul l'auteur d'un brouillon le préremplit")
+            depenses.exiger_modifiable(d, dep)
             if dep["lu_llm"]:
                 raise Refus("ce ticket a déjà été lu")
             if dep["ticket"] and dep["ticket"] != ticket:

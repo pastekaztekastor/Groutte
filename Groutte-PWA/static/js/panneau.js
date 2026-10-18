@@ -92,7 +92,7 @@ export function dessinerPanneau() {
       return entrees.length > 0 && [g.titre && el("h2", {}, g.titre), el("div", { class: "liste-groupee " + (g.classe || "") }, entrees.map(entree))];
     }),
     el("div", { class: "liste-groupee", style: "margin-top: var(--e6)" },
-      el("button", { type: "button", class: "ligne entree deconnexion", onclick: seDeconnecter },
+      el("button", { type: "button", class: "ligne entree deconnexion", onclick: () => { fermerPanneau(); seDeconnecter(); } },
         el("span", { class: "tuile" }, icone("fa-deconnexion")), el("span", { class: "ligne-texte" }, "Se déconnecter"))),
   ].flat(2).filter(Boolean));
   surlignerPageOuverte();

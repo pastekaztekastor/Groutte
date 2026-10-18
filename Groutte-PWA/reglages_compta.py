@@ -1,9 +1,9 @@
-"""Staff > Réglages compta : les catégories de dépenses, le mode de remboursement, les repas gérés par la communauté et
-la clôture des comptes.
+"""Staff > Réglages compta : les catégories de dépenses, le mode de remboursement, la page Dépenses visible ou non, les
+repas gérés par la communauté et la clôture des comptes.
 
 data/categories.json : {"categories": [{"id", "nom", "type": "obligatoire" | "facultative",
                                         "regle": "egale" | "repas" | "nuits", "sam": bool, "supprimee": date ou ""}]}
-data/reglages-compta.json : {"mode": "direct" | "minimum", "cloture": horodatage ou "",
+data/reglages-compta.json : {"mode": "direct" | "minimum", "cloture": horodatage ou "", "depenses_visibles": bool,
                              "repas": {"matin" | "midi" | "soir": {"gere": bool, "defaut": bool}},
                              "repas_historique": [{"depuis": horodatage, "repas": {...}}]}
 
@@ -15,6 +15,8 @@ repas suit le réglage en vigueur à l'heure où il commence (regle_repas).
 Sans fichier, les catégories de base (Alimentaire, Monster, Alcool). « NON GÉRÉ » n'est pas dans le fichier : elle est
 toujours là, ne se modifie pas, et reste à la charge du payeur. Changer une catégorie ne vaut que pour les dépenses
 validées ensuite : leurs parts sont figées à la validation (depenses.py).
+La page Dépenses est cachée tant que le staff ne l'a pas ouverte (en général à l'arrivée au gîte) : sans elle, pas de
+nouvelle dépense, sauf pour le staff, qui la voit toujours (pour les essais).
 La clôture des comptes (irréversible) fige les dépenses, les présences, les catégories et les repas gérés.
 """
 import sejour
@@ -52,6 +54,7 @@ def lire_reglages():
     donnees = lire_json(REGLAGES_COMPTA, {})
     donnees.setdefault("mode", "direct")
     donnees.setdefault("cloture", "")
+    donnees.setdefault("depenses_visibles", False)
     repas = donnees.setdefault("repas", {})
     for creneau, regle in REPAS_DEFAUT.items():
         repas.setdefault(creneau, dict(regle))
@@ -97,6 +100,28 @@ def changer_mode(d):
     staff.noter(d, "compta-mode", detail=MODES[mode])
     notifier(d.config, "comptes", "Mode de remboursement",
              f"Le mode de remboursement passe à {MODES[mode]} : regarde qui tu dois rembourser.", "#comptes", sauf=d.nom)
+
+
+def exiger_depenses_visibles(d):
+    if not d.staff and not lire_reglages()["depenses_visibles"]:
+        raise Refus("la page Dépenses n'est pas encore ouverte")
+
+
+@route("/api/compta/depenses-visibles")
+def regler_depenses_visibles(d):
+    """Ouvrir la page Dépenses à tout le monde (tout le monde est prévenu), ou la recacher."""
+    d.exiger_staff()
+    visibles = bool(d.corps.get("visibles"))
+    reglages = lire_reglages()
+    if reglages["depenses_visibles"] == visibles:
+        return
+    reglages["depenses_visibles"] = visibles
+    ecrire_json(REGLAGES_COMPTA, reglages)
+    import staff
+    staff.noter(d, "compta-depenses", detail="visible" if visibles else "cachée")
+    if visibles:
+        notifier(d.config, "depenses", "Dépenses", "La page Dépenses est ouverte : note ce que tu paies pour le groupe.",
+                 "#depenses", sauf=d.nom)
 
 
 @route("/api/compta/repas")

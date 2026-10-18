@@ -4,7 +4,7 @@ son code. (Les annonces du staff sont dans annonces.py.)
 data/profils.json : {nom: {
     "couleur", "avatar", "notifs": {categorie: bool},
     "prenom", "pseudo", "discord", "telephone", "regimes": [..], "allergies", "photo_ok": bool,
-    "categories": [id], "tournois": [id], "matelas": n, "duvets": n (absents : non renseigné),
+    "categories": [id], "tournois": [id], "matelas": n, "duvets": n (absents : non renseigné), "guide_vu": bool,
     "paiement": {"titulaire", "iban", "paypal", "revolut", "lydia", "wero", "especes", "prefere"}}}
 Les rôles, eux, sont dans data/comptes.json (comptes_donnees.py).
 """
@@ -50,7 +50,17 @@ def modifier_profil(d):
         if cle in corps:
             profil[cle] = texte(corps, cle, maxi)
     if "telephone" in corps:
+        ancien = profil.get("telephone")
         profil["telephone"] = telephone_valide(texte(corps, "telephone", 20))
+        # Wero se fait au numéro de téléphone : vide (ou resté sur l'ancien numéro), il suit le nouveau.
+        paiement = profil.setdefault("paiement", {})
+        if profil["telephone"] and paiement.get("wero", "") in ("", ancien):
+            paiement["wero"] = profil["telephone"]
+            ajuster_prefere(paiement)
+        if not paiement:
+            del profil["paiement"]
+    if corps.get("guide_vu") is True:   # le guide de la première connexion (bienvenue.js) : vu une fois pour toutes
+        profil["guide_vu"] = True
     if "photo_ok" in corps:
         if not isinstance(corps["photo_ok"], bool):
             raise Refus("consentement invalide")
@@ -168,13 +178,19 @@ def regler_paiement(d):
         raise Refus("indique le titulaire du compte avec l'IBAN")
     for cle in [k for k, v in paiement.items() if v in ("", None, False)]:
         del paiement[cle]
-    # Le moyen préféré retiré : la préférence passe au premier moyen restant.
-    if paiement.get("prefere") and paiement["prefere"] not in moyens_renseignes(paiement):
-        restants = moyens_renseignes(paiement)
-        paiement["prefere"] = restants[0] if restants else ""
-        if not paiement["prefere"]:
-            del paiement["prefere"]
+    ajuster_prefere(paiement)
     ecrire_json(PROFILS, profils)
+
+
+def ajuster_prefere(paiement):
+    """Un seul moyen renseigné : c'est le préféré. Le préféré retiré : la préférence passe au premier moyen restant."""
+    restants = moyens_renseignes(paiement)
+    if paiement.get("prefere") in restants:
+        return
+    if paiement.get("prefere") or len(restants) == 1:
+        paiement["prefere"] = restants[0] if restants else ""
+    if not paiement.get("prefere"):
+        paiement.pop("prefere", None)
 
 
 def moyens_renseignes(paiement):

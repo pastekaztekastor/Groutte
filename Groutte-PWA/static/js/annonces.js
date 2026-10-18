@@ -8,26 +8,39 @@ import { CRENEAUX, LIBELLES, presentsA } from "./sejour.js";
    ouverture de l'appli (Pings reçus), mais mieux vaut les prévenir aussi autrement. */
 
 const FILTRES = [
-  ["Groupe", [["tous", "Tout le monde"], ["viennent", "Qui vient"], ["presents", "Présents"], ["staff", "Staff"], ["role", "Rôle"],
+  ["Filtrer par groupe", [["tous", "Tout le monde"], ["viennent", "Qui vient"], ["presents", "Présents"], ["staff", "Staff"], ["role", "Rôle"],
     ["tardifs", "Inscriptions tardives"]]],
-  ["Argent", [["gite", "Pas payé le gîte"], ["salle", "Pas payé la salle"], ["doit", "Doit plus de"], ["sans_moyen", "Pas de moyen de paiement"]]],
-  ["À compléter", [["presence", "Présence non renseignée"], ["lit", "Pas de lit, alors qu'il en restait"], ["literie", "Literie non renseignée"],
+  ["Filtrer par argent", [["gite", "Pas payé le gîte"], ["salle", "Pas payé la salle"], ["doit", "Doit plus de"], ["sans_moyen", "Pas de moyen de paiement"]]],
+  ["Filtrer par info manquante", [["presence", "Présence non renseignée"], ["lit", "Pas de lit, alors qu'il en restait"], ["literie", "Literie non renseignée"],
     ["fiche", "Fiche incomplète"], ["alcool", "Alcool non coché (pour le SAM)"]]],
 ];
 export const PAGES = [["#pings", "Pings reçus"], ["#presence", "Présence"], ["#lits", "Lits"], ["#repas", "Mes repas"], ["#menu", "Menu"],
-  ["#comptes", "Mes comptes"], ["#creances", "Créances gîte et salle"], ["#depenses", "Dépenses"], ["#faq", "Comment ça marche"],
-  ["#fiche", "Ma fiche"], ["#rembourser", "Me rembourser"], ["#notifications", "Notifications"], ["#forum", "Forum"],
+  ["#comptes", "Remboursement"], ["#creances", "Créances gîte et salle"], ["#depenses", "Dépenses"], ["#faq", "FAQ"],
+  ["#fiche", "Ma fiche"], ["#rembourser", "Moyen de paiement"], ["#notifications", "Notifications"], ["#forum", "Forum"],
   ["#contact", "Contacter le staff"], ["#carnet", "Carnet d'adresses"]];
 const PAGE_DU_FILTRE = { gite: "#creances", salle: "#creances", doit: "#comptes", sans_moyen: "#rembourser", presence: "#presence",
   tardifs: "#presence", lit: "#lits", literie: "#fiche", fiche: "#fiche", alcool: "#fiche" };
 const TEXTE_MAX = 120;
+/* Le message d'exemple, prérempli quand un seul filtre est coché. Changer la sélection remplace le message (vide
+   s'il y a plusieurs filtres, aucun, ou un filtre sans exemple). */
+const EXEMPLE_DU_FILTRE = {
+  gite: ["Gîte : dernier rappel", "Il te reste 3 jours pour payer ta part du gîte !"],
+  salle: ["Salle : dernier rappel", "Il te reste 3 jours pour payer ta part de la salle !"],
+  doit: ["Remboursements", "Tu dois encore de l'argent à des ploucs : tout est dans Remboursement."],
+  sans_moyen: ["Moyen de paiement", "Indique comment on peut te rembourser, sinon personne ne pourra le faire !"],
+  presence: ["Présence", "Dis-nous quels jours tu viens, pour qu'on prévoie les lits et les repas."],
+  lit: ["Lits", "Il reste des lits : réserve le tien avant qu'il n'y en ait plus."],
+  literie: ["Literie", "Indique dans Ma fiche si tu apportes un matelas ou un duvet."],
+  fiche: ["Ma fiche", "Complète ta fiche (prénom, téléphone) pour qu'on puisse te joindre."],
+  alcool: ["SAM", "Tu ne prends pas d'alcool : tu veux bien être SAM pour les autres ?"],
+};
 
 /* « dans 12 min » d'après un horodatage à venir. */
 export const dans = horodatage => `dans ${Math.max(1, Math.round((new Date(horodatage) - Date.now()) / 60000))} min`;
 
 const choix = {
   coches: new Set(), combinaison: "ou", ajoutes: new Set(), retires: new Set(),
-  presents: null, role: "", seuil: "20", titre: "", texte: "", lien: "", lienChoisi: false,
+  presents: null, role: "", seuil: "20", ouverts: new Set(), titre: "", texte: "", lien: "", lienChoisi: false,
 };
 
 /* {id: [noms] ou null (grisé)} : ceux du serveur, et les trois calculés ici. */
@@ -61,6 +74,7 @@ function destinataires(l) {
 function cocher(id, actif) {
   actif ? choix.coches.add(id) : choix.coches.delete(id);
   if (!choix.lienChoisi) choix.lien = PAGE_DU_FILTRE[[...choix.coches].find(x => PAGE_DU_FILTRE[x])] || "#pings";
+  [choix.titre, choix.texte] = (choix.coches.size === 1 && EXEMPLE_DU_FILTRE[[...choix.coches][0]]) || ["", ""];
   afficher();
 }
 
@@ -86,8 +100,14 @@ function reglageFiltre(id) {
   return null;
 }
 
+/* Chaque groupe de filtres se déplie avec sa flèche (fermé au départ : la page reste courte). Le titre dit combien
+   sont cochés ; un groupe ouvert le reste quand la page se redessine. */
 function filtres(l) {
-  return FILTRES.map(([titre, ids]) => [el("h3", { class: "sous-titre" }, titre), el("div", { class: "liste-groupee" }, ids.map(([id, libelle]) => {
+  return FILTRES.map(([titre, ids]) => {
+    const coches = ids.filter(([id]) => choix.coches.has(id)).length;
+    const bloc = el("details", { class: "groupe-filtres", open: choix.ouverts.has(titre) },
+      el("summary", {}, titre, coches > 0 && el("span", { class: "badge" }, `${coches} coché${coches > 1 ? "s" : ""}`)),
+      el("div", { class: "liste-groupee" }, ids.map(([id, libelle]) => {
     const grise = l[id] === null || l[id] === undefined;
     const coche = el("input", { type: "checkbox", checked: choix.coches.has(id), disabled: grise, "aria-label": libelle });
     coche.onchange = () => cocher(id, coche.checked);
@@ -95,7 +115,10 @@ function filtres(l) {
       el("label", { class: "ligne-texte" }, libelle,
         el("span", { class: "doux petit" }, grise ? "Les paiements ne sont pas encore ouverts" : pluriel(l[id].length, "personne"))),
       coche, reglageFiltre(id) && el("span", { class: "reglage-filtre" }, reglageFiltre(id)));
-  }))]);
+      })));
+    bloc.addEventListener("toggle", () => { bloc.open ? choix.ouverts.add(titre) : choix.ouverts.delete(titre); });
+    return bloc;
+  });
 }
 
 /* Les pastilles des destinataires, et « @ » pour en ajouter. */
@@ -174,8 +197,7 @@ export function vueAnnonces() {
   const noms = destinataires(l);
   const silencieux = noms.filter(n => !compte(n).notifs);
   return [
-    el("h2", {}, "Filtres"),
-    filtres(l),
+    el("div", { class: "liste-filtres" }, filtres(l)),
     el("div", { class: "segments large", role: "radiogroup", "aria-label": "Combinaison des filtres" },
       [["ou", "Au moins un filtre"], ["et", "Tous les filtres"]].map(([v, libelle]) => el("button", {
         type: "button", class: choix.combinaison === v ? "choisi" : "", role: "radio", "aria-checked": String(choix.combinaison === v),

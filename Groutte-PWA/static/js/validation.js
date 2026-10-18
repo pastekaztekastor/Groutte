@@ -1,10 +1,11 @@
 import { app, el, envoyer, ouvrirModale, notifier } from "./commun.js";
-import { detailDepense, ligneDepense, trouverDepense } from "./depenses.js";
+import { detailDepense, ligneDepense, trouverDepense, vueSaisie } from "./depenses.js";
 import { euros } from "./paiement.js";
 
 /* #validation : Staff > Validation des dépenses. En attente, puis Validées, dans l'ordre d'envoi. #validation/<id> : le
    détail, avec les parts telles qu'elles seraient figées, et Valider ou Refuser (avec un motif). Un staff ne valide pas
-   sa propre dépense, sauf s'il est le seul staff. */
+   sa propre dépense, sauf s'il est le seul staff. Les brouillons des autres sont là aussi : un staff peut les compléter
+   et les valider à leur place (un plouc qui n'a laissé que la photo du ticket). */
 
 const envoyeeLe = d => d.historique.filter(h => h.action === "envoyee").pop()?.quand || d.saisie;
 const seulStaff = () => app.etat.comptes.filter(c => c.staff && !c.desactive).length <= 1;
@@ -13,11 +14,15 @@ export const enAttente = () => app.etat.depenses.filter(d => d.etat === "attente
 
 export function vueValidation() {
   const attente = enAttente().sort((a, b) => envoyeeLe(a).localeCompare(envoyeeLe(b)));
+  const brouillons = app.etat.depenses.filter(d => d.etat === "brouillon" && d.auteur !== app.moi).sort((a, b) => a.saisie.localeCompare(b.saisie));
   const validees = app.etat.depenses.filter(d => d.etat === "validee").sort((a, b) => envoyeeLe(a).localeCompare(envoyeeLe(b)));
   return [
     el("h2", {}, `En attente (${attente.length})`),
     attente.length ? el("div", { class: "liste-groupee" }, attente.map(d => ligneDepense(d, "#validation/" + d.id)))
       : el("p", { class: "doux note" }, "Rien à valider."),
+    brouillons.length > 0 && [el("h2", {}, `Brouillons (${brouillons.length})`),
+      el("div", { class: "liste-groupee" }, brouillons.map(d => ligneDepense(d, "#validation/" + d.id))),
+      el("p", { class: "doux petit note" }, "Pas encore envoyés. Tu peux en compléter un et le valider à la place de son auteur.")],
     el("h2", {}, `Validées (${validees.length})`),
     validees.length ? el("div", { class: "liste-groupee liste-elements" }, validees.map(d => ligneDepense(d, "#validation/" + d.id)))
       : el("p", { class: "doux note" }, "Aucune pour l'instant."),
@@ -38,6 +43,7 @@ function refuser(d) {
 
 export function vueValidationDepense(id) {
   const d = trouverDepense(id);
+  if (d?.etat === "brouillon" && d.auteur !== app.moi) return vueSaisie(d, true);
   if (!d || d.etat === "brouillon") return el("p", { class: "doux" }, "Cette dépense n'est plus en attente : elle a été refusée, ou n'existe plus.");
   const sienne = d.auteur === app.moi && !seulStaff();
   const actions = d.etat === "attente" && el("div", { class: "actions" },

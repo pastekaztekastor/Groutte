@@ -23,12 +23,14 @@ import { vuePings, resumePings, nonLus } from "./pings.js";
 import { vueAnnonces, resumeAnnonces } from "./annonces.js";
 import { vueSuivi, resumeSuivi } from "./suivi.js";
 import { vueReglagesLlm, resumeReglagesLlm } from "./reglages-llm.js";
+import { vueAccueil } from "./accueil.js";
+import { vueBienvenue, titreBienvenue } from "./bienvenue.js";
 
 /* Les écrans de l'appli (ecran), ce que montre le panneau (groupesPanneau), ce qui se relit tout seul (A_RAFRAICHIR).
    Le reste (main.js, panneau.js) est générique.
 
    Jalon 1 : le socle (Mon compte, Staff > Comptes et Annonce). Jalon 2 : Communauté (Forum, Contacter le staff),
-   Gîte (Présence, Lits), Repas (Mes repas), Budget (Mes comptes, Créances, Dépenses, Comment ça marche), et pour le
+   Gîte (Présence, Lits), Repas (Mes repas), Budget (Remboursement, Créances, Dépenses, FAQ), et pour le
    staff Gîte et salle, Réglages compta, Validation des dépenses. Jalon 3 : Pings reçus, Menu, et pour le staff
    Réglages LLM, Suivi des dépenses, Annonces. */
 
@@ -39,11 +41,15 @@ import { vueReglagesLlm, resumeReglagesLlm } from "./reglages-llm.js";
    - action      : [icône, libellé, fonction] : la bulle ronde en bas à droite sur téléphone, en haut à droite sinon ;
    - avecEnvoi   : l'écran finit par une zone d'envoi collée en bas (zone-message.js) ;
    - lu          : la clé de nouveautés que cet écran marque comme lue ;
+   - sansPanneau : ni panneau latéral ni bulle de compte (le guide de bienvenue : on n'en sort que par ses boutons) ;
    - vue         : la fonction qui renvoie le contenu (éléments, tableaux d'éléments, ou rien). */
 export function ecran(rubrique, argument) {
   if (rubrique === "fiche") return { titre: "Ma fiche", vue: vueFiche };
-  if (rubrique === "rembourser") return { titre: "Me rembourser", vue: vueRembourser };
-  if (rubrique === "carnet" || rubrique === "") {
+  if (rubrique === "rembourser") return { titre: "Moyen de paiement", vue: vueRembourser };
+  // Première connexion : le guide remplace l'accueil tant qu'il n'est pas vu (bienvenue.js).
+  if (rubrique === "bienvenue" || (rubrique === "" && app.etat.moi.guide_vu === false)) return { titre: titreBienvenue(argument), sansPanneau: true, vue: () => vueBienvenue(argument) };
+  if (rubrique === "") return { titre: "Accueil", vue: vueAccueil };
+  if (rubrique === "carnet") {
     if (argument) return { titre: titreContact(argument), retour: ["", "Retour"], vue: () => vueFicheContact(argument) };
     return { titre: "Carnet d'adresses", vue: vueCarnet };
   }
@@ -75,16 +81,17 @@ export function ecran(rubrique, argument) {
   if (rubrique === "menu-modifier" && argument) return { titre: "Modifier le menu", retour: ["#menu/" + argument, "Annuler"], vue: () => vueSaisieMenu(argument) };
 
   // Budget
-  if (rubrique === "comptes") return { titre: "Mes comptes", vue: vueComptes };
-  if (rubrique === "rembourser-a" && argument) return { titre: `Rembourser ${argument}`, retour: ["#comptes", "Mes comptes"], vue: () => vueRembourserA(argument) };
+  if (rubrique === "comptes") return { titre: "Remboursement", vue: vueComptes };
+  if (rubrique === "rembourser-a" && argument) return { titre: `Rembourser ${argument}`, retour: ["#comptes", "Remboursement"], vue: () => vueRembourserA(argument) };
   if (rubrique === "creances") return { titre: "Créances gîte et salle", vue: vueCreances };
   if (rubrique === "payer") return { titre: titrePayer(argument), retour: ["#creances", "Créances"], vue: () => vuePayer(argument) };
-  if (rubrique === "depenses") {
+  // Dépenses cachée (Réglages compta) : ni la liste ni la saisie, sauf pour le staff ; une dépense déjà liée reste lisible.
+  if (rubrique === "depenses" && (depensesVisibles() || (argument && argument !== "nouvelle"))) {
     if (argument === "nouvelle") return { titre: "Nouvelle dépense", retour: ["#depenses", "Annuler"], vue: () => vueSaisie(null) };
     if (argument) return { titre: titreDepense(argument), retour: ["", "Retour"], vue: () => vueDepense(argument) };
     return { titre: "Dépenses", action: ["fa-ajouter", "Nouvelle dépense", nouvelleDepense], vue: vueDepenses };
   }
-  if (rubrique === "faq") return { titre: "Comment ça marche", vue: () => vueFaq(argument) };
+  if (rubrique === "faq") return { titre: "FAQ", vue: () => vueFaq(argument) };
 
   // Staff
   if (estStaff()) {
@@ -99,8 +106,10 @@ export function ecran(rubrique, argument) {
       return { titre: "Validation des dépenses", vue: vueValidation };
     }
   }
-  return ecran("carnet", "");
+  return ecran("", "");
 }
+
+const depensesVisibles = () => estStaff() || app.etat.compta.depenses_visibles;
 
 /* Le panneau latéral : des groupes (titre, classe de couleur des icônes dans style.css) d'entrées
    { lien, icone, titre, resume, nouveau }. Une entrée false est ignorée (ex. réservée au staff). */
@@ -109,28 +118,30 @@ export function groupesPanneau() {
   const aValider = enAttente().filter(d => d.auteur !== app.moi).length;
   const tardifs = app.etat.gite.tardifs?.length || 0;
   return [
+    { classe: "groupe-compte", entrees: [
+      { lien: "#", icone: "fa-accueil", titre: "Accueil", resume: "À faire, séjour, argent, nouveautés" },
+    ] },
     { titre: "Communauté", classe: "groupe-1", entrees: [
-      { lien: "#forum", icone: "fa-forum", titre: "Forum", resume: forum ? `${forum} fil${forum > 1 ? "s" : ""} avec du nouveau` : "Règles, FAQ, tâches et le reste", nouveau: forum },
+      { lien: "#faq", icone: "fa-aide", titre: "FAQ", resume: "Fonctionnement de l'app" },
+      { lien: "#forum", icone: "fa-forum", titre: "Forum", resume: forum ? `${forum} fil${forum > 1 ? "s" : ""} avec du nouveau` : "Règles, orga et blabla", nouveau: forum },
       { lien: "#pings", icone: "fa-pings", titre: "Pings reçus", resume: resumePings(), nouveau: nonLus() },
       { lien: "#contact", icone: "fa-contact", titre: "Contacter le staff", resume: "Discord, hébergeurs, staff" },
     ] },
-    { titre: "Gîte", classe: "groupe-2", entrees: [
-      { lien: "#presence", icone: "fa-presence", titre: "Présence", resume: resumePresence() },
-      { lien: "#lits", icone: "fa-lit", titre: "Lits", resume: resumeLits() },
+    { titre: "Budget", classe: "groupe-3", entrees: [
+      { lien: "#comptes", icone: "fa-comptes", titre: "Remboursement", resume: resumeComptes(), nouveau: aConfirmerComptes() },
+      { lien: "#creances", icone: "fa-creances", titre: "Créances gîte et salle", resume: resumeCreances(), nouveau: aConfirmer() },
+      depensesVisibles() && { lien: "#depenses", icone: "fa-depenses", titre: "Dépenses", resume: resumeDepenses() },
     ] },
     { titre: "Repas", classe: "groupe-4", entrees: [
       { lien: "#repas", icone: "fa-repas", titre: "Mes repas", resume: resumeRepas() },
       { lien: "#menu", icone: "fa-menu", titre: "Menu", resume: resumeMenu(), nouveau: nombreNouveautes("menu") },
     ] },
-    { titre: "Budget", classe: "groupe-3", entrees: [
-      { lien: "#comptes", icone: "fa-comptes", titre: "Mes comptes", resume: resumeComptes(), nouveau: aConfirmerComptes() },
-      { lien: "#creances", icone: "fa-creances", titre: "Créances gîte et salle", resume: resumeCreances(), nouveau: aConfirmer() },
-      { lien: "#depenses", icone: "fa-depenses", titre: "Dépenses", resume: resumeDepenses() },
-      { lien: "#faq", icone: "fa-aide", titre: "Comment ça marche", resume: "Les règles d'argent" },
+    { titre: "Gîte", classe: "groupe-2", entrees: [
+      { lien: "#presence", icone: "fa-presence", titre: "Présence", resume: resumePresence() },
+      { lien: "#lits", icone: "fa-lit", titre: "Lits", resume: resumeLits() },
     ] },
     { titre: "Mon compte", classe: "groupe-compte", entrees: [
-      { lien: "#fiche", icone: "fa-fiche", titre: "Ma fiche", resume: resumeFiche() },
-      { lien: "#rembourser", icone: "fa-rembourser", titre: "Me rembourser", resume: resumeRembourser() },
+      { lien: "#rembourser", icone: "fa-rembourser", titre: "Moyen de paiement", resume: resumeRembourser() },
       { lien: "#notifications", icone: "fa-cloche", titre: "Notifications", resume: resumeNotifications() },
       { lien: "#carnet", icone: "fa-carnet", titre: "Carnet d'adresses", resume: resumeCarnet() },
       !estInstallee() && { lien: "#appli", icone: "fa-installer", titre: "Installer l'appli", resume: "Icône, plein écran, notifications" },

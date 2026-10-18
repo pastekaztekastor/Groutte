@@ -1,5 +1,4 @@
 import { app, el, icone, avatar, envoyer, ouvrirFeuille, afficher, dateCourte, jourCourt, pluriel, lienContact } from "./commun.js";
-import { euros } from "./paiement.js";
 import { CRENEAUX, LIBELLES, creneauxDe, presenceDe, presentsA, venants } from "./sejour.js";
 
 /* #presence : Gîte > Présence. Mes dates (arrivée et départ, chacun date + créneau), l'emploi du temps du groupe, et
@@ -65,24 +64,12 @@ function resultat() {
     : "Tu n'as pas encore de dates : tu ne comptes nulle part.");
   const nuits = creneaux.filter(([, c]) => c === "nuit").length;
   const repas = creneaux.length - nuits;
-  const g = app.etat.creances.gite;
-  const gite = app.etat.gite.gite;
-  let part;
-  if (g.exempte) part = el("p", {}, "Exempté du gîte.");
-  else if (!gite.montant) part = el("p", { class: "doux petit" }, "Le prix du gîte n'est pas encore fixé.");
-  else if (g.hebergeur) part = el("p", { class: "doux petit" }, "Tu es l'hébergeur du gîte : ta part réduit ce que tu as avancé.");
-  else if (!gite.ouverture) {
-    const prix = gite.repartition === "nuits" && g.nuitees ? Math.round(gite.montant / g.nuitees) : 0;
-    part = [el("p", {}, `Gîte : environ ${euros(g.part)}`, prix > 0 && el("span", { class: "doux" }, ` (${euros(prix)} la nuit)`)),
-      el("p", { class: "doux petit" }, "Estimation : elle baisse si d'autres s'inscrivent, jusqu'à l'ouverture des paiements.")];
-  } else {
-    part = [el("p", {}, `Gîte : ta part figée est de ${euros(g.part)}.`),
-      g.retard > 0 && el("p", { class: "doux petit" }, `Tes nuits en plus depuis l'ouverture des paiements : tu dois ${euros(g.retard)} à ceux qui ont payé le gîte (Mes comptes).`)];
-  }
-  return [el("p", { class: "resultat-dates" }, `${pluriel(nuits, "nuit")} · ${repas} repas`), part];
+  // Ce que ça coûte (gîte et salle) : dans Créances, pour ne pas le dire deux fois.
+  return [el("p", { class: "resultat-dates" }, `${pluriel(nuits, "nuit")} · ${repas} repas`),
+    el("p", { class: "petit" }, el("a", { href: "#creances" }, "Ce que tu paies pour le gîte et la salle"))];
 }
 
-function mesDates() {
+export function mesDates() {
   if (app.etat.gite.tardif) {
     return el("section", { class: "carte" },
       el("p", {}, "Tu t'es inscrit après la date limite : l'hébergeur doit d'abord accepter ton inscription pour que tu puisses saisir tes dates."),

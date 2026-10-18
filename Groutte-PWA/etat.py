@@ -90,6 +90,7 @@ def etat(nom):
     resultat.update({
         "moi": {
             "code_provisoire": moi["code_provisoire"],
+            "guide_vu": bool(profil.get("guide_vu")),
             "paiement": profil.get("paiement", {}),
         },
         "pings": pings.vue(nom),

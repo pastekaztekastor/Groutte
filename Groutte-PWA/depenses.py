@@ -16,6 +16,8 @@ data/depenses.json : {"depenses": [{
     "lu_llm": horodatage de la lecture du ticket par le LLM, ou "" (une seule lecture par dépense : llm.py)}]}
 
 Le gîte et la salle ne passent pas par ici (Créances). Un staff ne valide pas sa propre dépense, sauf s'il est seul.
+Un staff voit aussi les brouillons des autres (Validation) : il peut les compléter et les valider d'un coup, pour un
+plouc qui n'a laissé que la photo du ticket. L'auteur (le payeur) ne change pas.
 """
 import re
 
@@ -49,6 +51,14 @@ def trouver(donnees, ident):
     if not dep:
         raise Refus("dépense introuvable", "404 Not Found")
     return dep
+
+
+def exiger_modifiable(d, dep):
+    """Un brouillon se modifie par son auteur, ou par un staff qui le complète pour lui."""
+    if dep["auteur"] != d.nom and not d.staff:
+        raise interdit("seul l'auteur modifie sa dépense")
+    if dep["etat"] != "brouillon":
+        raise Refus("cette dépense est envoyée : elle ne se modifie plus")
 
 
 def lien(dep):
@@ -130,7 +140,9 @@ def verifier_envoi(c, dep):
 
 @route("/api/depenses/enregistrer")
 def enregistrer(d):
-    """Créer ou modifier un brouillon (`id`) ; `envoyer` : le passer En attente, et prévenir le staff."""
+    """Créer ou modifier un brouillon (`id`) ; `envoyer` : le passer En attente, et prévenir le staff. `valider` (staff,
+    sur le brouillon d'un autre) : le valider directement, sans passer par En attente."""
+    reglages_compta.exiger_depenses_visibles(d)
     c = compta.Compta(d.config)
     if c.cloture():
         raise Refus("les comptes sont clôturés : plus de nouvelle dépense")
@@ -138,10 +150,7 @@ def enregistrer(d):
     ident = d.corps.get("id")
     if ident:
         dep = trouver(donnees, ident)
-        if dep["auteur"] != d.nom:
-            raise interdit("seul l'auteur modifie sa dépense")
-        if dep["etat"] != "brouillon":
-            raise Refus("cette dépense est envoyée : elle ne se modifie plus")
+        exiger_modifiable(d, dep)
     else:
         if len(donnees["depenses"]) >= MAX_DEPENSES:
             raise Refus("trop de dépenses")
@@ -150,14 +159,20 @@ def enregistrer(d):
         donnees["depenses"].append(dep)
     dep.update(lire_contenu(d, dep))
     ancien, dep["ticket"] = dep.get("ticket", ""), ticket_valide(d.corps.get("ticket"))
-    if d.corps.get("envoyer"):
+    if d.corps.get("valider"):
+        if dep["auteur"] == d.nom:
+            raise Refus("ta propre dépense s'envoie, un autre staff la valide")
+        figer(d, c, dep, "complétée par le staff")
+    elif d.corps.get("envoyer"):
         verifier_envoi(c, dep)
         dep["etat"] = "attente"
         dep["historique"].append({"quand": maintenant(), "par": d.nom, "action": "envoyee", "detail": ""})
     ecrire_json(DEPENSES, donnees)
     if ancien and ancien != dep["ticket"]:
         medias.supprimer(ancien)
-    if dep["etat"] == "attente":
+    if dep["etat"] == "validee":
+        prevenir_validation(d, dep)
+    elif dep["etat"] == "attente":
         notifier(d.config, "depenses", "Dépense à valider", f"{d.nom} : {dep['motif']}, {euros(dep['montant'])}.",
                  "#validation/" + dep["id"], destinataires=set(cd.staffs_actifs(c.comptes)), sauf=d.nom)
     return {"depense": dep["id"]}
@@ -197,10 +212,20 @@ def valider(d):
     exiger_attente(dep)
     if dep["auteur"] == d.nom and len(cd.staffs_actifs(c.comptes)) > 1:
         raise interdit("un autre staff doit la valider")
+    figer(d, c, dep)
+    ecrire_json(DEPENSES, donnees)
+    prevenir_validation(d, dep)
+
+
+def figer(d, c, dep, detail=""):
+    """Valider : les parts sont calculées et figées. Définitif."""
+    d.exiger_staff()
     dep["parts"] = verifier_envoi(c, dep)
     dep.update(etat="validee", valide_le=maintenant(), refus="")
-    dep["historique"].append({"quand": maintenant(), "par": d.nom, "action": "validee", "detail": ""})
-    ecrire_json(DEPENSES, donnees)
+    dep["historique"].append({"quand": maintenant(), "par": d.nom, "action": "validee", "detail": detail})
+
+
+def prevenir_validation(d, dep):
     notifier(d.config, "depenses", "Dépense validée", f"Ta dépense « {dep['motif']} » est validée par {d.nom}.", lien(dep),
              destinataires={dep["auteur"]}, sauf=d.nom)
     soldes = compta.Compta(d.config).soldes()
@@ -237,13 +262,13 @@ def renommer(ancien, nouveau):
 # --- Ce que la page reçoit -------------------------------------------------------------------------
 
 def vue(c, nom, staff):
-    """Mes dépenses (tous les états), celles validées qui me concernent, et pour le staff toutes celles envoyées.
+    """Mes dépenses (tous les états), celles validées qui me concernent, et pour le staff toutes (brouillons compris).
     Les dépenses en attente portent les parts telles qu'elles seraient figées maintenant (`apercu`)."""
     resultat = []
     for dep in c.deps["depenses"]:
         moi_auteur = dep["auteur"] == nom
         concerne = dep["etat"] == "validee" and nom in dep["parts"]
-        if not (moi_auteur or concerne or (staff and dep["etat"] != "brouillon")):
+        if not (moi_auteur or concerne or staff):
             continue
         copie = dict(dep)
         if dep["etat"] == "attente" and staff:

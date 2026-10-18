@@ -184,9 +184,12 @@ function boutonLecture(d, f) {
   ];
 }
 
-async function sauver(id, f, envoi) {
+/* `action` : "brouillon", "envoyer", ou "valider" (un staff, sur le brouillon d'un autre : enregistré et validé d'un coup). */
+async function sauver(id, f, action) {
+  const envoi = action !== "brouillon";
   const montant = lireEuros(f.montant);
   if (montant === null && (envoi || f.montant)) return notifier("Indique un montant valable, par exemple 12,50.");
+  if (action === "valider" && !confirm(`Valider « ${f.motif} » (${euros(montant)}) ? C'est définitif.`)) return;
   let ticket = f.ticket;
   if (f.fichier) {
     notifier("Envoi de la photo...", true);
@@ -195,18 +198,20 @@ async function sauver(id, f, envoi) {
     f.ticket = ticket;
     f.fichier = null;
   }
-  const corps = { date: f.date, motif: f.motif, montant: montant || 0, mode: f.mode, ticket, envoyer: envoi };
+  const corps = { date: f.date, motif: f.motif, montant: montant || 0, mode: f.mode, ticket, envoyer: action === "envoyer", valider: action === "valider" };
   if (id) corps.id = id;
   if (f.mode === "egales") corps.concernes = f.concernes;
   else if (f.mode === "exacts") corps.lignes = f.concernes.map(nom => ({ nom, montant: lireEuros(f.exacts[nom]) || 0 }));
   else corps.lignes = f.categories.map(l => ({ categorie: l.categorie, montant: lireEuros(l.montant) || 0 }));
   if (!await envoyer("depenses/enregistrer", corps)) return;
   delete formulaires[id || "nouvelle"];
-  notifier(envoi ? "Dépense envoyée : un staff va la valider." : "Brouillon enregistré.", true);
-  location.replace(envoi || !id ? "#depenses" : "#depenses/" + id);
+  notifier({ brouillon: "Brouillon enregistré.", envoyer: "Dépense envoyée : un staff va la valider.", valider: "Dépense validée." }[action], true);
+  if (location.hash.startsWith("#validation")) location.replace("#validation");
+  else location.replace(envoi || !id ? "#depenses" : "#depenses/" + id);
 }
 
-export function vueSaisie(d) {
+/* `pourStaff` : un staff complète le brouillon d'un autre (Validation), puis le valide. */
+export function vueSaisie(d, pourStaff = false) {
   const id = d?.id || "";
   const f = formulaires[id || "nouvelle"] ??= nouveauFormulaire(d);
   const mode = el("div", { class: "segments segments-trois", role: "radiogroup", "aria-label": "Mode de répartition" },
@@ -215,6 +220,7 @@ export function vueSaisie(d) {
       onclick: () => { f.mode = cle; afficher(); },
     }, libelle)));
   return [
+    pourStaff && el("section", { class: "carte bandeau" }, el("p", {}, `Brouillon de ${d.auteur}, pas encore envoyé. Complète-le et valide-le à sa place : ${d.auteur} reste le payeur, et sera prévenu.`)),
     d?.refus && el("section", { class: "carte bandeau" }, el("p", {}, el("strong", {}, "Refusée : "), d.refus)),
     el("div", { class: "carte" },
       el("label", { class: "champ" }, "Date du ticket", champTexte(f, "date", { type: "date" })),
@@ -229,18 +235,21 @@ export function vueSaisie(d) {
     boutonLecture(d, f),
     el("h2", {}, "Répartition"),
     mode,
-    f.mode === "egales" && [el("p", { class: "doux petit note" }, "Le montant est divisé entre les personnes concernées. Les centimes en trop sont pour toi."), choixPersonnes(f)],
+    f.mode === "egales" && [el("p", { class: "doux petit note" }, `Le montant est divisé entre les personnes concernées. Les centimes en trop sont pour ${pourStaff ? d.auteur : "toi"}.`), choixPersonnes(f)],
     f.mode === "exacts" && [el("p", { class: "doux petit note" }, "Une ligne par personne, avec ce qu'elle a pris."), choixPersonnes(f), lignesExactes(f)],
     f.mode === "communaute" && [el("p", { class: "doux petit note" }, "Le montant est découpé par catégories, chacune réparti selon sa règle. NON GÉRÉ met de côté un achat perso : il reste pour toi."),
       lignesCategories(f)],
     f.mode !== "egales" && el("p", { class: "note", id: "reste-depense", "aria-live": "polite" }, texteTotal(f)),
-    el("div", { class: "actions" },
-      el("button", { class: "btn principal large", type: "button", onclick: () => sauver(id, f, true) }, "Envoyer"),
-      el("button", { class: "btn large", type: "button", onclick: () => sauver(id, f, false) }, "Enregistrer le brouillon"),
+    pourStaff ? el("div", { class: "actions" },
+      el("button", { class: "btn principal large", type: "button", onclick: () => sauver(id, f, "valider") }, "Valider"),
+      el("button", { class: "btn large", type: "button", onclick: () => sauver(id, f, "brouillon") }, "Enregistrer le brouillon"))
+    : el("div", { class: "actions" },
+      el("button", { class: "btn principal large", type: "button", onclick: () => sauver(id, f, "envoyer") }, "Envoyer"),
+      el("button", { class: "btn large", type: "button", onclick: () => sauver(id, f, "brouillon") }, "Enregistrer le brouillon"),
       id && el("button", { class: "btn danger large", type: "button", onclick: async () => {
         if (confirm("Supprimer ce brouillon ?") && await envoyer("depenses/supprimer", { id })) { delete formulaires[id]; location.replace("#depenses"); }
       } }, "Supprimer le brouillon")),
-    el("p", { class: "doux petit note" }, "Envoyer : un staff la valide, puis elle compte dans les comptes de chacun. Une dépense envoyée ne se modifie plus."),
+    !pourStaff && el("p", { class: "doux petit note" }, "Envoyer : un staff la valide, puis elle compte dans les comptes de chacun. Une dépense envoyée ne se modifie plus. Tu peux aussi n'enregistrer que la photo du ticket : un staff pourra compléter le brouillon pour toi."),
   ];
 }
 
@@ -292,7 +301,8 @@ export function resumeDepenses() {
   const miennes = app.etat.depenses.filter(d => d.auteur === app.moi);
   const attente = miennes.filter(d => d.etat === "attente").length;
   const refusees = miennes.filter(d => d.etat === "brouillon" && d.refus).length;
-  return refusees ? `${refusees} refusée${refusees > 1 ? "s" : ""}, à corriger` : attente ? `${attente} en attente` : miennes.length ? `${miennes.length} saisie${miennes.length > 1 ? "s" : ""}` : "Ce que j'ai payé pour le groupe";
+  const cachee = app.etat.compta.depenses_visibles ? "" : "Cachée aux autres · ";
+  return cachee + (refusees ? `${refusees} refusée${refusees > 1 ? "s" : ""}, à corriger` : attente ? `${attente} en attente` : miennes.length ? `${miennes.length} saisie${miennes.length > 1 ? "s" : ""}` : "Ce que j'ai payé pour le groupe");
 }
 
 export const nouvelleDepense = () => { oublierSaisie(""); location.hash = "#depenses/nouvelle"; };

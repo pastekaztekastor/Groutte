@@ -1,10 +1,12 @@
-import { app, el, icone, sansAccent, saisie, brouillons, envoyer, afficher, notifier, ouvrirModale, ouvrirFeuille, telechargerFichier,
-  dateCourte, pluriel, iso } from "./commun.js";
+import { app, el, icone, sansAccent, saisie, brouillons, envoyer, afficher, notifier, ouvrirModale, ouvrirFeuille, fermerModale,
+  telechargerFichier, dateCourte, pluriel, iso } from "./commun.js";
 import { euros, enSaisie, lireEuros } from "./paiement.js";
+import { telephone } from "./panneau.js";
 
 /* #suivi : Staff > Suivi des dépenses. Toutes les dettes d'origine du groupe (suivi.py), filtrées et triées ici ; la
    zone dangereuse : effacer une dette (le créancier l'absorbe), créer une dette manuelle. Chaque action se confirme en
-   retapant le montant. Export CSV des lignes affichées. */
+   retapant le montant. Export CSV des lignes affichées. Sur téléphone, le tableau n'a que De, Montant et À : toucher
+   une ligne ouvre le reste (origine, date, Effacer). */
 
 const reglage = { origine: "", nonRegle: true, tri: "date" };
 const TRIS = { date: "Date", montant: "Montant", personne: "Personne" };
@@ -78,22 +80,45 @@ function exporter(lignes) {
   telechargerFichier("suivi.csv", nom, new File([texte], nom, { type: "text/csv" }));
 }
 
+/* Sur téléphone : le détail d'une ligne, avec ses actions. */
+function detail(l) {
+  const info = (libelle, valeur) => valeur && el("div", { class: "ligne" }, el("span", { class: "ligne-texte" }, libelle), el("span", { class: "ligne-valeur" }, valeur));
+  ouvrirFeuille(`${l.de} → ${l.a}`, [
+    el("div", { class: "liste-groupee" },
+      info("Montant", euros(l.montant)),
+      l.reste !== l.montant && info("Reste", euros(l.reste)),
+      l.declare > 0 && info("Déclarés", euros(l.declare)),
+      info("Origine", app.etat.suivi.origines[l.origine] || l.origine),
+      info("Date", l.date ? dateCourte(l.date.slice(0, 10)) : "")),
+    l.libelle && el("p", {}, l.libelle),
+    l.effacee && el("p", { class: "doux petit" }, `Effacée par ${l.effacee.par}${l.effacee.message ? ` : ${l.effacee.message}` : ""}.`),
+    el("div", { class: "actions" },
+      el("button", { class: "btn large", type: "button", onclick: () => { fermerModale(); origine(l); } }, "Voir d'où ça vient"),
+      l.action && el("button", { class: "btn danger large", type: "button", onclick: () => { fermerModale(); effacer(l); } }, "Effacer la dette")),
+  ]);
+}
+
 function tableau(lignes) {
   if (!lignes.length) return el("p", { class: "doux note" }, app.etat.suivi.lignes.length ? "Aucune ligne pour ces filtres." : "Personne ne doit rien à personne.");
   const total = lignes.reduce((t, l) => t + l.montant, 0), reste = lignes.reduce((t, l) => t + l.reste, 0);
+  const court = telephone.matches;
   return [
-    el("div", { class: "tableau-defile" }, el("table", { class: "tableau-suivi tableau-dettes" },
-      el("thead", {}, el("tr", {}, ["De", "Montant", "À", "Origine", "Date", ""].map(t => el("th", {}, t)))),
-      el("tbody", {}, lignes.map(l => el("tr", { class: l.reste > 0 ? "" : "regle" },
-        el("td", {}, l.de),
-        el("td", {}, el("button", { type: "button", class: "lien-montant", onclick: () => origine(l) },
-          l.reste > 0 && l.reste < l.montant ? [el("s", { class: "doux" }, euros(l.montant)), " ", euros(l.reste)] : euros(l.montant),
-          l.declare > 0 && el("span", { class: "doux petit" }, ` · ${euros(l.declare)} déclarés`))),
-        el("td", {}, l.a),
-        el("td", {}, el("span", { title: l.libelle }, app.etat.suivi.origines[l.origine] || l.origine)),
-        el("td", {}, l.date ? dateCourte(l.date.slice(0, 10)) : ""),
-        el("td", {}, l.action ? el("button", { type: "button", class: "discret danger", onclick: () => effacer(l) }, "Effacer")
-          : l.effacee && el("button", { type: "button", class: "discret", onclick: () => effacer(l) }, "effacée"))))))),
+    el("div", { class: "tableau-defile" }, el("table", { class: "tableau-suivi tableau-dettes" + (court ? " court" : "") },
+      el("thead", {}, el("tr", {}, (court ? ["De", "Montant", "À"] : ["De", "Montant", "À", "Origine", "Date", ""]).map(t => el("th", {}, t)))),
+      el("tbody", {}, lignes.map(l => {
+        const montant = l.reste > 0 && l.reste < l.montant ? [el("s", { class: "doux" }, euros(l.montant)), " ", euros(l.reste)] : euros(l.montant);
+        return el("tr", { class: l.reste > 0 ? "" : "regle", onclick: court ? () => detail(l) : null },
+          el("td", {}, l.de),
+          court ? el("td", { class: "montant-court" }, montant)
+            : el("td", {}, el("button", { type: "button", class: "lien-montant", onclick: () => origine(l) },
+              montant, l.declare > 0 && el("span", { class: "doux petit" }, ` · ${euros(l.declare)} déclarés`))),
+          el("td", {}, l.a),
+          !court && [
+            el("td", {}, el("span", { title: l.libelle }, app.etat.suivi.origines[l.origine] || l.origine)),
+            el("td", {}, l.date ? dateCourte(l.date.slice(0, 10)) : ""),
+            el("td", {}, l.action ? el("button", { type: "button", class: "discret danger", onclick: () => effacer(l) }, "Effacer")
+              : l.effacee && el("button", { type: "button", class: "discret", onclick: () => effacer(l) }, "effacée"))]);
+      })))),
     el("p", { class: "note" }, `${pluriel(lignes.length, "ligne")} · ${euros(total)} d'origine · ${euros(reste)} restent`),
   ];
 }
@@ -112,7 +137,7 @@ export function vueSuivi() {
   nonRegle.onchange = () => { reglage.nonRegle = nonRegle.checked; afficher(); };
   remplir();
   return [
-    el("p", { class: "doux petit note" }, "Les dettes d'origine, comme en mode direct, quel que soit le mode de remboursement. Touche un montant pour voir d'où il vient."),
+    el("p", { class: "doux petit note" }, `Les dettes d'origine, comme en mode direct, quel que soit le mode de remboursement. ${telephone.matches ? "Touche une ligne pour le détail." : "Touche un montant pour voir d'où il vient."}`),
     el("div", { class: "carte filtres-suivi" }, personne, origines, tri,
       el("label", { class: "coche-ligne" }, "Non réglé seulement", nonRegle)),
     zone,

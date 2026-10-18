@@ -1,8 +1,8 @@
 import { app, $, el, icone, titreAppli, compte, themeDe, appliquerMode, charger, fermerModale, afficherConnexion, nouveauCode, marquerLu, definirRendu, afficher } from "./commun.js";
 import { majEcrans } from "./installation.js";
-import { telephone, bulleCompte, dessinerPanneau } from "./panneau.js";
+import { telephone, bulleCompte, dessinerPanneau, fermerPanneau } from "./panneau.js";
 import { ecran, A_RAFRAICHIR } from "./rubriques.js";
-import { fenetrePings } from "./pings.js";
+import { fenetrePings, nonLus } from "./pings.js";
 
 /* Point d'entrée : le rendu de toute la page, à chaque changement (état reçu, adresse changée, action).
    Rien ici n'est propre à une appli : les écrans sont déclarés dans rubriques.js.
@@ -37,6 +37,7 @@ function dessiner() {
   if (!connecte) afficherConnexion();
   document.title = titreAppli();
   const m = connecte ? compte(app.moi) : null;
+  majPastille(m ? nonLus() : 0);
   if (!m) { dessinerPanneau(); $("vue").replaceChildren(); $("barre-nav").hidden = true; return; }
   // Code provisoire (remis à zéro par le staff) : on choisit son code avant tout le reste.
   if (app.etat.moi.code_provisoire && !$("connexion").dataset.code) nouveauCode(m.nom, "Ton code était provisoire : choisis ton code à toi.");
@@ -57,6 +58,11 @@ function dessiner() {
   if (e.lu && aDuNouveau(e.lu)) marquerLu(e.lu);
   dessinerPanneau();
 
+  // Écran sans panneau (le guide de bienvenue) : ni panneau, ni bulle de compte, ni voile.
+  document.body.classList.toggle("sans-panneau", Boolean(e.sansPanneau));
+  if (e.sansPanneau) fermerPanneau();
+  const bulle = taille => !e.sansPanneau && telephone.matches && bulleCompte(taille);
+
   const pousse = Boolean(e.retour);
   $("barre-nav").hidden = !pousse;
   document.body.classList.toggle("avec-nav", pousse);
@@ -67,7 +73,8 @@ function dessiner() {
     $("retour").dataset.lien = lien || "";
     // Téléphone : la bulle de compte reste à gauche du retour, pour aller ailleurs sans revenir en arrière
     // (sauf sur un écran d'écriture, « Annuler » : on n'en sort que par Annuler ou en validant).
-    $("gauche-nav").replaceChildren(...(telephone.matches && libelle !== "Annuler" ? [bulleCompte(30)] : []), $("retour"));
+    const b = libelle !== "Annuler" && bulle(30);
+    $("gauche-nav").replaceChildren(...(b ? [b] : []), $("retour"));
     // « Annuler » : en toutes lettres, sans flèche (comme sur iPhone). Sinon flèche + nom de l'écran parent,
     // nom caché sur téléphone (la place va à la bulle et au titre).
     $("retour").replaceChildren(...(libelle === "Annuler" ? [libelle] : [icone("chevron-gauche"), el("span", { class: "libelle-retour" }, libelle)]));
@@ -82,7 +89,7 @@ function dessiner() {
   const actionEnHaut = action && !telephone.matches ? action : null;
   $("action-nav").replaceChildren(...(pousse && actionEnHaut ? [actionEnHaut] : []));
   const entete = [
-    !pousse && el("div", { class: "entete-titre" }, telephone.matches && bulleCompte(), el("h1", { class: "grand-titre" }, e.titre), actionEnHaut),
+    !pousse && el("div", { class: "entete-titre" }, bulle(), el("h1", { class: "grand-titre" }, e.titre), actionEnHaut),
     telephone.matches && action,
   ];
   $("vue").replaceChildren(...[entete, e.vue()].flat(3).filter(Boolean));
@@ -90,16 +97,18 @@ function dessiner() {
   if (!app.etat.moi.code_provisoire) fenetrePings();
 }
 
-/* La pastille sur l'icône de l'appli s'efface quand on ouvre l'appli. */
-function effacerPastille() {
-  if (document.hidden) return;
-  if (navigator.clearAppBadge) navigator.clearAppBadge().catch(() => {});
-  // Remet à zéro le compteur tenu par le service worker (sw.js, augmenterPastille ; même nom de cache que CACHE).
-  if (window.caches) caches.open("groutte").then(c => c.delete(new URL("__pastille", location.href).href.split("#")[0])).catch(() => {});
+/* La pastille sur l'icône de l'appli : le nombre de pings non lus, recalé à chaque dessin. Le service worker l'augmente
+   de un à chaque notification reçue, appli fermée (sw.js, augmenterPastille) : il repart de ce nombre-là. */
+let pastille = null;
+function majPastille(n) {
+  if (n === pastille || !navigator.setAppBadge) return;
+  pastille = n;
+  (n ? navigator.setAppBadge(n) : navigator.clearAppBadge()).catch(() => {});
+  // Le compteur du service worker (même nom de cache que CACHE dans sw.js).
+  if (window.caches) caches.open("groutte").then(c => c.put(new URL("__pastille", location.href).href.split("#")[0], new Response(String(n)))).catch(() => {});
 }
 
 async function rafraichir() {
-  effacerPastille();
   if (document.hidden) return;
   await Promise.all(A_RAFRAICHIR.map(f => f()));
   await charger(true);
@@ -118,6 +127,5 @@ appliquerMode();
 definirRendu(dessiner);
 window.addEventListener("hashchange", () => { window.scrollTo(0, 0); afficher(); });
 charger();
-effacerPastille();
 setInterval(rafraichir, 30000);
 document.addEventListener("visibilitychange", rafraichir);

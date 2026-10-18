@@ -188,6 +188,7 @@ def vue(c, nom):
     return {
         "mode": c.mode(),
         "cloture": c.cloture(),
+        "depenses_visibles": c.reglages["depenses_visibles"],
         "solde": c.soldes().get(nom, 0),
         "je_dois": je_dois,
         "on_me_doit": on_me_doit,
