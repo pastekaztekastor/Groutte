@@ -36,6 +36,7 @@ function dessiner() {
   majEcrans();
   const connecte = Boolean(app.etat.moi) && compte(app.moi);
   if (!connecte) afficherConnexion();
+  else if (!$("connexion").dataset.code) $("connexion").hidden = true;   // connecté : plus de « Qui es-tu ? »
   document.title = titreAppli();
   const m = connecte ? compte(app.moi) : null;
   majPastille(m ? nonLus() : 0);

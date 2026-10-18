@@ -7,7 +7,7 @@ import { blocsTournois } from "./tournois.js";
 /* #bienvenue/<étape> : le guide de la première connexion, une page par sujet. Les champs sont ceux de Ma fiche,
    Présence et Moyen de paiement : ce que le staff a déjà rempli (pendant l'orga, avant l'appli) est déjà là, il
    suffit de vérifier. Chaque champ s'enregistre tout seul ; « Passer le guide » ou la dernière page le marquent vu
-   (profil « guide_vu »), et il ne revient plus. main.js y envoie tant qu'il n'est pas vu. */
+   (profil « guide_vu »), et il ne revient plus. Tant qu'il n'est pas vu, il remplace toutes les pages (rubriques.js). */
 
 const ETAPES = [
   ["", "Bienvenue"],
@@ -65,10 +65,10 @@ export function vueBienvenue(etape) {
       "aria-label": `Étape ${i + 1} sur ${ETAPES.length}` }, ETAPES.map((_, j) => el("span", { class: j <= i ? "faite" : "" }))),
     contenu(ETAPES[i][0], m),
     el("div", { class: "actions guide-actions" },
+      i > 0 && el("a", { class: "btn large", href: lien(i - 1) }, "Précédent"),
       derniere
         ? el("button", { class: "btn principal large", type: "button", onclick: terminer }, "Aller à l'accueil")
         : el("a", { class: "btn principal large", href: lien(i + 1) }, i === 0 ? "C'est parti" : "Suivant"),
-      i > 0 && el("a", { class: "btn large", href: lien(i - 1) }, "Précédent"),
       !derniere && el("button", { class: "lien-discret", type: "button", onclick: terminer }, "Passer le guide")),
   ];
 }

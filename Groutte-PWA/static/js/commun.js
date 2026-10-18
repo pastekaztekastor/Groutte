@@ -405,7 +405,7 @@ export function ouvrirFeuille(titre, contenu) {
 /* --- Connexion : « Qui es-tu ? » (les photos des comptes), puis le pavé du code -------------------------------
    Chaque compte a son code à 4 chiffres. Le serveur remet un jeton à l'appareil, joint à chaque demande.
    - Code provisoire (remis à zéro par le staff) : on choisit tout de suite un nouveau code (deux fois).
-   - « Créer un compte » : le nom, puis le code, puis le même code une seconde fois ; on arrive sur Ma fiche. */
+   - « Créer un compte » : le nom, puis le code, puis le même code une seconde fois ; on arrive sur le guide. */
 
 function memoriser(nom, jeton) {
   app.moi = nom;
@@ -496,9 +496,10 @@ function creerCompte() {
             const r = await poster("api/inscription", { nom, code });
             memoriser(r.nom, r.jeton);
             fermerConnexion();
-            location.hash = "#fiche";
+            // L'état d'abord (il connaît le nouveau compte), l'adresse ensuite : sinon le redessin de l'adresse
+            // se ferait avec l'ancien état, sans ce compte, et ramènerait sur « Qui es-tu ? ».
             await charger();
-            notifier("Bienvenue ! Remplis ta fiche pour que les autres te reconnaissent.", true);
+            location.hash = "#bienvenue";
           },
         }),
       });

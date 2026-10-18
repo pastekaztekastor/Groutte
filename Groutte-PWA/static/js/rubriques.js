@@ -1,4 +1,4 @@
-import { app, estStaff, nombreNouveautes } from "./commun.js";
+import { app, estStaff, nombreNouveautes, notifier } from "./commun.js";
 import { vueReglages, vueNotifications, vueAppli } from "./reglages.js";
 import { resumeNotifications } from "./notifs.js";
 import { estInstallee } from "./installation.js";
@@ -44,11 +44,21 @@ import { vueInscription, resumeInscription } from "./tournois.js";
    - lu          : la clé de nouveautés que cet écran marque comme lue ;
    - sansPanneau : ni panneau latéral ni burger (le guide de bienvenue : on n'en sort que par ses boutons) ;
    - vue         : la fonction qui renvoie le contenu (éléments, tableaux d'éléments, ou rien). */
+let etapeGuide = "";   // la dernière étape du guide affichée
+
 export function ecran(rubrique, argument) {
+  // Première connexion : le guide remplace tout le site tant qu'il n'est pas fini ou passé (bienvenue.js).
+  // Un lien vers une autre page (« Voir les Lits »...) laisse sur l'étape en cours.
+  if (rubrique === "bienvenue") etapeGuide = argument;
+  if (rubrique === "bienvenue" || app.etat.moi.guide_vu === false) {
+    if (rubrique !== "bienvenue") {
+      if (rubrique) notifier("Finis le guide (ou passe-le) pour aller sur le reste de l'appli.");
+      location.replace("#bienvenue" + (etapeGuide ? "/" + etapeGuide : ""));
+    }
+    return { titre: titreBienvenue(etapeGuide), sansPanneau: true, vue: () => vueBienvenue(etapeGuide) };
+  }
   if (rubrique === "fiche") return { titre: "Ma fiche", vue: vueFiche };
   if (rubrique === "rembourser") return { titre: "Moyen de paiement", vue: vueRembourser };
-  // Première connexion : le guide remplace l'accueil tant qu'il n'est pas vu (bienvenue.js).
-  if (rubrique === "bienvenue" || (rubrique === "" && app.etat.moi.guide_vu === false)) return { titre: titreBienvenue(argument), sansPanneau: true, vue: () => vueBienvenue(argument) };
   if (rubrique === "") return { titre: "Accueil", vue: vueAccueil };
   if (rubrique === "carnet") {
     if (argument) return { titre: titreContact(argument), retour: ["", "Retour"], vue: () => vueFicheContact(argument) };
