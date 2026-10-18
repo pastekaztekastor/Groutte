@@ -657,6 +657,23 @@ label.ligne > .ligne-texte, .ligne:has(> select) > .ligne-texte { flex: 1 1 auto
 .tableau-groupe .case.trop { background: var(--or-fond); box-shadow: inset 0 0 0 2px var(--or); }
 .tableau-repas td.fige { opacity: .5; }
 
+/* Présence : une colonne par personne, sa bande de couleur de son arrivée à son départ, le jour écrit de haut en bas. */
+.tableau-bandes { border-spacing: 2px 0 !important; margin: 0 auto; }
+.tableau-bandes thead th { padding: 0 1px var(--e2); }
+.tableau-bandes tr.debut-jour > th { border-top: 1px solid var(--separateur); }
+.tableau-bandes tbody tr:first-child > th { border-top: none; }
+.tableau-bandes td { padding: 0; height: 24px; min-width: 28px; }
+.tableau-bandes th.jour-vertical { width: 20px; padding: var(--e1) 0; text-align: center; vertical-align: middle; }
+.tableau-bandes th.jour-vertical span { writing-mode: vertical-rl; transform: rotate(180deg); }
+.tableau-bandes th.creneau { left: 20px; padding: 0 var(--e1) 0 0; }
+.case-creneau { display: flex; align-items: center; justify-content: space-between; gap: var(--e2); width: 100%; min-width: 64px;
+  height: 22px; padding: 0 var(--e2); border: none; border-radius: var(--r-petit); background: none; color: inherit; font: inherit; }
+.case-creneau .compte-creneau { color: var(--texte); font-weight: 700; }
+.case-creneau.trop { background: var(--or-fond); box-shadow: inset 0 0 0 2px var(--or); }
+.bande { display: block; width: 10px; height: 100%; min-height: 24px; margin: 0 auto; background: var(--couleur); }
+.bande.arrive { border-top-left-radius: 5px; border-top-right-radius: 5px; }
+.bande.repart { border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; }
+
 /* Lits : chaque case donne les prénoms ; ma case en couleur, une case pleine grisée, mes nuits d'absence pâles. */
 .tableau-lits .case { flex-direction: column; min-width: 72px; min-height: 48px; font-size: var(--t-petit); font-weight: 500; gap: 2px; }
 .tableau-lits .case.mienne { background: var(--c9); color: var(--sur-c); font-weight: 700; }

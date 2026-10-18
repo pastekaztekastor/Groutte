@@ -1,4 +1,4 @@
-import { app, el, icone, avatar, envoyer, ouvrirFeuille, afficher, dateCourte, jourCourt, pluriel, lienContact } from "./commun.js";
+import { app, el, icone, avatar, qui, compte, couleurTheme, envoyer, ouvrirFeuille, afficher, dateCourte, jourCourt, pluriel, lienContact } from "./commun.js";
 import { CRENEAUX, LIBELLES, creneauxDe, presenceDe, presentsA, venants } from "./sejour.js";
 
 /* #presence : Gîte > Présence. Mes dates (arrivée et départ, chacun date + créneau), l'emploi du temps du groupe, et
@@ -100,23 +100,38 @@ function detailCreneau(jour, creneau) {
     : el("p", { class: "doux" }, "Personne."));
 }
 
+/* L'emploi du temps du groupe : une colonne par personne (dans l'ordre d'arrivée), une ligne par créneau, et une
+   bande de sa couleur de son arrivée à son départ. Le jour est écrit de haut en bas sur ses lignes ; toucher un
+   créneau donne la liste de ses présents. */
 function emploiDuTemps() {
   const jours = app.etat.sejour.jours;
   const capacite = app.etat.gite.capacite;
-  return el("div", { class: "tableau-defile" }, el("table", { class: "tableau-groupe" },
-    el("thead", {}, el("tr", {}, el("th", {}, ""), CRENEAUX.map(c => el("th", {}, LIBELLES[c])))),
-    el("tbody", {}, jours.map((j, i) => el("tr", {},
-      el("th", { scope: "row" }, dateCourte(j)),
-      CRENEAUX.map(c => {
-        if (i === jours.length - 1 && c === "nuit") return el("td", {}, "–");
-        const n = presentsA(j, c).presents.length;
-        const trop = c === "nuit" && capacite && n > capacite;
-        return el("td", {}, el("button", {
-          type: "button", class: "case" + (trop ? " trop" : "") + (n ? "" : " vide"),
-          "aria-label": `${dateCourte(j)} ${LIBELLES[c]} : ${n} présent${n > 1 ? "s" : ""}`,
+  const gens = venants().sort((a, b) => ordre(presenceDe(a).arrivee).localeCompare(ordre(presenceDe(b).arrivee)) || a.localeCompare(b));
+  const lettre = j => new Date(j + "T12:00").toLocaleDateString("fr-FR", { weekday: "short" }).charAt(0).toUpperCase();
+  const lignes = jours.flatMap((j, i) => {
+    const creneaux = CRENEAUX.filter(c => !(i === jours.length - 1 && c === "nuit"));
+    return creneaux.map((c, k) => {
+      const { presents, arrivent, partent } = presentsA(j, c);
+      const trop = c === "nuit" && capacite && presents.length > capacite;
+      return el("tr", { class: k === 0 ? "debut-jour" : null },
+        k === 0 && el("th", { scope: "rowgroup", rowspan: creneaux.length, class: "jour-vertical" }, el("span", {}, `${lettre(j)} ${dateCourte(j)}`)),
+        el("th", { scope: "row", class: "creneau" }, el("button", {
+          type: "button", class: "case-creneau" + (trop ? " trop" : ""),
+          "aria-label": `${dateCourte(j)} ${LIBELLES[c]} : ${presents.length} présent${presents.length > 1 ? "s" : ""}`,
           onclick: () => detailCreneau(j, c),
-        }, String(n)));
-      }))))));
+        }, LIBELLES[c], el("span", { class: "compte-creneau" }, String(presents.length)))),
+        gens.map(nom => {
+          if (!presents.includes(nom)) return el("td", {});
+          const bande = el("span", { class: "bande" + (arrivent.includes(nom) ? " arrive" : "") + (partent.includes(nom) ? " repart" : "") });
+          bande.style.setProperty("--couleur", couleurTheme(compte(nom)?.couleur));
+          return el("td", {}, bande);
+        }));
+    });
+  });
+  if (!gens.length) return el("p", { class: "doux" }, "Personne n'a encore donné ses dates.");
+  return el("div", { class: "tableau-defile" }, el("table", { class: "tableau-bandes" },
+    el("thead", {}, el("tr", {}, el("th", { colspan: 2 }, ""), gens.map(nom => el("th", { scope: "col" }, qui(nom, true))))),
+    el("tbody", {}, lignes)));
 }
 
 function alertesNuits() {
