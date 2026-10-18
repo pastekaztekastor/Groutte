@@ -1,4 +1,4 @@
-"""Tournois > Inscription : les tournois proposés (tournois.json, dans le dépôt, modifié par le webmaster) et qui s'y
+"""Tournois > Inscription : les tournois proposés (reglages/tournois.json, dans le dépôt, modifié par le webmaster) et qui s'y
 inscrit (data/profils.json, « tournois » : [id]). Chaque tournoi donne un rôle à ses inscrits, comme Chef ou
 Hébergeur : un rôle automatique, affiché dans le carnet d'adresses, sans aucun droit sur l'appli.
 """
@@ -6,9 +6,9 @@ import json
 
 from requetes import Refus
 from routes import route
-from stockage import ICI, PROFILS, ecrire_json, lire_json
+from stockage import PROFILS, REGLAGES, ecrire_json, lire_json
 
-FICHIER = ICI / "tournois.json"
+FICHIER = REGLAGES / "tournois.json"
 
 
 def lire():

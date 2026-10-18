@@ -11,11 +11,11 @@ C'est une petite appli de groupe, mobile first et installable. Elle a les notifi
 **Jalon 3 (ensuite)** : Pings reçus, Menu ; pour le staff, Réglages LLM (lecture des tickets), Suivi des dépenses, Annonces (section 15). Et les changements des fiches *à revoir* : repas gérés par la communauté, literie dans Lits, « Je ne viens pas » enregistré, message court au staff, clôture des comptes, garde-fou de la désactivation.
 
 ```
-python3 app.py                 # http://127.0.0.1:8000
-PORT=9124 python3 app.py       # autre port
+python3 serveur/app.py                 # http://127.0.0.1:8000 (depuis le dossier de l'appli)
+PORT=9124 python3 serveur/app.py       # autre port
 ```
 
-Comptes de départ dans `config.json` (premier démarrage seulement) : Alice (staff, code provisoire 1111), Bob (2222), Chloé (3333). Chacun choisit son vrai code à la première connexion. **À remplacer par les vrais staffs avant le premier déploiement.**
+Comptes de départ dans `reglages/config.json` (premier démarrage seulement) : Alice (staff, code provisoire 1111), Bob (2222), Chloé (3333). Chacun choisit son vrai code à la première connexion. **À remplacer par les vrais staffs avant le premier déploiement.**
 
 ---
 
@@ -31,6 +31,20 @@ Comptes de départ dans `config.json` (premier démarrage seulement) : Alice (st
 ---
 
 ## 2. Arborescence
+
+Des dossiers côte à côte, pour n'avoir que quelques dossiers à envoyer sur le serveur (section 10) :
+
+| Dossier | Contenu | Sur le serveur |
+| --- | --- | --- |
+| `passenger_wsgi.py` | Le point d'entrée de Passenger (il doit rester à la racine). | envoyé |
+| `serveur/` | Tout le code Python (`*.py`) et `llm-essai.png`. | envoyé |
+| `reglages/` | Ce que le webmaster modifie, versionné : `config.json`, `roles.json`, `tournois.json`, `flairs.json`, `reactions.json`, `requirements.txt`. | envoyé |
+| `static/` | La page : `index.html`, `tokens.css`, `style.css`, `sw.js`, `js/`, `icones/`. | envoyé |
+| `data/` | Les données, créées par l'appli. | au premier déploiement seulement |
+| `secrets/` | Les clés d'API des LLM, créées par l'appli. | jamais |
+| `outils/` | Captures, icônes des environnements : pour le développement. | jamais |
+
+Les chemins sont tous dans `serveur/stockage.py` (`RACINE`, `SERVEUR`, `REGLAGES`, `STATIQUE`, `DOSSIER_DONNEES`, `DOSSIER_SECRETS`).
 
 | Fichier | Rôle |
 | --- | --- |
@@ -48,9 +62,9 @@ Comptes de départ dans `config.json` (premier démarrage seulement) : Alice (st
 | `menu.py` | Repas > Menu : les plats proposés et leurs inscrits (`data/menus.json`), liés à Mes repas ; le rôle automatique Chef. |
 | `suivi.py` | Staff > Suivi des dépenses : toutes les dettes d'origine, dette effacée (grâce du staff), dette manuelle (`data/dettes-manuelles.json`). |
 | `llm.py` | Staff > Réglages LLM et la lecture des tickets : clés dans `secrets/llm.json` (hors de `data/`), appels HTTP à Claude, ChatGPT ou Mistral. |
-| `llm-essai.png` | Le faux ticket du bouton Tester (fait depuis `outils/ticket-essai.svg`). |
+| `serveur/llm-essai.png` | Le faux ticket du bouton Tester (fait depuis `outils/ticket-essai.svg`). |
 | `forum.py` | Communauté > Forum, repris de NextSession : posts, commentaires en arbre, votes, réactions, suivi des fils, modération par le staff (`data/forum.json`). |
-| `flairs.json`, `reactions.json` | Les flairs du forum (certains réservés au staff) et les réactions en texte. Modifiés par le webmaster, versionnés. |
+| `reglages/flairs.json`, `reglages/reactions.json` | Les flairs du forum (certains réservés au staff) et les réactions en texte. Modifiés par le webmaster, versionnés. |
 | `sejour.py` | Les dates du séjour (`config.json > sejour`) et le modèle de présence : créneaux, nuits, repas, heures des repas. |
 | `presence.py` | Gîte > Présence : arrivée et départ de chacun (`data/presences.json`). Prévient les hébergeurs, les créanciers d'un retardataire, le staff si la capacité est dépassée. |
 | `lits.py` | Gîte > Lits : les réservations nuit par nuit (`data/lits.json`), retirées quand les dates ou les lits changent ; le bilan de literie et l'alerte de manque au staff. |
@@ -68,8 +82,10 @@ Comptes de départ dans `config.json` (premier démarrage seulement) : Alice (st
 | `medias.py` | Fichiers envoyés, rangés sous des noms aléatoires dans `data/medias/`, avec un aperçu léger. |
 | `etat.py` | **Ce que voit chaque compte.** Chaque module y ajoute sa partie. |
 | `environnement.py` | Production, test (`test.`) ou local (localhost, 127.x, 192.168.x, 10.x, .local), d'après l'adresse. Hors production, le nom et l'icône de l'appli, le titre, le bandeau et les notifications le disent. |
-| `config.json` | Titre, comptes de départ, régimes proposés, thèmes, catégories de notifications, dates du séjour (`sejour`), heures des repas (`heures_repas`), lien du Discord de gestion (`discord_gestion`). |
-| `roles.json` | Les rôles du carnet et leur type (`libre`, `staff`, `automatique`). Modifié par le webmaster, versionné. |
+| `tournois.py` | Tournois > Inscription : les tournois (`reglages/tournois.json`), les inscriptions (`data/profils.json > tournois`) et le rôle automatique de chaque tournoi. |
+| `reglages/config.json` | Titre, comptes de départ, régimes proposés, thèmes, catégories de notifications, dates du séjour (`sejour`), heures des repas (`heures_repas`), lien du Discord de gestion (`discord_gestion`). |
+| `reglages/tournois.json` | Les tournois proposés : nom, description, prérequis, jeux (page Steam), rôle des inscrits. Modifié par le webmaster, versionné, relu sans redémarrer. |
+| `reglages/roles.json` | Les rôles du carnet et leur type (`libre`, `staff`, `automatique`). Modifié par le webmaster, versionné. |
 | `static/index.html` | La coquille : barre du haut, `<main id="vue">`, panneau, fenêtres, visionneuse. |
 | `static/tokens.css` | Les jetons de design (couleurs, espacements, tailles, arrondis), en clair et en sombre. |
 | `static/style.css` | Tous les styles, construits **uniquement** sur les jetons. |
@@ -269,11 +285,12 @@ Pour chaque nouvelle page du cahier des charges. Le modèle complet (Notes) est 
    - URL : le sous-domaine ;
    - startup file : `passenger_wsgi.py`, entry point : `application`.
 3. En FTP (FileZilla, « FTP explicite sur TLS »), envoie dans ce dossier :
-   - les `.py`, les `.json` du dossier (`config.json`, `roles.json`, `flairs.json`, `reactions.json`), `llm-essai.png`, `requirements.txt` et `static/` ;
+   - **`passenger_wsgi.py`, `serveur/`, `reglages/` et `static/`**, c'est tout ;
    - jamais `secrets/` : les clés des LLM se posent depuis Staff > Réglages LLM, sur le serveur ;
+   - jamais `outils/` ;
    - `data/` seulement au premier déploiement. **Ne l'écrase jamais ensuite.**
 4. Setup Python App :
-   - ajoute `requirements.txt` puis clique « Run Pip Install » (pour les notifications) ;
+   - ajoute `reglages/requirements.txt` puis clique « Run Pip Install » (pour les notifications) ;
    - ensuite **Restart**, à refaire après chaque envoi de fichiers Python.
 5. cPanel > Statut SSL/TLS > AutoSSL, puis force le HTTPS dans le `.htaccess` du dossier du sous-domaine.
 6. Si quelque chose casse : le chemin du `stderr.log` est affiché dans Setup Python App.
@@ -287,7 +304,7 @@ Le guide pas à pas complet est dans `../Nextsession/DEPLOIEMENT.md`.
 - **Toujours sur une copie** : les essais écrivent dans `data/`.
 
   ```
-  cp -r Squelette-PWA /tmp/essai && cd /tmp/essai && PORT=9124 python3 app.py
+  cp -r Groutte-PWA /tmp/essai && cd /tmp/essai && PORT=9124 python3 serveur/app.py
   ```
 
 - **Captures sans téléphone** (Node 22+ et Chromium) :
@@ -307,7 +324,7 @@ Le guide pas à pas complet est dans `../Nextsession/DEPLOIEMENT.md`.
 
   Teste aussi les refus : un autre compte qui modifie, un champ vide, un id inconnu.
 - Pour arrêter un serveur sur un port : `kill $(fuser 9124/tcp)`. Évite `pkill -f`, qui peut tuer le terminal qui l'a lancé.
-- `python3 -m py_compile *.py` et `node --check static/js/*.js` vérifient la syntaxe.
+- `python3 -m py_compile serveur/*.py` et `node --check static/js/*.js` vérifient la syntaxe.
 
 ---
 

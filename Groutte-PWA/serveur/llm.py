@@ -33,7 +33,7 @@ import reglages_compta
 from notifications import notifier
 from requetes import Refus
 from routes import route
-from stockage import DEPENSES, DOSSIER_SECRETS, ICI, REGLAGES_LLM, aujourdhui, ecrire_json, lire_json, maintenant, nouvel_id, verrou
+from stockage import DEPENSES, DOSSIER_SECRETS, REGLAGES_LLM, SERVEUR, aujourdhui, ecrire_json, lire_json, maintenant, nouvel_id, verrou
 
 FOURNISSEURS = {
     "claude": {"nom": "Claude", "societe": "Anthropic", "url": "https://api.anthropic.com/v1/messages"},
@@ -43,7 +43,7 @@ FOURNISSEURS = {
 # Le moins cher qui lit bien les images, pour chaque fournisseur. Le webmaster le change dans config.json > llm_modeles.
 MODELES_DEFAUT = {"claude": "claude-haiku-5-5", "chatgpt": "gpt-4o-mini", "mistral": "mistral-small-latest"}
 SECRETS = DOSSIER_SECRETS / "llm.json"
-ESSAI = ICI / "llm-essai.png"   # faux ticket (outils/ticket-essai.svg) : 3 lignes, 12,50 € au total
+ESSAI = SERVEUR / "llm-essai.png"   # faux ticket (outils/ticket-essai.svg) : 3 lignes, 12,50 € au total
 DELAI = 30
 TAILLE_MAX_IMAGE = 3_500_000    # au-delà, on envoie l'aperçu léger (1280 px)
 ECHEC_LECTURE = "la lecture a échoué : saisis la dépense à la main"

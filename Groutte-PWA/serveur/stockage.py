@@ -1,4 +1,7 @@
-"""Fichiers de données (data/*.json) et configuration (config.json).
+"""Fichiers de données (data/*.json) et réglages (reglages/config.json, roles.json...).
+
+L'appli est rangée en dossiers côte à côte (RACINE) : serveur/ (le code Python), reglages/ (ce que le webmaster
+modifie, versionné), static/ (la page), et ceux que le serveur crée : data/ (les données) et secrets/ (les clés).
 
 Toutes les données sont des fichiers JSON dans data/, lus à chaque requête et réécrits en entier (fichier
 temporaire puis renommage : jamais de fichier à moitié écrit). Toutes les écritures passent par verrou().
@@ -13,16 +16,19 @@ from contextlib import contextmanager
 from datetime import date, datetime
 from pathlib import Path
 
-ICI = Path(__file__).resolve().parent
-CONFIG = ICI / "config.json"
-DOSSIER_DONNEES = ICI / "data"
-ROLES = ICI / "roles.json"                     # liste des rôles et leur type (dans le dépôt, modifiée par le webmaster)
+SERVEUR = Path(__file__).resolve().parent     # serveur/ : ce code
+RACINE = SERVEUR.parent                        # le dossier de l'appli : serveur/, reglages/, static/, data/, secrets/
+REGLAGES = RACINE / "reglages"                 # config.json, roles.json, tournois.json... (versionnés)
+STATIQUE = RACINE / "static"
+CONFIG = REGLAGES / "config.json"
+DOSSIER_DONNEES = RACINE / "data"
+ROLES = REGLAGES / "roles.json"                   # liste des rôles et leur type (dans le dépôt, modifiée par le webmaster)
 COMPTES = DOSSIER_DONNEES / "comptes.json"    # les comptes : code, staff, rôles, muet, désactivé (comptes_donnees.py)
 PROFILS = DOSSIER_DONNEES / "profils.json"    # ce que chacun règle lui-même (fiche, couleur, photo, préférences)
 JOURNAL = DOSSIER_DONNEES / "journal-staff.json"
 LUS = DOSSIER_DONNEES / "lus.json"
-FLAIRS = ICI / "flairs.json"                   # flairs du forum (dans le dépôt, modifiés par le webmaster)
-REACTIONS = ICI / "reactions.json"             # réactions en texte du forum (dans le dépôt)
+FLAIRS = REGLAGES / "flairs.json"                 # flairs du forum (dans le dépôt, modifiés par le webmaster)
+REACTIONS = REGLAGES / "reactions.json"           # réactions en texte du forum (dans le dépôt)
 FORUM = DOSSIER_DONNEES / "forum.json"        # Communauté > Forum (forum.py)
 PRESENCES = DOSSIER_DONNEES / "presences.json"   # Gîte > Présence : arrivée et départ de chacun (presence.py)
 LITS = DOSSIER_DONNEES / "lits.json"          # Gîte > Lits : les réservations, nuit par nuit (lits.py)
@@ -39,7 +45,7 @@ PINGS = DOSSIER_DONNEES / "pings.json"        # Communauté > Pings reçus : cha
 ANNONCES = DOSSIER_DONNEES / "annonces.json"  # Staff > Annonces, et les messages courts au staff (annonces.py)
 DETTES_MANUELLES = DOSSIER_DONNEES / "dettes-manuelles.json"   # Staff > Suivi des dépenses (suivi.py)
 REGLAGES_LLM = DOSSIER_DONNEES / "reglages-llm.json"   # Staff > Réglages LLM : fournisseur actif, compteur (llm.py)
-DOSSIER_SECRETS = ICI / "secrets"             # hors de data/ et de git : les clés d'API des LLM (llm.py)
+DOSSIER_SECRETS = RACINE / "secrets"           # hors de data/ et de git : les clés d'API des LLM (llm.py)
 VERROU = DOSSIER_DONNEES / ".verrou"
 
 

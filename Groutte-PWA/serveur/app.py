@@ -1,13 +1,21 @@
 """Nouvel An à la Groutte : appli web installable (PWA), serveur WSGI, bibliothèque standard uniquement.
 
-- en local : python3 app.py (PORT=9123 python3 app.py pour un autre port)
-- sur un hébergement Passenger (O2Switch, cPanel) : passenger_wsgi.py importe `application`
+- en local, depuis le dossier de l'appli : python3 serveur/app.py (PORT=9123 python3 serveur/app.py pour un autre port)
+- sur un hébergement Passenger (O2Switch, cPanel) : passenger_wsgi.py (à la racine) importe `application`
+
+Les dossiers, côte à côte (stockage.py) :
+- serveur/   ce code Python (et llm-essai.png)              -> à envoyer sur le serveur
+- reglages/  config.json, roles.json, tournois.json, flairs.json, reactions.json, requirements.txt -> à envoyer
+- static/    la page (index.html, tokens.css, style.css, js/) -> à envoyer
+- data/      les données, créées par l'appli    -> jamais écrasé par un envoi (sauvegarder plutôt)
+- secrets/   les clés d'API des LLM              -> jamais envoyé, jamais dans git
+- outils/    pour le développement seulement     -> pas envoyé
 
 Chaque compte a son code à 4 chiffres : la connexion remet un jeton à l'appareil (acces.py). Chaque requête dit
 qui l'envoie (`nom`) avec ce jeton ; le serveur vérifie ce que ce compte a le droit de faire.
 
 Organisation :
-- stockage.py      fichiers data/*.json et config.json, verrou d'écriture
+- stockage.py      les dossiers, fichiers data/*.json et reglages/*.json, verrou d'écriture
 - requetes.py      lecture et validation des requêtes, refus
 - routes.py        registre des actions POST (@route)
 - comptes_donnees.py  comptes (data/comptes.json), codes hachés, rôles (roles.json), renommage
@@ -32,7 +40,7 @@ Organisation :
 - medias.py        fichiers envoyés, rangés dans data/medias/
 - etat.py          ce que voit chaque compte
 - environnement.py production, test ou local : nom et icônes de l'appli hors production
-- static/          la page (index.html, tokens.css, style.css, js/)
+- tournois.py      Tournois > Inscription (reglages/tournois.json)
 """
 import json
 import os
@@ -68,14 +76,13 @@ from environnement import environnement
 from etat import etat
 from requetes import Demande, Refus, lire_corps
 from routes import ROUTES, SANS_VERROU
-from stockage import ICI, lire_config, verrou
+from stockage import RACINE, STATIQUE, lire_config, verrou
 
 
 class ServeurMultiThread(ThreadingMixIn, WSGIServer):
     daemon_threads = True
 
 
-STATIQUE = ICI / "static"
 PAGE = STATIQUE / "index.html"
 TYPES_STATIQUES = {
     ".css": "text/css; charset=utf-8",
@@ -212,7 +219,7 @@ def televerser(environ, parametres):
 
 def fichier_statique(chemin):
     """Fichier .css, .js, ou icône sous static/, ou None. Refuse tout ce qui sort du dossier (../)."""
-    fichier = (ICI / chemin.lstrip("/")).resolve()
+    fichier = (RACINE / chemin.lstrip("/")).resolve()
     try:
         fichier.relative_to(STATIQUE)
     except ValueError:

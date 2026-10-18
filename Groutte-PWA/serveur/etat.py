@@ -26,20 +26,20 @@ import suivi
 import tournois
 from comptes import regimes_proposes
 from lus import non_lus
-from stockage import ICI, PROFILS, lire_config, lire_flairs, lire_json, lire_reactions, lire_themes
+from stockage import PROFILS, REGLAGES, SERVEUR, STATIQUE, lire_config, lire_flairs, lire_json, lire_reactions, lire_themes
 
 CHAMPS_FICHE = ("prenom", "pseudo", "discord", "telephone", "allergies")
 
 
 def version_appli():
     """Change dès qu'un fichier du site change (code ou page) : une page restée ouverte propose alors la mise à jour."""
-    fichiers = list(ICI.glob("*.py")) + list(ICI.glob("*.json")) + [f for f in (ICI / "static").rglob("*") if f.is_file()]
+    fichiers = list(SERVEUR.glob("*.py")) + list(REGLAGES.glob("*.json")) + [f for f in STATIQUE.rglob("*") if f.is_file()]
     return str(int(max(f.stat().st_mtime for f in fichiers)))
 
 
 def icones_dessinees():
     """Noms des icônes dessinées déposées dans static/icones/ui/ (<nom>.svg) : elles remplacent les pictogrammes."""
-    dossier = ICI / "static" / "icones" / "ui"
+    dossier = STATIQUE / "icones" / "ui"
     return sorted(f.stem for f in dossier.glob("*.svg")) if dossier.is_dir() else []
 
 

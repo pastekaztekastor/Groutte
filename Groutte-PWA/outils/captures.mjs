@@ -5,7 +5,7 @@
 //   ex. node outils/captures.mjs /tmp/captures 390 sombre Bob:2222 "#fiche" "#carnet"
 //   Le code sert à se connecter (chaque compte a son code). Sans compte : l'écran « Qui es-tu ? ».
 //
-// Le serveur doit tourner sur http://127.0.0.1:9124/ (PORT=9124 python3 app.py, idéalement sur une COPIE du projet :
+// Le serveur doit tourner sur http://127.0.0.1:9124/ (PORT=9124 python3 serveur/app.py, idéalement sur une COPIE du projet :
 // les essais écrivent dans data/). Une image par adresse, nommée d'après elle ; les erreurs JS sont affichées à la fin.
 import { spawn } from "node:child_process";
 import { mkdirSync, writeFileSync } from "node:fs";
