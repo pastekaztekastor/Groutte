@@ -1,6 +1,8 @@
 {
     "titre": "La Groutte",
     "nom_court": "Groutte",
+    "_aide_prefixe": "Préfixe de ce que la page range dans le navigateur, et nom du cache du service worker. Ne pas changer : les appareils perdraient leur connexion.",
+    "prefixe": "groutte",
     "description": "Le séjour du Nouvel An à la Groutte : inscription, gîte, budget, tournois et souvenirs.",
     "notifications": true,
     "prefixe_notifications": "La Groutte",
@@ -12,6 +14,10 @@
         "gite": "Gîte",
         "repas": "Repas"
     },
+    "_aide_categorie_inscriptions": "Catégorie de la notification au staff quand quelqu'un crée son compte.",
+    "categorie_inscriptions": "gite",
+    "_aide_lien_fiche": "La page qui s'ouvre quand on touche la notification d'un message au staff ({nom} : l'expéditeur).",
+    "lien_fiche": "#carnet/{nom}",
     "_aide_sejour": "Dates du séjour (AAAA-MM-JJ) : le premier et le dernier jour. Elles bornent Présence, Lits et Mes repas.",
     "sejour": {
         "debut": "2026-12-28",

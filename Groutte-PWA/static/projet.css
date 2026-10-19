@@ -1,0 +1,334 @@
+/* Les styles propres à Groutte, chargés après ceux du socle (socle/static/style.css), sur les mêmes jetons
+   (socle/static/tokens.css) : aucune valeur brute ici non plus. Un élément qui servirait à un autre projet va dans le
+   socle (skill modifier-socle). */
+
+/* --- Fiche contact, façon Contacts de l'iPhone (Ma fiche, Carnet), reprise de NextSession ------------------------ */
+.contact-tete { display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--e1); margin: var(--e2) 0 var(--e4); }
+.contact-tete .avatar { margin-bottom: var(--e2); }
+.contact-tete h1 { font-size: var(--t-grand); font-weight: 700; letter-spacing: -.02em; margin: 0; line-height: 1.1; max-width: 100%; overflow-wrap: anywhere; }
+.contact-tete > p { margin: 0; }
+.contact-tete .rangee { justify-content: center; margin-top: var(--e1); }
+.photo-modifiable { cursor: pointer; }
+.actions-contact { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--e2); margin-bottom: var(--e2); }
+.actions-contact.deux { grid-template-columns: repeat(2, 1fr); }
+.action-contact {
+  display: flex; flex-direction: column; align-items: center; gap: var(--e1); padding: var(--e3) var(--e1);
+  border-radius: var(--r-carte); background: var(--surface); color: var(--c11); text-decoration: none; font-size: var(--t-petit); font-weight: 600;
+}
+.action-contact .rond { display: inline-flex; width: 28px; height: 28px; align-items: center; justify-content: center; }
+.action-contact .icone { width: 22px; height: 22px; }
+.action-contact.inactive { color: var(--texte-pale); }
+.ligne-contact { align-items: flex-start; padding-top: var(--e3); padding-bottom: var(--e3); }
+.icone-contact { flex: none; display: inline-flex; width: 24px; justify-content: center; padding-top: 2px; color: var(--c9); }
+:root.sombre .icone-contact { color: var(--c11); }
+.icone-contact .icone { width: 18px; height: 18px; }
+.libelle-contact { font-size: var(--t-petit); color: var(--texte-doux); }
+.ligne-contact .texte-libre, .ligne-contact a { font-size: var(--t-corps); }
+.ligne-contact .ligne-texte { flex: 1 1 auto; min-width: 0; }
+.ligne-contact :is(input, textarea) {
+  border: none; border-radius: 0; background: none; padding: 2px 0; min-height: 28px; box-shadow: none; resize: none; width: 100%;
+}
+.ligne-contact:focus-within .libelle-contact { color: var(--c11); }
+.ligne-contact + .ligne-contact::before { left: calc(var(--e4) + 24px + var(--e3)); }
+
+/* --- Carnet d'adresses : recherche, filtres par rôle, répertoire par lettre ---------------------------------------- */
+.recherche-carnet input { width: 100%; }
+
+/* --- Me rembourser et page « Payer » (moyens de paiement, QR code), repris de NextSession ------------------------- */
+.moyens { display: grid; gap: var(--e3); }
+.moyens .carte + .carte { margin-top: 0; }
+.moyens h3 { margin: 0 0 var(--e2); }
+.copie { display: grid; min-width: 0; }
+.copie .valeur { overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.bloc-qr { display: grid; justify-items: center; gap: var(--e2); margin-top: var(--e3); text-align: center; }
+.qr { width: min(220px, 70vw); height: auto; border-radius: var(--r-petit); background: #fff; }
+
+/* --- Montants : une dette au bout de sa ligne ------------------------------------------------------------------ */
+.ligne-dette .montant { flex: none; }
+
+/* --- Tableaux (emploi du temps, lits, repas, suivi) : défilent de côté sur téléphone ---------------------- */
+.tableau-groupe { width: 100%; }
+.tableau-groupe .case, .tableau-lits .case {
+  display: flex; align-items: center; justify-content: center; width: 100%; min-width: 48px; min-height: 40px; padding: var(--e1);
+  border: none; border-radius: var(--r-petit); background: var(--surface); color: var(--texte); font-weight: 600;
+}
+.tableau-groupe .case.vide { color: var(--texte-pale); font-weight: 400; }
+.tableau-groupe .case.trop { background: var(--or-fond); box-shadow: inset 0 0 0 2px var(--or); }
+.tableau-repas td.fige { opacity: .5; }
+/* Présence : une colonne par personne, sa bande de couleur de son arrivée à son départ, le jour écrit de haut en bas. */
+.tableau-bandes { border-spacing: 2px 0 !important; margin: 0 auto; }
+/* Les photos descendent avec la page sous la barre du haut (presence.js, collerPhotos) : les bandes passent dessous. */
+.tableau-bandes thead th { padding: 0 1px var(--e2); position: relative; z-index: 2; background: var(--fond); }
+/* Le coin collé lui aussi : les photos passent dessous en défilant de côté, comme les bandes sous les créneaux. */
+.tableau-bandes thead th:first-child { position: sticky; left: 0; z-index: 3; }
+/* Safari colle la colonne après la marge du tableau : l'ombre couvre cette marge, sinon les bandes y défilent. */
+.tableau-bandes thead th:first-child, .tableau-bandes th.jour-vertical { box-shadow: calc(-1 * var(--e4)) 0 0 var(--fond); }
+.tableau-bandes tr.debut-jour > th { border-top: 1px solid var(--separateur); }
+.tableau-bandes tbody tr:first-child > th { border-top: none; }
+.tableau-bandes td { padding: 0; height: 24px; min-width: 28px; }
+.tableau-bandes th.jour-vertical { width: 20px; min-width: 20px; box-sizing: border-box; padding: var(--e1) 0; text-align: center; vertical-align: middle; }
+/* Largeur imposée par le texte : sinon Safari réduit la colonne (rowspan, texte vertical) à 1 px et les bandes passent à côté. */
+.tableau-bandes th.jour-vertical span { display: inline-block; width: 20px; writing-mode: vertical-rl; transform: rotate(180deg); }
+.tableau-bandes th.creneau { left: 20px; padding: 0 var(--e1) 0 0; }
+.case-creneau { display: flex; align-items: center; justify-content: space-between; gap: var(--e2); width: 100%; min-width: 64px;
+  height: 22px; padding: 0 var(--e2); border: none; border-radius: var(--r-petit); background: none; color: inherit; font: inherit; }
+.case-creneau .compte-creneau { color: var(--texte); font-weight: 700; }
+.case-creneau.trop { background: var(--or-fond); box-shadow: inset 0 0 0 2px var(--or); }
+.bande { display: block; width: 10px; height: 100%; min-height: 24px; margin: 0 auto; background: var(--couleur); }
+.bande.arrive { border-top-left-radius: 5px; border-top-right-radius: 5px; }
+.bande.repart { border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; }
+/* Lits : chaque case donne les prénoms ; ma case en couleur, une case pleine grisée, mes nuits d'absence pâles. */
+.tableau-lits .case { flex-direction: column; min-width: 72px; min-height: 48px; font-size: var(--t-petit); font-weight: 500; gap: 2px; }
+.tableau-lits .case.mienne { background: var(--c9); color: var(--sur-c); font-weight: 700; }
+.tableau-lits .case.pleine { background: var(--surface-2); color: var(--texte-doux); }
+.tableau-lits .case.absente:not(.mienne) { opacity: .45; }
+.tableau-lits th.absent { color: var(--texte-pale); }
+.tableau-lits tr.debut-totaux > * { padding-top: var(--e2); }
+.tableau-lits .libres { font-weight: 700; color: var(--texte); }
+.tableau-lits .libres.aucun { color: var(--rouge-texte); }
+.entete-lit { display: inline-flex; gap: 2px; align-items: baseline; min-height: 32px; padding: 0 var(--e2); border: none;
+  border-radius: var(--r-pilule); background: var(--surface-2); color: var(--texte); font-weight: 700; }
+.plan-gite { display: block; width: 100%; padding: 0; border: none; background: none; margin-bottom: var(--e3); }
+.plan-gite img { width: 100%; max-height: 50vh; object-fit: contain; border-radius: var(--r-image); background: var(--surface-2); }
+.legende strong { display: inline-flex; min-width: 24px; }
+.lettre-lit { display: inline-flex; justify-content: center; min-width: 28px; font-size: var(--t-titre); }
+.miniature-plan { flex: none; width: 64px; height: 64px; padding: 0; border: none; background: none; }
+.miniature-plan img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--r-petit); }
+/* Mes repas : une vraie case à cocher (pas un interrupteur) dans chaque case du tableau. */
+input[type=checkbox].case-cocher { width: 28px; height: 28px; margin: 0 auto; border-radius: var(--r-petit); background: var(--surface);
+  box-shadow: inset 0 0 0 2px var(--bordure); }
+input[type=checkbox].case-cocher::before { inset: 0; top: 0; left: 0; width: 100%; height: 100%; border-radius: 0; background: none; box-shadow: none; transform: none; }
+input[type=checkbox].case-cocher:checked { background: var(--vert); box-shadow: none; }
+input[type=checkbox].case-cocher:checked::before { content: "\2713"; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; transform: none; }
+input[type=checkbox].case-cocher:disabled { cursor: default; }
+/* Suivi des paiements (Créances, Gîte et salle), tableau des catégories (FAQ). */
+.tableau-suivi { min-width: 100%; }
+.tableau-suivi td { padding: var(--e2); background: var(--surface); color: var(--texte); text-align: left; white-space: nowrap; }
+.tableau-suivi td.du { color: var(--rouge-texte); font-weight: 600; }
+.tableau-suivi tr td:first-child { border-radius: var(--r-petit) 0 0 var(--r-petit); }
+.tableau-suivi tr td:last-child { border-radius: 0 var(--r-petit) var(--r-petit) 0; }
+
+/* --- Présence -------------------------------------------------------------------------------------------- */
+.choix-point { flex-wrap: wrap; }
+.choix-point .ligne-texte { flex: 0 0 64px; }
+.choix-point select { flex: 1 1 110px; width: auto; min-width: 0; }
+.resultat-dates { font-size: var(--t-titre); font-weight: 700; margin-bottom: var(--e2); }
+
+/* --- Contacter le staff, Créances, Mes comptes -------------------------------------------------------------- */
+.entete-bloc { display: flex; align-items: baseline; justify-content: space-between; gap: var(--e3); }
+.entete-bloc h3 { margin: 0; }
+.entete-bloc strong { font-size: var(--t-titre); font-variant-numeric: tabular-nums; }
+.methode .calcul { font-family: var(--mono); font-size: var(--t-second); background: var(--g2); border-radius: var(--r-petit); padding: var(--e2) var(--e3); }
+.entete-paiement { display: flex; align-items: center; gap: var(--e3); }
+.entete-paiement p { margin: 0; }
+/* Le solde : du rouge (je dois) au vert (on me doit) en passant par le gris (quitte), selon le montant. */
+.solde { display: grid; justify-items: center; gap: var(--e1); margin: var(--e2) 0 var(--e4); padding: var(--e5) var(--e4);
+  border-radius: var(--r-carte); text-align: center;
+  background: color-mix(in oklch, var(--rouge-fond) var(--t-rouge, 0%), color-mix(in oklch, var(--vert-fond) var(--t-vert, 0%), var(--surface)));
+  color: color-mix(in oklch, var(--rouge-texte) var(--t-rouge, 0%), color-mix(in oklch, var(--vert-texte) var(--t-vert, 0%), var(--texte-doux))); }
+.solde strong { font-size: var(--t-grand); font-weight: 700; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.ligne-dette .montant, .ligne-depense .montant { font-weight: 700; color: var(--texte); font-variant-numeric: tabular-nums; }
+.ligne-dette.colonne { flex-direction: column; align-items: stretch; gap: var(--e2); }
+.rangee-dette { display: flex; align-items: center; gap: var(--e3); }
+.declare { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: var(--e2); }
+.declare .petit { margin-right: auto; color: var(--texte-doux); }
+.ligne-valeur.positif { color: var(--vert-texte); font-weight: 600; }
+.ligne-valeur.negatif { color: var(--rouge-texte); font-weight: 600; }
+
+/* --- Dépenses ------------------------------------------------------------------------------------------------ */
+.ligne-depense .ligne-texte { flex: 1 1 auto; min-width: 0; gap: var(--e1); }
+.rangee-depense { display: flex; flex-wrap: wrap; align-items: center; gap: var(--e1) var(--e2); min-width: 0; }
+.rangee-depense strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.etat-depense { font-size: var(--t-petit); font-weight: 600; color: var(--texte-doux); }
+.etat-depense.attente { color: var(--c11); }
+.etat-depense.validee { color: var(--vert-texte); }
+.segments-trois button { font-size: var(--t-mini); }
+.ticket { display: grid; gap: var(--e2); justify-items: start; }
+.apercu-ticket { max-width: 100%; max-height: 240px; border-radius: var(--r-petit); object-fit: contain; }
+.ticket-grand { display: block; width: 100%; padding: 0; border: none; background: none; margin-top: var(--e3); }
+.ticket-grand img { width: 100%; max-height: 60vh; object-fit: contain; border-radius: var(--r-image); background: var(--surface-2); }
+.entete-depense { display: grid; justify-items: center; gap: var(--e1); text-align: center; }
+.montant-grand { font-size: var(--t-grand); font-weight: 700; margin: 0; font-variant-numeric: tabular-nums; }
+
+/* --- Ma fiche, Réglages compta, Gîte et salle --------------------------------------------------------------------- */
+.encart-sam { background: var(--c3); }
+.coche-courte { display: inline-flex; align-items: center; gap: var(--e1); font-size: var(--t-petit); color: var(--texte-doux); }
+.coche-courte input[type=checkbox] { margin: 0; }
+.ligne-exemption { flex-wrap: wrap; }
+.ligne-exemption .coches { display: flex; flex-wrap: wrap; gap: var(--e2) var(--e3); }
+.replie-supprimees { margin-top: var(--e6); }
+.replie-supprimees summary { cursor: pointer; padding: var(--e2) var(--e4); color: var(--texte-doux); font-size: var(--t-second); }
+
+/* --- Comment ça marche ------------------------------------------------------------------------------------------- */
+.liste-faq { display: grid; gap: var(--e2); }
+.question-faq { background: var(--surface); border-radius: var(--r-carte); padding: 0 var(--e4); scroll-margin-top: 72px; }
+.question-faq > summary { display: grid; grid-template-columns: 12px minmax(0, 1fr); align-items: baseline; gap: var(--e1) var(--e2);
+  min-height: var(--cible); padding: var(--e3) 0; cursor: pointer; font-weight: 600; list-style: none; }
+.question-faq > summary .badge { grid-column: 2; justify-self: start; }
+.question-faq > summary::-webkit-details-marker { display: none; }
+.question-faq > summary::before { content: "\203A"; display: inline-block; width: 12px; color: var(--texte-pale); transition: transform .2s; }
+.question-faq[open] > summary::before { transform: rotate(90deg); }
+.question-faq > p { margin: 0 0 var(--e3); }
+.en-detail { margin: 0 0 var(--e3); padding: var(--e2) var(--e3); border-radius: var(--r-petit); background: var(--g2); }
+.en-detail summary { cursor: pointer; color: var(--c11); font-weight: 600; font-size: var(--t-second); }
+.en-detail p { margin: var(--e2) 0 0; font-size: var(--t-second); }
+.en-detail .tableau-defile { margin-top: var(--e2); }
+.exemple { padding: var(--e2) var(--e3); border-left: 3px solid var(--c8); background: var(--surface); border-radius: 0 var(--r-petit) var(--r-petit) 0; }
+@media (prefers-reduced-motion: reduce) { .question-faq > summary::before { transition: none; } }
+
+/* --- Forum (repris de NextSession) ------------------------------------------------------------------------------- */
+/* Flair : pilule teintée de sa couleur. */
+.flair {
+  display: inline-flex; align-items: center; flex: none; padding: 2px var(--e3); border: none; border-radius: var(--r-pilule);
+  background: color-mix(in oklch, var(--flair, var(--g9)) 16%, var(--surface));
+  color: color-mix(in oklch, var(--flair, var(--g9)) 70%, var(--texte)); font-size: 12px; font-weight: 600;
+}
+:root.sombre .flair { background: color-mix(in oklch, var(--flair, var(--g9)) 28%, var(--surface)); color: color-mix(in oklch, var(--flair, var(--g9)) 45%, var(--texte)); }
+/* Filtre par flair : puces, la choisie en encre. */
+.filtre-flairs { display: flex; gap: var(--e2); overflow-x: auto; scrollbar-width: none; margin: 0 calc(-1 * var(--e4)) var(--e3); padding: 0 var(--e4); }
+.filtre-flairs .flair { min-height: 34px; padding: 0 var(--e4); font-size: var(--t-second); font-weight: 500; background: var(--surface-2); color: var(--texte); }
+.filtre-flairs .flair.actif { background: var(--texte); color: var(--fond); }
+.filtre-flairs .flair.tous { --flair: var(--texte); }
+/* Réactions (texte, pas emoji). */
+.reactions { display: flex; flex-wrap: wrap; gap: var(--e1); margin: var(--e2) 0 0; }
+.reaction {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--e1); min-height: 28px; min-width: 32px;
+  padding: 0 var(--e2); border: none; border-radius: var(--r-pilule); background: var(--surface-2); color: var(--texte); font-size: var(--t-petit); font-weight: 600;
+}
+.reaction .visage { font-family: var(--mono); }
+.reaction .nombre { color: var(--texte-doux); font-size: 12px; }
+.reaction.moi { background: var(--c4); color: var(--c11); }
+.reaction.moi .nombre { color: var(--c11); }
+.ajout-reaction { color: var(--texte-doux); }
+.ajout-reaction .icone { width: 16px; height: 16px; }
+/* La liste des posts. */
+.liste-sujets { display: grid; gap: var(--e3); }
+.liste-sujets .carte + .carte { margin-top: 0; }
+.liste-sujets:last-child { margin-bottom: 72px; }
+.carte.post { display: flex; gap: var(--e2); padding: var(--e3) var(--e4) var(--e3) var(--e2); }
+.colonne-vote { flex: none; width: 40px; display: flex; justify-content: center; }
+.post-corps { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; color: var(--texte); text-decoration: none; }
+.post-titre { font-size: var(--t-corps); font-weight: 600; line-height: 1.25; }
+.post-domaine { color: var(--c11); font-size: var(--t-petit); }
+.post-pied { display: flex; align-items: center; gap: var(--e2); color: var(--texte-doux); font-size: var(--t-petit); }
+.post-vignette { width: 100%; max-height: 220px; object-fit: cover; border-radius: var(--r-image); background: var(--surface-2); }
+.titre-sujet { font-size: var(--t-titre); font-weight: 700; letter-spacing: -.01em; line-height: 1.2; margin: 0; text-transform: none; color: var(--texte); }
+.bouton-vote {
+  display: inline-flex; flex-direction: column; align-items: center; justify-content: center; min-width: 40px; min-height: var(--cible);
+  padding: 2px var(--e1); border: none; border-radius: var(--r-petit); background: none; color: var(--texte-pale); font-weight: 700; font-size: var(--t-petit);
+}
+.bouton-vote svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linejoin: round; }
+.bouton-vote.vote { color: var(--c9); }
+:root.sombre .bouton-vote.vote { color: var(--c11); }
+.bouton-vote.vote svg { fill: currentColor; }
+.bouton-vote:disabled { opacity: .3; }
+.bouton-vote img.icone.dessinee { width: 22px; height: 22px; }
+.flair-choix { width: auto; min-height: 32px; padding: 2px var(--e3); font-size: var(--t-petit); }
+.lien-post { display: grid; gap: 2px; padding: var(--e3) var(--e4); border-radius: var(--r-carte); background: var(--g2); color: var(--texte); text-decoration: none; overflow-wrap: anywhere; }
+/* Un post et ses commentaires en arbre. */
+.carte.post.detail { margin-top: var(--e2); }
+.entete-commentaires { display: grid; gap: var(--e2); margin-top: var(--e6); }
+.entete-commentaires h2 { margin: 0 var(--e4); }
+.entete-commentaires .segments { margin: 0; }
+.commentaire-texte.ouvrable { cursor: pointer; }
+.commentaire-corps .bouton-vote { flex: none; margin-top: -6px; }
+.commentaire-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--e1); margin-top: 2px; }
+.commentaire-actions .reactions { margin: 0; display: contents; }
+.suite-fil { margin: var(--e1) 0; }
+.contexte { display: flex; flex-wrap: wrap; align-items: center; gap: var(--e1) 6px; margin-top: var(--e2); color: var(--texte-doux); text-decoration: none; font-size: var(--t-petit); overflow-wrap: anywhere; }
+.contexte strong { color: var(--texte); }
+.contexte + .carte.post.detail { margin-top: var(--e3); }
+
+/* --- Ma fiche : le couchage ---------------------------------------------------------------------------------- */
+.ligne select.choix-couchage { flex: none; max-width: none; }
+
+/* --- Menu ------------------------------------------------------------------------------------------------ */
+.ligne-menu .qui-lien { gap: var(--e2); }
+.ligne-menu .ligne-valeur { color: var(--texte); font-weight: 600; font-variant-numeric: tabular-nums; }
+.ligne-menu.passe { opacity: .55; }
+.ligne-menu .case-cocher { flex: none; margin: 0; }
+
+/* --- Suivi des dépenses ------------------------------------------------------------------------------------ */
+.filtres-suivi { display: grid; gap: var(--e2); }
+.tableau-dettes tr.regle td { opacity: .5; }
+.tableau-dettes td s { text-decoration-thickness: 1.5px; }
+.lien-montant { padding: 0; border: none; background: none; color: var(--texte); font-weight: 600; font-variant-numeric: tabular-nums; text-align: left; }
+.tableau-dettes .discret { min-height: 32px; }
+
+/* --- Réglages LLM ----------------------------------------------------------------------------------------- */
+.aide-llm ol { margin: var(--e2) 0 0; padding-left: var(--e5); font-size: var(--t-second); }
+.aide-llm li + li { margin-top: var(--e1); }
+
+/* --- Accueil : les widgets (accueil.js) ---------------------------------------------------------------------- */
+.widgets { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: var(--e3); margin-top: var(--e2); }
+.widget { display: flex; flex-direction: column; gap: var(--e1); min-width: 0; padding: var(--e3) var(--e4); border-radius: var(--r-carte);
+  background: var(--surface); color: var(--texte); text-decoration: none; }
+a.widget:active { background: var(--surface-2); }
+.widget.large { grid-column: 1 / -1; }
+.widget-titre { display: flex; align-items: center; gap: var(--e2); margin-bottom: var(--e1); color: var(--texte-doux); font-size: var(--t-petit); font-weight: 600; }
+.widget-titre .icone { width: 16px; height: 16px; color: var(--c9); }
+.widget-chiffre { font-size: var(--t-grand); font-weight: 700; line-height: 1.1; }
+.widget-chiffre small { margin-left: var(--e1); font-size: var(--t-second); font-weight: 400; color: var(--texte-doux); }
+.widget-valeur { font-weight: 600; }
+.widget-sous { color: var(--texte-doux); font-size: var(--t-petit); }
+.widget-annonce { font-size: var(--t-second); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+/* Le compte à rebours : le seul grand chiffre de la page. */
+.widget-hero { align-items: flex-start; padding: var(--e4); background: var(--c9); color: var(--sur-c); }
+.widget-hero .widget-sous { color: inherit; opacity: .85; font-size: var(--t-second); }
+.hero-chiffre { font-size: 52px; font-weight: 700; line-height: 1; letter-spacing: -.02em; }
+/* Solde : un mot d'état coloré, le chiffre reste dans la couleur du texte. */
+.widget-etat { align-self: flex-start; padding: 1px var(--e2); border-radius: var(--r-pilule); font-size: var(--t-petit); font-weight: 600; background: var(--surface-2); color: var(--texte-doux); }
+.widget-etat.doit { background: var(--vert-fond); color: var(--vert-texte); }
+.widget-etat.dois { background: var(--rouge-fond); color: var(--rouge-texte); }
+.pile-avatars { display: flex; align-items: center; margin-top: var(--e1); }
+.pile-avatars > * { margin-right: -6px; box-shadow: 0 0 0 2px var(--surface); border-radius: 50%; }
+.pile-plus { display: inline-grid; place-items: center; width: 28px; height: 28px; background: var(--surface-2); color: var(--texte-doux); font-size: var(--t-mini); font-weight: 600; }
+/* Mes nuits : une pastille par nuit du séjour, pleine si j'y dors. */
+.frise-nuits { display: flex; gap: 4px; margin: var(--e1) 0; }
+.frise-nuits span { flex: 1; max-width: 22px; height: 8px; border-radius: var(--r-pilule); background: var(--surface-2); }
+.frise-nuits span.pleine { background: var(--c9); }
+.jauge { display: block; }
+.jauge-texte { display: flex; justify-content: space-between; gap: var(--e2); font-size: var(--t-second); }
+.jauge .barre-progres { display: block; margin: var(--e1) 0 var(--e2); height: 6px; }
+.jauge .barre-progres span { display: block; }
+/* À faire : une petite liste à cocher. */
+.widget-liste ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 2px; }
+.widget-liste li a { display: flex; align-items: center; gap: var(--e2); min-height: 36px; color: var(--texte); text-decoration: none; }
+.widget-liste .case { flex: none; width: 16px; height: 16px; border: 2px solid var(--texte-pale); border-radius: 5px; }
+/* Staff : trois chiffres côte à côte. */
+.trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--e2); }
+.trio a { display: flex; flex-direction: column; color: var(--texte); text-decoration: none; }
+.trio a.zero { opacity: .45; }
+
+/* --- Guide de la première connexion (bienvenue.js) -------------------------------------------------------------- */
+.progression-guide { display: flex; gap: 4px; margin: 0 0 var(--e4); }
+.progression-guide span { flex: 1; height: 4px; border-radius: var(--r-pilule); background: var(--surface-2); }
+.progression-guide span.faite { background: var(--c9); }
+.guide-actions { margin-top: var(--e5); }
+.guide-actions .lien-discret { justify-self: center; }
+/* Suivi des dépenses sur téléphone : trois colonnes, toute la ligne s'ouvre (suivi.js, detail). */
+.tableau-dettes.court { width: 100%; }
+.tableau-dettes.court tr { cursor: pointer; }
+.tableau-dettes.court td { white-space: normal; }
+.tableau-dettes.court .montant-court { font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* --- Tournois > Inscription (tournois.js) ---------------------------------------------------------------------- */
+.groupe-5 { --tuile: #2f5d7c; }
+.tournoi { display: grid; gap: var(--e2); margin-bottom: var(--e3); }
+.tournoi h3 { display: flex; align-items: center; gap: var(--e2); margin: 0; }
+.tournoi h3 .icone { width: 20px; height: 20px; color: #2f5d7c; }
+.tournoi.inscrit { box-shadow: inset 0 0 0 2px var(--c9); }
+.tournoi h4 { margin: var(--e2) 0 0; font-size: var(--t-petit); text-transform: uppercase; color: var(--texte-doux); font-weight: 600; }
+.tournoi p, .tournoi ul { margin: 0; }
+.jeux-tournoi { padding: 0; list-style: none; display: grid; gap: var(--e1); }
+.jeux-tournoi li { display: flex; align-items: center; gap: var(--e2); }
+.jeux-tournoi .icone { width: 18px; height: 18px; color: var(--texte-doux); }
+.inscription-tournoi { padding: var(--e2) 0 0; border-top: .5px solid var(--separateur); }
+.inscrits-tournoi { display: flex; align-items: center; justify-content: space-between; gap: var(--e2); }
+.inscrits-tournoi .pile-avatars { margin-top: 0; }
+.widget-tournois { margin: var(--e1) 0 0; padding: 0; list-style: none; display: grid; gap: 2px; font-size: var(--t-second); }
+.widget-tournois li { display: flex; align-items: center; gap: var(--e2); color: var(--texte-doux); }
+.widget-tournois li.oui { color: var(--texte); font-weight: 600; }
+.widget-tournois .case { flex: none; width: 12px; height: 12px; border: 2px solid var(--texte-pale); border-radius: 4px; }
+.widget-tournois li.oui .case { background: var(--c9); border-color: var(--c9); }
+.prerequis-tournoi { padding-left: 1.2em; display: grid; gap: 2px; }

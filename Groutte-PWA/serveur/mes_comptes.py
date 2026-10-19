@@ -20,7 +20,8 @@ from euros import centimes, euros
 from notifications import notifier
 from requetes import Refus, interdit
 from routes import route
-from stockage import REMBOURSEMENTS, ecrire_json, lire_json, maintenant, nouvel_id
+from donnees import REMBOURSEMENTS
+from stockage import ecrire_json, lire_json, maintenant, nouvel_id
 
 SANS_REPONSE = timedelta(days=7)
 DERNIER_DELAI = timedelta(hours=24)

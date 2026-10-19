@@ -1,0 +1,4 @@
+[submodule "Groutte-PWA/socle"]
+	path = Groutte-PWA/socle
+	url = https://github.com/pastekaztekastor/Squelette-PWA.git
+	branch = main

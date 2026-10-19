@@ -12,7 +12,8 @@ from datetime import datetime, timedelta
 
 import creances
 import mes_comptes
-from stockage import TACHES, ecrire_json, lire_json, maintenant, verrou
+from donnees import TACHES
+from stockage import ecrire_json, lire_json, maintenant, verrou
 
 INTERVALLE = timedelta(minutes=5)
 

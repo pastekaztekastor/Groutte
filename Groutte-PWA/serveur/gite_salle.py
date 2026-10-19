@@ -27,7 +27,8 @@ from euros import euros
 from notifications import notifier
 from requetes import Refus, texte
 from routes import route
-from stockage import GITE_SALLE, PROFILS, ecrire_json, lire_json, maintenant
+from donnees import GITE_SALLE
+from stockage import PROFILS, ecrire_json, lire_json, maintenant
 
 QUOI = ("gite", "salle")
 NOMS = {"gite": "gîte", "salle": "salle"}
@@ -83,7 +84,7 @@ def est_tardif(config, nom, comptes=None, donnees=None):
     donnees = donnees or lire()
     c = comptes.get(nom)
     limite = donnees["limite_inscription"]
-    return bool(c and limite and not c["staff"] and c["cree"][:10] > limite and not c["inscription_acceptee"])
+    return bool(c and limite and not c["staff"] and c["cree"][:10] > limite and not c.get("inscription_acceptee"))
 
 
 def prevenir_inscription(config, nom):
@@ -258,7 +259,7 @@ def ouvrir_paiements(d):
     if not donnees["limite_paiement"]:
         raise Refus("fixe d'abord la date limite de paiement")
     paiement = lire_json(PROFILS, {}).get(x["hebergeur"], {}).get("paiement", {})
-    from comptes import moyens_renseignes   # import ici : comptes importe acces, qui importe ce module
+    from fiche import moyens_renseignes   # import ici : fiche importe (de loin) ce module
     if not moyens_renseignes(paiement):
         notifier(d.config, None, "Me rembourser", "Ajoute un moyen de paiement pour qu'on puisse te payer.", "#rembourser",
                  destinataires={x["hebergeur"]})
@@ -387,7 +388,7 @@ def accepter_inscription(d):
     qui = d.corps.get("qui")
     if not isinstance(qui, str) or qui not in comptes:
         raise Refus("compte inconnu")
-    if comptes[qui]["inscription_acceptee"]:
+    if comptes[qui].get("inscription_acceptee"):
         return
     comptes[qui]["inscription_acceptee"] = {"par": d.nom, "quand": maintenant()}
     cd.ecrire_comptes(comptes)
@@ -438,7 +439,7 @@ def vue(c, nom, staff):
         resultat[quoi] = {"montant": x["montant"], "hebergeur": x["hebergeur"], "ouverture": x["ouverture"],
                           "repartition": x["repartition"]}
     if staff:
-        from comptes import moyens_renseignes
+        from fiche import moyens_renseignes
         resultat["exemptions"] = donnees["exemptions"]
         resultat["sans_moyen"] = sorted(n for n in cd.staffs_actifs(c.comptes)
                                         if not moyens_renseignes(c.profils.get(n, {}).get("paiement", {})))

@@ -20,7 +20,8 @@ from euros import centimes, euros
 from notifications import notifier
 from requetes import Refus, interdit
 from routes import route
-from stockage import CREANCES, aujourdhui, ecrire_json, lire_json, maintenant, nouvel_id
+from donnees import CREANCES
+from stockage import aujourdhui, ecrire_json, lire_json, maintenant, nouvel_id
 
 LIEU = {"gite": "du gîte", "salle": "de la salle"}
 

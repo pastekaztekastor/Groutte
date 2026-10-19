@@ -17,7 +17,8 @@ from euros import euros
 from notifications import notifier
 from requetes import Refus
 from routes import route
-from stockage import PRESENCES, ecrire_json, lire_json, maintenant
+from donnees import PRESENCES
+from stockage import ecrire_json, lire_json, maintenant
 
 
 def lire():

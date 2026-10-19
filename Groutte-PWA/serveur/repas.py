@@ -13,7 +13,8 @@ import compta
 import sejour
 from requetes import Refus
 from routes import route
-from stockage import REPAS, ecrire_json, lire_json, maintenant
+from donnees import REPAS
+from stockage import ecrire_json, lire_json, maintenant
 
 
 def lire():

@@ -33,7 +33,8 @@ import reglages_compta
 from notifications import notifier
 from requetes import Refus
 from routes import route
-from stockage import DEPENSES, DOSSIER_SECRETS, REGLAGES_LLM, SERVEUR, aujourdhui, ecrire_json, lire_json, maintenant, nouvel_id, verrou
+from donnees import DEPENSES, REGLAGES_LLM
+from stockage import DOSSIER_SECRETS, SERVEUR_PROJET as SERVEUR, aujourdhui, ecrire_json, lire_json, maintenant, nouvel_id, verrou
 
 FOURNISSEURS = {
     "claude": {"nom": "Claude", "societe": "Anthropic", "url": "https://api.anthropic.com/v1/messages"},

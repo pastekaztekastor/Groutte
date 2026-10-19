@@ -29,7 +29,8 @@ from euros import euros
 from notifications import notifier
 from requetes import Refus, interdit, texte
 from routes import route
-from stockage import DEPENSES, aujourdhui, ecrire_json, lire_json, maintenant, nouvel_id
+from donnees import DEPENSES
+from stockage import aujourdhui, ecrire_json, lire_json, maintenant, nouvel_id
 
 MODES = ("egales", "exacts", "communaute")
 MAX_DEPENSES = 2000

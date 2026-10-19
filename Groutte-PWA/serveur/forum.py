@@ -23,7 +23,8 @@ from lus import compteur
 from notifications import extrait, mentionnes, notifier, notifier_mentions
 from requetes import Refus, interdit, texte
 from routes import route
-from stockage import FORUM, ecrire_json, lire_flairs, lire_json, lire_reactions, maintenant, nouvel_id
+from donnees import FORUM, lire_flairs, lire_reactions
+from stockage import ecrire_json, lire_json, maintenant, nouvel_id
 
 MAX_SUJETS = 500
 MAX_COMMENTAIRES = 2000

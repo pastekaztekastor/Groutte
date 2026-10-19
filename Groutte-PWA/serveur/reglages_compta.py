@@ -24,7 +24,8 @@ from euros import euros
 from notifications import notifier
 from requetes import Refus, texte
 from routes import route
-from stockage import CATEGORIES, PROFILS, REGLAGES_COMPTA, ecrire_json, lire_json, maintenant, nouvel_id, sans_accent
+from donnees import CATEGORIES, REGLAGES_COMPTA
+from stockage import PROFILS, ecrire_json, lire_json, maintenant, nouvel_id, sans_accent
 
 NON_GERE = {"id": "non-gere", "nom": "Non géré", "type": "speciale", "regle": "payeur", "sam": False, "supprimee": ""}
 DE_BASE = [

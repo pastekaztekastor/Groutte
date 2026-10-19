@@ -26,6 +26,7 @@ import { vueReglagesLlm, resumeReglagesLlm } from "./reglages-llm.js";
 import { vueAccueil } from "./accueil.js";
 import { vueBienvenue, titreBienvenue } from "./bienvenue.js";
 import { vueInscription, resumeInscription } from "./tournois.js";
+import "./branchements.js";   // les réglages de Groutte dans la page commune (socle)
 
 /* Les écrans de l'appli (ecran), ce que montre le panneau (groupesPanneau), ce qui se relit tout seul (A_RAFRAICHIR).
    Le reste (main.js, panneau.js) est générique.

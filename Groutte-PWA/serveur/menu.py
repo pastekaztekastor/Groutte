@@ -15,12 +15,13 @@ import comptes_donnees as cd
 import compta
 import repas
 import sejour
-from comptes import regimes_proposes
+from fiche import regimes_proposes
 from lus import compteur
 from notifications import notifier
 from requetes import Refus, interdit, texte
 from routes import route
-from stockage import LUS, MENUS, ecrire_json, lire_json, maintenant, nouvel_id
+from donnees import MENUS
+from stockage import LUS, ecrire_json, lire_json, maintenant, nouvel_id
 
 MAX_MENUS = 300
 MOUVEMENTS_MAX = 200

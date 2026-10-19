@@ -23,7 +23,8 @@ from euros import centimes, euros
 from notifications import notifier
 from requetes import Refus, texte
 from routes import route
-from stockage import CREANCES, DETTES_MANUELLES, REMBOURSEMENTS, ecrire_json, lire_json, maintenant, nouvel_id
+from donnees import CREANCES, DETTES_MANUELLES, REMBOURSEMENTS
+from stockage import ecrire_json, lire_json, maintenant, nouvel_id
 
 ORIGINES = {"depense": "dépense", "report": "report", "avoir": "avoir", "manque": "manque", "retard": "retardataire",
             "manuelle": "dette manuelle", "gite": "gîte", "salle": "salle"}

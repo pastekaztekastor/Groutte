@@ -17,7 +17,8 @@ import sejour
 from notifications import notifier
 from requetes import Refus
 from routes import route
-from stockage import LITS, ecrire_json, lire_json, maintenant
+from donnees import LITS
+from stockage import ecrire_json, lire_json, maintenant
 
 SALLE = "salle"
 

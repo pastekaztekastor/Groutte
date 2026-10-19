@@ -32,7 +32,8 @@ import reglages_compta
 import repas
 import sejour
 from requetes import Refus
-from stockage import DETTES_MANUELLES, PROFILS, aujourdhui, lire_json
+from donnees import DETTES_MANUELLES
+from stockage import PROFILS, aujourdhui, lire_json
 
 QUOI = ("gite", "salle")
 LIEU = {"gite": "du gîte", "salle": "de la salle"}
