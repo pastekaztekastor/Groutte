@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Comptes](../staff/comptes.md) · [Menu](../../README.md#les-pages)
+[Précédent : Comptes](../staff/comptes.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Compte > Inscription et connexion
@@ -98,5 +98,5 @@
 - Aucune.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Ma fiche](../compte/ma-fiche.md)
+[Menu](../README.md#les-pages) · [Suivant : Ma fiche](../compte/ma-fiche.md)
 <!-- /nav -->

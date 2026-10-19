@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : POV du tournoi](../dropbox/pov-tournoi.md) · [Menu](../../README.md#les-pages)
+[Précédent : POV du tournoi](../dropbox/pov-tournoi.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Gîte > SAM
@@ -42,5 +42,5 @@
 - À décrire.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Clés](../gite/cles.md)
+[Menu](../README.md#les-pages) · [Suivant : Clés](../gite/cles.md)
 <!-- /nav -->

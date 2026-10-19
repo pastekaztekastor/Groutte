@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Gîte et salle](../staff/gite-salle.md) · [Menu](../../README.md#les-pages)
+[Précédent : Gîte et salle](../staff/gite-salle.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Staff > Réglages compta
@@ -118,5 +118,5 @@ Sont refusés :
 -
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Validation des dépenses](../staff/validation-depenses.md)
+[Menu](../README.md#les-pages) · [Suivant : Validation des dépenses](../staff/validation-depenses.md)
 <!-- /nav -->

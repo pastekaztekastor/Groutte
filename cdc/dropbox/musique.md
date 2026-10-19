@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Photos et vidéos](../dropbox/photos-videos.md) · [Menu](../../README.md#les-pages)
+[Précédent : Photos et vidéos](../dropbox/photos-videos.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Drop box > Musique
@@ -42,5 +42,5 @@
 - À décrire.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : POV du tournoi](../dropbox/pov-tournoi.md)
+[Menu](../README.md#les-pages) · [Suivant : POV du tournoi](../dropbox/pov-tournoi.md)
 <!-- /nav -->

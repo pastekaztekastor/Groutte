@@ -1,6 +1,6 @@
 # Groutte PWA
 
-L'appli du Nouvel An à la Groutte, construite sur le **socle PWA** partagé ([Squelette-PWA](https://github.com/pastekaztekastor/Squelette-PWA), le sous-module `socle/`). Le cahier des charges est dans `../README.md` et `../cdc/`. Ce README décrit ce qui est propre à Groutte ; le fonctionnement commun (serveur, état, comptes, notifications, design, déploiement) est dans [socle/README.md](socle/README.md). Ce qui reste à faire est dans `../TODO.md`.
+L'appli du Nouvel An à la Groutte, construite sur le **socle PWA** partagé ([Squelette-PWA](https://github.com/pastekaztekastor/Squelette-PWA), le sous-module `socle/`). Le cahier des charges est dans [../cdc/README.md](../cdc/README.md). Ce README décrit ce qui est propre à Groutte ; le fonctionnement commun (serveur, état, comptes, notifications, design, déploiement) est dans [socle/README.md](socle/README.md). Ce qui reste à faire est dans `../TODO.md`.
 
 **Jalon 1 (le socle)** : inscription et connexion, Ma fiche, Moyen de paiement, Notifications, Carnet d'adresses, Staff > Comptes, `roles.json`.
 

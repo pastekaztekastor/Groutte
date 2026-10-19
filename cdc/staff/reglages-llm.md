@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Mes repas](../repas/mes-repas.md) · [Menu](../../README.md#les-pages)
+[Précédent : Mes repas](../repas/mes-repas.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Staff > Réglages LLM
@@ -145,5 +145,5 @@ Dans la catégorie Dépenses (voir [Notifications](../compte/notifications.md)) 
 -
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Menu](../repas/menu.md)
+[Menu](../README.md#les-pages) · [Suivant : Menu](../repas/menu.md)
 <!-- /nav -->

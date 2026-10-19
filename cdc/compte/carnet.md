@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Notifications](../compte/notifications.md) · [Menu](../../README.md#les-pages)
+[Précédent : Notifications](../compte/notifications.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Compte > Carnet d'adresses
@@ -96,5 +96,5 @@ Il n'y a pas d'adresse ni de bouton Itinéraire, contrairement à NextSession : 
 - Aucune.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Forum](../communaute/forum.md)
+[Menu](../README.md#les-pages) · [Suivant : Forum](../communaute/forum.md)
 <!-- /nav -->

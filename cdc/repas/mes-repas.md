@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Contacter le staff](../communaute/contact-staff.md) · [Menu](../../README.md#les-pages)
+[Précédent : Contacter le staff](../communaute/contact-staff.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Repas > Mes repas
@@ -88,5 +88,5 @@
 -
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Réglages LLM](../staff/reglages-llm.md)
+[Menu](../README.md#les-pages) · [Suivant : Réglages LLM](../staff/reglages-llm.md)
 <!-- /nav -->

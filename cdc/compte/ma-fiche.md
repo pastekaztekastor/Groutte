@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Inscription et connexion](../compte/inscription.md) · [Menu](../../README.md#les-pages)
+[Précédent : Inscription et connexion](../compte/inscription.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Compte > Ma fiche
@@ -49,7 +49,7 @@ Une liste groupée, comme les Réglages de l'iPhone. Chaque groupe a son titre :
 6. **Photos et vidéos** : « D'accord pour apparaître sur les photos et vidéos », oui ou non.
 7. **Tournois** : une case par tournoi auquel je participe. La liste viendra des pages [Tournois](../tournois/jeux.md) (voir Questions ouvertes).
 8. **Mes rôles** :
-   - les rôles de type `libre` de `roles.json` (cuisine, ménage, permis, véhicule, fumeur… voir le [README](../../README.md#rôles-rolesjson)) : une case à cocher par rôle ;
+   - les rôles de type `libre` de `roles.json` (cuisine, ménage, permis, véhicule, fumeur… voir le [README](../README.md#rôles-rolesjson)) : une case à cocher par rôle ;
    - les rôles `staff` et `automatique` que j'ai : affichés, sans pouvoir les modifier.
 
 ```
@@ -141,5 +141,5 @@ Le thème et le mode sombre restent dans **Réglages**, comme dans le squelette,
 - **La liste des tournois** auxquels on peut s'inscrire depuis la fiche : elle n'est pas encore connue. Elle sera définie avec les pages Tournois.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Me rembourser](../compte/me-rembourser.md)
+[Menu](../README.md#les-pages) · [Suivant : Me rembourser](../compte/me-rembourser.md)
 <!-- /nav -->

@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Validation des dépenses](../staff/validation-depenses.md) · [Menu](../../README.md#les-pages)
+[Précédent : Validation des dépenses](../staff/validation-depenses.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Communauté > Contacter le staff
@@ -78,5 +78,5 @@
 -
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Mes repas](../repas/mes-repas.md)
+[Menu](../README.md#les-pages) · [Suivant : Mes repas](../repas/mes-repas.md)
 <!-- /nav -->

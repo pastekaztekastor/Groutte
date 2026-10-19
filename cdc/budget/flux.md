@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Hors ligne](../staff/hors-ligne.md) · [Menu](../../README.md#les-pages)
+[Précédent : Hors ligne](../staff/hors-ligne.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Budget > Flux
@@ -108,5 +108,5 @@ De haut en bas :
 - Aucune.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Prévisionnel](../staff/previsionnel.md)
+[Menu](../README.md#les-pages) · [Suivant : Prévisionnel](../staff/previsionnel.md)
 <!-- /nav -->

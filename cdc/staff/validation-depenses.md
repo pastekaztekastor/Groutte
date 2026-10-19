@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Réglages compta](../staff/reglages-compta.md) · [Menu](../../README.md#les-pages)
+[Précédent : Réglages compta](../staff/reglages-compta.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Staff > Validation des dépenses
@@ -79,5 +79,5 @@ Détail :
 -
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Contacter le staff](../communaute/contact-staff.md)
+[Menu](../README.md#les-pages) · [Suivant : Contacter le staff](../communaute/contact-staff.md)
 <!-- /nav -->

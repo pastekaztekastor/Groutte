@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Créances gîte et salle](../budget/creances.md) · [Menu](../../README.md#les-pages)
+[Précédent : Créances gîte et salle](../budget/creances.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Budget > Dépenses
@@ -155,5 +155,5 @@ L'envoi est refusé si :
 - Aucune.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Comment ça marche](../budget/comment-ca-marche.md)
+[Menu](../README.md#les-pages) · [Suivant : Comment ça marche](../budget/comment-ca-marche.md)
 <!-- /nav -->

@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Dépenses](../budget/depenses.md) · [Menu](../../README.md#les-pages)
+[Précédent : Dépenses](../budget/depenses.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Budget > Comment ça marche
@@ -139,5 +139,5 @@ Le gîte coûte 1 400 € pour 50 nuitées, soit 28 € la nuitée. Bill reste 5
 -
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Gîte et salle](../staff/gite-salle.md)
+[Menu](../README.md#les-pages) · [Suivant : Gîte et salle](../staff/gite-salle.md)
 <!-- /nav -->

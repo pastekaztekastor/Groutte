@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Flux](../budget/flux.md) · [Menu](../../README.md#les-pages)
+[Précédent : Flux](../budget/flux.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Staff > Prévisionnel
@@ -43,5 +43,5 @@
 - À décrire.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages)
+[Menu](../README.md#les-pages)
 <!-- /nav -->

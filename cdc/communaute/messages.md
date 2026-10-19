@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Pings reçus](../communaute/pings.md) · [Menu](../../README.md#les-pages)
+[Précédent : Pings reçus](../communaute/pings.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Communauté > Messages
@@ -43,5 +43,5 @@
 - Seulement entre deux personnes, ou aussi des groupes ?
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Jeux](../tournois/jeux.md)
+[Menu](../README.md#les-pages) · [Suivant : Jeux](../tournois/jeux.md)
 <!-- /nav -->

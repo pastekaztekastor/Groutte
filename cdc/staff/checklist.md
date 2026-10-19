@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Clés](../gite/cles.md) · [Menu](../../README.md#les-pages)
+[Précédent : Clés](../gite/cles.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Staff > Checklist d'avancement
@@ -42,5 +42,5 @@
 - À décrire.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Hors ligne](../staff/hors-ligne.md)
+[Menu](../README.md#les-pages) · [Suivant : Hors ligne](../staff/hors-ligne.md)
 <!-- /nav -->

@@ -2,7 +2,7 @@
 
 # Groutte
 
-L'appli du séjour du Nouvel An à la Groutte (un gîte et une salle, une quinzaine de personnes) : inscription, présence, lits, repas et menu, budget partagé (gîte, salle, dépenses, remboursements), forum, tournois, annonces du staff. Le cahier des charges est dans `../cdc/` et `../README.md`, ce qui reste à faire dans `../TODO.md`, la technique propre à Groutte dans `README.md`.
+L'appli du séjour du Nouvel An à la Groutte (un gîte et une salle, une quinzaine de personnes) : inscription, présence, lits, repas et menu, budget partagé (gîte, salle, dépenses, remboursements), forum, tournois, annonces du staff. Le cahier des charges est dans `../cdc/` (vue d'ensemble : `../cdc/README.md`), ce qui reste à faire dans `../TODO.md`, la technique propre à Groutte dans `README.md`.
 
 - **Ce qui touche au socle est réuni dans deux fichiers** : `serveur/branchements.py` (état, cartes, filtres d'annonce, protections, vérifications) et `static/js/branchements.js` (liens, textes, journal, désactivation, annonces, Contacter le staff). Chercher là avant d'ajouter un branchement ailleurs.
 - **L'argent est en centimes** (entiers), écrit en euros seulement à l'affichage (`euros.py`, `paiement.js`). Tout calcul passe par `compta.Compta(config)`, qui n'enregistre rien.

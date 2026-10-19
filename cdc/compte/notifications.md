@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Me rembourser](../compte/me-rembourser.md) · [Menu](../../README.md#les-pages)
+[Précédent : Me rembourser](../compte/me-rembourser.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Compte > Notifications
@@ -105,5 +105,5 @@ Notifications
 - Aucune.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Carnet d'adresses](../compte/carnet.md)
+[Menu](../README.md#les-pages) · [Suivant : Carnet d'adresses](../compte/carnet.md)
 <!-- /nav -->

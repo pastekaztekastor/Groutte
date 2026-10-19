@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Ma fiche](../compte/ma-fiche.md) · [Menu](../../README.md#les-pages)
+[Précédent : Ma fiche](../compte/ma-fiche.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Compte > Me rembourser
@@ -103,5 +103,5 @@ Ensuite vient le bouton **« J'ai payé »** (voir [Mes comptes](../budget/mes-c
   Je sais le virement c'était cool ... bref on avissera pour l'année suivante.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Notifications](../compte/notifications.md)
+[Menu](../README.md#les-pages) · [Suivant : Notifications](../compte/notifications.md)
 <!-- /nav -->

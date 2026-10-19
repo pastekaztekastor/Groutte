@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Leaderboard](../tournois/leaderboard.md) · [Menu](../../README.md#les-pages)
+[Précédent : Leaderboard](../tournois/leaderboard.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Drop box > Photos et vidéos
@@ -45,5 +45,5 @@
 - À décrire.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Musique](../dropbox/musique.md)
+[Menu](../README.md#les-pages) · [Suivant : Musique](../dropbox/musique.md)
 <!-- /nav -->

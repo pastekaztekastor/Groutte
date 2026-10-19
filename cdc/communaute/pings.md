@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Annonces](../staff/annonces.md) · [Menu](../../README.md#les-pages)
+[Précédent : Annonces](../staff/annonces.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Communauté > Pings reçus
@@ -78,5 +78,5 @@ Pings reçus
 -
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Messages](../communaute/messages.md)
+[Menu](../README.md#les-pages) · [Suivant : Messages](../communaute/messages.md)
 <!-- /nav -->

@@ -1,4 +1,4 @@
-"""Ajoute les liens de navigation aux fiches de cdc/, dans l'ordre du tableau « Les pages » du README.
+"""Ajoute les liens de navigation aux fiches de cdc/, dans l'ordre du tableau « Les pages » de cdc/README.md.
 
 En haut : Précédent et Menu. En bas : Menu et Suivant.
 Relançable sans risque : les anciens liens (entre <!-- nav --> et <!-- /nav -->) sont remplacés.
@@ -9,15 +9,16 @@ import re
 from pathlib import Path
 
 RACINE = Path(__file__).resolve().parent.parent
-README = RACINE / "README.md"
-MENU = "[Menu](../../README.md#les-pages)"
+CDC = RACINE / "cdc"
+README = CDC / "README.md"
+MENU = "[Menu](../README.md#les-pages)"
 BLOC = re.compile(r"<!-- nav -->.*?<!-- /nav -->\n*", re.S)
 
 
 def pages_du_sommaire():
     """Les (titre, chemin) du tableau, dans l'ordre."""
     section = README.read_text(encoding="utf-8").split("## Les pages", 1)[1].split("\n## ", 1)[0]
-    return re.findall(r"^\|[^|]*\|\s*\[([^\]]+)\]\((cdc/[^)]+\.md)\)", section, re.M)
+    return re.findall(r"^\|[^|]*\|\s*\[([^\]]+)\]\(([a-z-]+/[^)]+\.md)\)", section, re.M)
 
 
 def lien(texte, titre, chemin):
@@ -32,7 +33,7 @@ def bloc(*morceaux):
 def main():
     pages = pages_du_sommaire()
     for i, (titre, chemin) in enumerate(pages):
-        fichier = RACINE / chemin
+        fichier = CDC / chemin
         if not fichier.exists():
             print("manquante :", chemin)
             continue

@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Menu](../repas/menu.md) · [Menu](../../README.md#les-pages)
+[Précédent : Menu](../repas/menu.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Staff > Suivi des dépenses
@@ -129,5 +129,5 @@ Et aussi :
 -
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Annonces](../staff/annonces.md)
+[Menu](../README.md#les-pages) · [Suivant : Annonces](../staff/annonces.md)
 <!-- /nav -->

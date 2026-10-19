@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Réglages LLM](../staff/reglages-llm.md) · [Menu](../../README.md#les-pages)
+[Précédent : Réglages LLM](../staff/reglages-llm.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Repas > Menu
@@ -146,5 +146,5 @@ Et aussi :
 -
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Suivi des dépenses](../staff/suivi-depenses.md)
+[Menu](../README.md#les-pages) · [Suivant : Suivi des dépenses](../staff/suivi-depenses.md)
 <!-- /nav -->

@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Mes comptes](../budget/mes-comptes.md) · [Menu](../../README.md#les-pages)
+[Précédent : Mes comptes](../budget/mes-comptes.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Budget > Créances gîte et salle
@@ -161,5 +161,5 @@ Les notifications de paiement **ne peuvent pas être coupées** dans Réglages >
   - Piste : une page **Réservation** où l'on paie, par exemple, 80 % du prévisionnel pour réserver sa place, si le staff active cette option.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Dépenses](../budget/depenses.md)
+[Menu](../README.md#les-pages) · [Suivant : Dépenses](../budget/depenses.md)
 <!-- /nav -->

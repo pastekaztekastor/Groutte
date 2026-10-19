@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Suivi des dépenses](../staff/suivi-depenses.md) · [Menu](../../README.md#les-pages)
+[Précédent : Suivi des dépenses](../staff/suivi-depenses.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Staff > Annonces
@@ -138,5 +138,5 @@ Et aussi :
 -
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Pings reçus](../communaute/pings.md)
+[Menu](../README.md#les-pages) · [Suivant : Pings reçus](../communaute/pings.md)
 <!-- /nav -->

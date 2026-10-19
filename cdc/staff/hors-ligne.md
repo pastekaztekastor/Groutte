@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Checklist d'avancement](../staff/checklist.md) · [Menu](../../README.md#les-pages)
+[Précédent : Checklist d'avancement](../staff/checklist.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Staff > Hors ligne
@@ -42,5 +42,5 @@
 - À décrire.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Flux](../budget/flux.md)
+[Menu](../README.md#les-pages) · [Suivant : Flux](../budget/flux.md)
 <!-- /nav -->

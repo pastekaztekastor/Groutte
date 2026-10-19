@@ -1,5 +1,5 @@
 <!-- nav -->
-[Menu](../../README.md#les-pages)
+[Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Staff > Comptes
@@ -96,7 +96,7 @@ Comptes
 - s'il est muet ;
 - s'il est désactivé.
 
-**La liste des rôles** est dans un fichier JSON du dépôt (`roles.json`), que le webmaster modifie. La liste complète est dans le [README](../../README.md#rôles-rolesjson). Chaque rôle a un **type** :
+**La liste des rôles** est dans un fichier JSON du dépôt (`roles.json`), que le webmaster modifie. La liste complète est dans le [README](../README.md#rôles-rolesjson). Chaque rôle a un **type** :
 
 | Type | Qui l'attribue | Exemples |
 | --- | --- | --- |
@@ -158,5 +158,5 @@ Et aussi :
 - **Les messages privés d'un membre muet** : tu as dit « la Communauté », j'y ai donc inclus les messages privés. Peut-il quand même écrire au staff pour discuter de sa sanction ?
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Inscription et connexion](../compte/inscription.md)
+[Menu](../README.md#les-pages) · [Suivant : Inscription et connexion](../compte/inscription.md)
 <!-- /nav -->

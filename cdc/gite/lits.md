@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Présence](../gite/presence.md) · [Menu](../../README.md#les-pages)
+[Précédent : Présence](../gite/presence.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Gîte > Lits
@@ -129,5 +129,5 @@ La réservation est refusée si :
 - **Le plan avec des repères à toucher**, posés par le staff sur l'image : prévu pour plus tard. Au jalon 2, les lettres sont dessinées directement sur l'image.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Mes comptes](../budget/mes-comptes.md)
+[Menu](../README.md#les-pages) · [Suivant : Mes comptes](../budget/mes-comptes.md)
 <!-- /nav -->

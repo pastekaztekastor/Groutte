@@ -2,3 +2,7 @@
 	path = Groutte-PWA/socle
 	url = https://github.com/pastekaztekastor/Squelette-PWA.git
 	branch = main
+[submodule "methode"]
+	path = methode
+	url = https://github.com/pastekaztekastor/Methode.git
+	branch = main

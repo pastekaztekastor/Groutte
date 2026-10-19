@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Règlements](../tournois/reglements.md) · [Menu](../../README.md#les-pages)
+[Précédent : Règlements](../tournois/reglements.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Tournois > Leaderboard
@@ -42,5 +42,5 @@
 - À décrire.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Photos et vidéos](../dropbox/photos-videos.md)
+[Menu](../README.md#les-pages) · [Suivant : Photos et vidéos](../dropbox/photos-videos.md)
 <!-- /nav -->

@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Jeux](../tournois/jeux.md) · [Menu](../../README.md#les-pages)
+[Précédent : Jeux](../tournois/jeux.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Tournois > Planning
@@ -42,5 +42,5 @@
 - À décrire.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Règlements](../tournois/reglements.md)
+[Menu](../README.md#les-pages) · [Suivant : Règlements](../tournois/reglements.md)
 <!-- /nav -->

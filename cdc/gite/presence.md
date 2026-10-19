@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Forum](../communaute/forum.md) · [Menu](../../README.md#les-pages)
+[Précédent : Forum](../communaute/forum.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Gîte > Présence
@@ -77,7 +77,7 @@ Un compte sans dates ne vient pas, et ne compte nulle part. S'il a la mention «
 
 ## Règles et calculs
 <!-- Formules, répartitions, valeurs par défaut. -->
-- **Les créneaux** suivent le [modèle de présence](../../README.md#le-modèle-de-présence-commun-à-gîte-repas-et-budget) : matin = petit-déjeuner, midi = déjeuner, soir = dîner, nuit = nuitée. Dans une journée, ils se suivent dans cet ordre.
+- **Les créneaux** suivent le [modèle de présence](../README.md#le-modèle-de-présence-commun-à-gîte-repas-et-budget) : matin = petit-déjeuner, midi = déjeuner, soir = dîner, nuit = nuitée. Dans une journée, ils se suivent dans cet ordre.
 - **L'arrivée est le premier créneau compté, le départ le dernier.** Tous les créneaux entre les deux sont comptés.
   - Exemple : arrivée le 28 au soir, départ le 31 au matin. Cela donne le dîner du 28, les nuits du 28, du 29 et du 30, et tous les repas jusqu'au petit-déjeuner du 31 compris.
   - Le texte d'aide reprend cet exemple.
@@ -115,5 +115,5 @@ L'enregistrement est refusé si :
 -
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Lits](../gite/lits.md)
+[Menu](../README.md#les-pages) · [Suivant : Lits](../gite/lits.md)
 <!-- /nav -->

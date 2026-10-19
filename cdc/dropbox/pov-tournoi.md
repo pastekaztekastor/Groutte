@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Musique](../dropbox/musique.md) · [Menu](../../README.md#les-pages)
+[Précédent : Musique](../dropbox/musique.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Drop box > POV du tournoi
@@ -42,5 +42,5 @@
 - À décrire.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : SAM](../gite/sam.md)
+[Menu](../README.md#les-pages) · [Suivant : SAM](../gite/sam.md)
 <!-- /nav -->

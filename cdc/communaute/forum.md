@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : Carnet d'adresses](../compte/carnet.md) · [Menu](../../README.md#les-pages)
+[Précédent : Carnet d'adresses](../compte/carnet.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Communauté > Forum
@@ -119,5 +119,5 @@ Toutes les actions de NextSession :
 - Aucune.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Présence](../gite/presence.md)
+[Menu](../README.md#les-pages) · [Suivant : Présence](../gite/presence.md)
 <!-- /nav -->

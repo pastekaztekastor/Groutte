@@ -1,5 +1,5 @@
 <!-- nav -->
-[Précédent : SAM](../gite/sam.md) · [Menu](../../README.md#les-pages)
+[Précédent : SAM](../gite/sam.md) · [Menu](../README.md#les-pages)
 <!-- /nav -->
 
 # Gîte > Clés
@@ -42,5 +42,5 @@
 - À décrire.
 
 <!-- nav -->
-[Menu](../../README.md#les-pages) · [Suivant : Checklist d'avancement](../staff/checklist.md)
+[Menu](../README.md#les-pages) · [Suivant : Checklist d'avancement](../staff/checklist.md)
 <!-- /nav -->
