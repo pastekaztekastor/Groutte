@@ -177,13 +177,13 @@
         },
         {
           "id": "non-gere",
-          "question": "C'est quoi « NON GÉRÉ » ?",
+          "question": "C'est quoi « Non géré » ?",
           "court": "Un achat perso glissé dans le panier commun : il reste à la charge de celui qui a payé. Un ticket qui mélange perso et commun autrement se règle entre vous.",
           "detail": [
-            "Dans une dépense pour la communauté, mets le montant de ton achat perso dans la ligne NON GÉRÉ : personne d'autre ne le paie.",
+            "Dans une dépense pour la communauté, mets le montant de ton achat perso dans la ligne Non géré : personne d'autre ne le paie.",
             "Une dépense n'a qu'un seul mode. Les autres mélanges (le sandwich de quelqu'un d'autre dans les courses) s'arrangent entre ploucs, en dehors de l'outil."
           ],
-          "exemple": "Le ticket de Bob fait 89,20 € : 70 € d'alimentaire, 14,20 € de Monster, et 5 € pour son sandwich, en NON GÉRÉ."
+          "exemple": "Le ticket de Bob fait 89,20 € : 70 € d'alimentaire, 14,20 € de Monster, et 5 € pour son sandwich, en Non géré."
         },
         {
           "id": "mange-ailleurs",

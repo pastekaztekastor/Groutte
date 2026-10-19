@@ -1,35 +1,38 @@
 {
- "_aide": "Tournois > Inscription : les tournois proposés (exemples à remplacer). id : identifiant fixe (ne pas le changer une fois les inscriptions ouvertes). role : le rôle donné aux inscrits, affiché dans le carnet d'adresses (ni le nom du tournoi ni le jeu). jeux : nom et page Steam (lien vide si pas sur Steam). Pris en compte sans redémarrer.",
+ "_aide": "C'est ici que vous pouvez vous inscrire pour les tournois de la semaine. Si vous aviez déjà répondu au Google Forms, vos informations sont 'normalement' déjà pré remplies. Si vous voulez changer vos réponses, vous pouvez le faire ici.",
  "tournois": [
   {
-   "id": "plouc-supreme",
-   "nom": "Tournoi du plouc suprême",
+   "id": "lebigtournoi-gg",
+   "nom": "Tournoi Guilty Gear",
    "role": {"id": "tournoi-guiltygear", "nom": "GuiltyGear"},
-   "description": "Le tournoi de jeu de baston de la semaine : poules le premier soir, arbre final le 31 avant minuit.",
-   "prerequis": ["Une manette (ou un stick) à toi si tu en as une", "Avoir fait le tutoriel du jeu", "Être là le 29 au soir pour les poules"],
+   "description": "Le tournoi de jeu de baston de la semaine : Un seul vainceur partira la coupe en main. De la musique de ouf, des persos de fifou et des match intense entre nos autistes. Êtes vous capables de relever le défi?",
+   "prerequis": ["Une manette (ou un stick) à toi si tu en as une", "Avoir fait le tutoriel du jeu", "Être là le 29 au soir"],
    "jeux": [
     {"nom": "Guilty Gear -Strive-", "steam": "https://store.steampowered.com/app/1384160/GUILTY_GEARSTRIVE/"}
    ]
   },
   {
-   "id": "course-folle",
-   "nom": "La course folle",
-   "role": {"id": "tournoi-kart", "nom": "Pilote"},
-   "description": "Des courses en écran partagé, par équipes de deux. Le classement se fait aux points sur trois manches.",
-   "prerequis": ["Trouver un coéquipier (ou on t'en trouve un)", "Une manette"],
+   "id": "kingoffighters",
+   "nom": "King of Fighters",
+   "role": {"id": "tournoi-kof", "nom": "KOF"},
+   "description": "Combats en versus par équipes de trois. Chaque joueur une vie pour conquérir la coupe.",
+   "prerequis": ["Trouver deux coéquipier (ou on t'en trouve)", "Une manette si tu en as une"],
    "jeux": [
-    {"nom": "Trackmania", "steam": "https://store.steampowered.com/app/2225070/Trackmania/"},
-    {"nom": "Rocket League", "steam": ""}
+    {"nom": "King Of Fighters XV", "steam": "https://store.steampowered.com/app/1498570/THE_KING_OF_FIGHTERS_XV/"}
    ]
   },
   {
-   "id": "cerveau-groutte",
-   "nom": "Le cerveau de la Groutte",
-   "role": {"id": "tournoi-quiz", "nom": "Cerveau"},
-   "description": "Quiz et jeux d'ambiance en équipes, le dernier soir. Pas besoin d'être bon aux jeux vidéo.",
-   "prerequis": ["Un téléphone pour répondre"],
+   "id": "grouttemaxxing",
+   "nom": "Tournoi Multijeux",
+   "role": {"id": "tournoi-multijeux", "nom": "Multijeux"},
+   "description": "Une gamme diverse de petits jeux arcade à scores. Jouez quand vous voulez dans l'ordre que vous voulez, Merci de préférence de ne pas toucher au jeu(pour le tournoi), pour faire un tournoi plus équitable. Le grand scoreboard sera contabilisé à la fin et vous pouvez y gagner gros.",
+   "prerequis": ["Rien du tout, on s'en occupe"],
    "jeux": [
-    {"nom": "Jackbox Party Pack 7", "steam": "https://store.steampowered.com/app/1211630/The_Jackbox_Party_Pack_7/"}
+    {"nom": "DoDonPachi Resurrection", "steam": "https://store.steampowered.com/app/464450/DoDonPachi_Resurrection/"},
+	{"nom": "Delta", "steam": "https://store.steampowered.com/app/3714420/Delta/"},
+	{"nom": "BASED", "steam": "https://store.steampowered.com/app/4015070/BASED/"},
+	{"nom": "Denshattack", "steam": "https://store.steampowered.com/app/2524850/Denshattack/"},
+	{"nom": "Iron Meat", "steam": "https://store.steampowered.com/app/1157740/Iron_Meat/"}
    ]
   }
  ]

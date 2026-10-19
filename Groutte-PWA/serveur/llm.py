@@ -110,7 +110,7 @@ def modele(config, fournisseur):
 # --- L'appel au fournisseur -----------------------------------------------------------------------
 
 def consigne(categories):
-    """Ce qu'on demande au LLM : un JSON fixé, avec une catégorie de Réglages compta (NON GÉRÉ compris) par ligne."""
+    """Ce qu'on demande au LLM : un JSON fixé, avec une catégorie de Réglages compta (Non géré compris) par ligne."""
     liste = "\n".join(f"  - {c['id']} : {c['nom']}" for c in categories)
     return (
         "Tu lis la photo d'un ticket de caisse pour préremplir une dépense partagée entre amis.\n"

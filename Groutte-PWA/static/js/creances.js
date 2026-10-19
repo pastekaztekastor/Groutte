@@ -47,12 +47,13 @@ function bloc(quoi) {
     b.retard
       ? el("p", {}, `Tu es arrivé après l'ouverture des paiements : ta part ${DU[quoi]} (${euros(b.retard)}) est une dette envers les autres ploucs, dans `, el("a", { href: "#comptes" }, "Mes comptes"), ".")
       : el("p", { class: "doux" }, "Tu n'as pas de part à payer."));
-  const regle = b.confirme + b.reporte;
+  const regle = b.confirme + b.reporte + b.efface;
   const lignes = [];
-  if (b.reste <= 0 && !b.declare) lignes.push(el("p", { class: "succes" }, b.reporte ? "Réglé (avec un report dans Mes comptes)." : "Payé, merci !"));
+  if (b.reste <= 0 && !b.declare) lignes.push(el("p", { class: "succes" }, b.reporte ? "Réglé (avec un report dans Mes comptes)." : b.efface ? "Réglé." : "Payé, merci !"));
   else lignes.push(barre(regle, b.part), el("p", {}, `Payé : ${euros(b.confirme)} · reste ${euros(Math.max(0, b.reste))}`));
   if (b.reste < 0) lignes.push(el("p", { class: "doux petit" }, `Trop-payé de ${euros(-b.reste)} : un avoir dans `, el("a", { href: "#comptes" }, "Mes comptes"), "."));
   if (b.declare) lignes.push(el("p", { class: "doux petit" }, `${euros(b.declare)} déclarés, en attente de confirmation par ${app.etat.gite[quoi].hebergeur}.`));
+  if (b.efface) lignes.push(el("p", { class: "doux petit" }, `${euros(b.efface)} effacés par le staff : ${app.etat.gite[quoi].hebergeur} les absorbe.`));
   if (b.reporte) lignes.push(el("p", { class: "doux petit" }, `Report accepté : ${euros(b.reporte)} passent dans `, el("a", { href: "#comptes" }, "Mes comptes"), "."));
   if (b.retard) lignes.push(el("p", { class: "doux petit" }, `Tes nuits en plus depuis l'ouverture : ${euros(b.retard)} à régler dans `, el("a", { href: "#comptes" }, "Mes comptes"), "."));
   const resteAPayer = b.reste - b.declare;
@@ -115,7 +116,8 @@ export function suivi(quoi, b) {
     el("tbody", {}, lignes.sort((a, z) => z.reste - a.reste).map(s => el("tr", {},
       el("td", {}, s.nom), el("td", {}, String(s.nuits)), el("td", {}, euros(s.part)),
       el("td", {}, euros(s.confirme), s.declare > 0 && el("span", { class: "doux petit" }, ` (+${euros(s.declare)} en attente)`)),
-      el("td", { class: s.reste > 0 ? "du" : "" }, euros(s.reste), s.reporte > 0 && el("span", { class: "doux petit" }, ` (report ${euros(s.reporte)})`)),
+      el("td", { class: s.reste > 0 ? "du" : "" }, euros(s.reste), s.reporte > 0 && el("span", { class: "doux petit" }, ` (report ${euros(s.reporte)})`),
+        s.efface > 0 && el("span", { class: "doux petit" }, ` (effacé ${euros(s.efface)})`)),
       el("td", {}, s.reste > 0 && app.etat.creances.limite_passee && el("button", {
         class: "discret", type: "button",
         onclick: () => { if (confirm(`Reporter les ${euros(s.reste)} de ${s.nom} dans Mes comptes ? Ils deviennent une dette envers l'hébergeur.`)) envoyer("creances/reporter", { qui: s.nom, quoi }); },

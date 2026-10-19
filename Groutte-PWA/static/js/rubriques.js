@@ -57,6 +57,7 @@ export function ecran(rubrique, argument) {
     }
     return { titre: titreBienvenue(etapeGuide), sansPanneau: true, vue: () => vueBienvenue(etapeGuide) };
   }
+  etapeGuide = "";   // hors du guide : s'il revient (remis à zéro par le staff), il repart du début
   if (rubrique === "fiche") return { titre: "Ma fiche", vue: vueFiche };
   if (rubrique === "rembourser") return { titre: "Moyen de paiement", vue: vueRembourser };
   if (rubrique === "") return { titre: "Accueil", vue: vueAccueil };

@@ -5,7 +5,7 @@ confirme. Après la date limite, l'hébergeur (ou un staff) peut accepter de rep
 
 data/creances.json : {
     "paiements": [{"id", "nom", "quoi": "gite" | "salle", "montant", "quand", "etat": "declare" | "confirme" | "refuse",
-                   "par", "le"}],
+                   "par", "le", "grace": true si le staff a effacé ce reste (Suivi des dépenses), "message"}],
     "reports":   [{"id", "nom", "quoi", "a": hébergeur, "montant", "par", "quand"}],
     "rappels":   {"<nom>/<quoi>": date du dernier rappel, "<nom>/<quoi>/limite": date}}
 
@@ -182,7 +182,8 @@ def vue(c, nom, staff):
             "part": part,
             "exempte": c.exempte(nom, quoi),
             "hebergeur": heb == nom,
-            "confirme": sum(p["montant"] for p in mes if p["etat"] == "confirme"),
+            "confirme": sum(p["montant"] for p in mes if p["etat"] == "confirme" and not p.get("grace")),
+            "efface": sum(p["montant"] for p in mes if p.get("grace")),
             "declare": sum(p["montant"] for p in mes if p["etat"] == "declare"),
             "reporte": sum(r["montant"] for r in c.cr["reports"] if r["nom"] == nom and r["quoi"] == quoi),
             "reste": c.reste(nom, quoi),
@@ -201,7 +202,8 @@ def vue(c, nom, staff):
                 lignes = [x for x in c.cr["paiements"] if x["nom"] == p and x["quoi"] == quoi]
                 suivi.append({
                     "nom": p, "nuits": base.get(p, 0), "part": parts.get(p, 0),
-                    "confirme": sum(x["montant"] for x in lignes if x["etat"] == "confirme"),
+                    "confirme": sum(x["montant"] for x in lignes if x["etat"] == "confirme" and not x.get("grace")),
+                    "efface": sum(x["montant"] for x in lignes if x.get("grace")),
                     "declare": sum(x["montant"] for x in lignes if x["etat"] == "declare"),
                     "reporte": sum(r["montant"] for r in c.cr["reports"] if r["nom"] == p and r["quoi"] == quoi),
                     "reste": c.reste(p, quoi), "hebergeur": p == heb,

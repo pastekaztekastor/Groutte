@@ -58,7 +58,7 @@ Dépenses
   - **Montants exacts** : une ligne par personne, avec son montant. Exemple : 4 personnes vont au McDo, une seule paie tout, et on note qui a pris quoi.
   - **Pour la communauté**, comme pour des courses alimentaires : le montant est découpé par **catégories**, celles définies par le staff dans [Réglages compta](../staff/reglages-compta.md).
     - Chaque catégorie se répartit entre ses concernés par défaut.
-    - La catégorie **« NON GÉRÉ »** est toujours présente : elle met de côté un achat personnel glissé dans le panier, qui reste à la charge du payeur.
+    - La catégorie **« Non géré »** est toujours présente : elle met de côté un achat personnel glissé dans le panier, qui reste à la charge du payeur.
 
 ## Actions
 <!-- Chaque bouton ou saisie, et ce qui se passe ensuite. -->
@@ -111,7 +111,7 @@ Ce que la dépense lit ailleurs :
   | Alimentaire | obligatoire | ceux qui mangent sur la réserve | au prorata des repas pris ([Mes repas](../repas/mes-repas.md)) |
   | Monster | facultative | ceux qui l'ont cochée | au prorata des nuits |
   | Alcool | facultative | ceux qui l'ont cochée | à parts égales |
-  | NON GÉRÉ | spéciale | le payeur seul | - |
+  | Non géré | spéciale | le payeur seul | - |
 
   - Exemple : A achète des Monster sans en boire, les buveurs le remboursent en totalité.
   - Le staff gère les autres catégories et leur règle dans Réglages compta.

@@ -59,7 +59,7 @@
 <!-- Formules, répartitions, valeurs par défaut. -->
 - **Les repas gérés par la communauté** se règlent dans [Réglages compta](../staff/reglages-compta.md) : pour chaque créneau (matin, midi, soir), s'il est géré, et s'il est coché par défaut. Par défaut, seul le soir est géré, et il est coché.
   - **Un repas géré** se coche et se décoche ici. Il compte dans les repas pris s'il est coché.
-  - **Un repas non géré** est grisé, et ne compte jamais dans les repas pris : chacun se débrouille (les restes, dehors). Les restes ont été payés par ceux qui ont mangé le repas d'avant : on ne compte rien de plus.
+  - **Un repas Non géré** est grisé, et ne compte jamais dans les repas pris : chacun se débrouille (les restes, dehors). Les restes ont été payés par ceux qui ont mangé le repas d'avant : on ne compte rien de plus.
 - **Par défaut, je mange sur la réserve** à chaque repas géré coché par défaut. Je n'ai rien à faire si je mange avec tout le monde.
 - **Un repas se modifie jusqu'à ce qu'il commence** : avant 8 h pour le matin, 12 h pour le midi, 19 h pour le soir. Ensuite il est figé : c'est « qui a mangé, et quand ».
 - **Mes repas pris** = les repas gérés de ma présence qui sont cochés.

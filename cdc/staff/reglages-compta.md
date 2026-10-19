@@ -18,7 +18,7 @@
 <!-- Ce qu'on voit, de haut en bas. Un croquis ASCII est bienvenu. -->
 1. **Le mode de remboursement** : un choix à deux positions, *Direct* ou *Minimum de virements*, avec un lien vers la question correspondante de [Comment ça marche](../budget/comment-ca-marche.md).
 2. **Les catégories** : une ligne par catégorie, avec son nom, son type, sa règle de répartition, et le repère SAM s'il est coché. Toucher une ligne l'ouvre pour la modifier.
-   - **NON GÉRÉ** est toujours en bas, sans bouton de modification.
+   - **Non géré** est toujours en bas, sans bouton de modification.
    - Un bouton **Ajouter une catégorie**.
 3. **Les catégories supprimées** encore utilisées par des dépenses, repliées, pour mémoire.
 4. **Les repas gérés par la communauté** : une ligne par créneau (matin, midi, soir), avec deux cases, **Géré** et **Coché par défaut** (voir [Mes repas](../repas/mes-repas.md)).
@@ -33,7 +33,7 @@
 │ Alimentaire  obligatoire  prorata repas  >│
 │ Monster      facultative  prorata nuits  >│
 │ Alcool       facultative  parts égales 🚗 >│
-│ NON GÉRÉ     le payeur seul               │
+│ Non géré     le payeur seul               │
 │                     [+ Ajouter catégorie] │
 ├───────────────────────────────────────────┤
 │ > Supprimées, encore utilisées (0)        │
@@ -72,7 +72,7 @@
 | Alimentaire | obligatoire | au prorata des repas | - |
 | Monster | facultative | au prorata des nuits | non |
 | Alcool | facultative | à parts égales | oui |
-| NON GÉRÉ | spéciale | le payeur seul | - |
+| Non géré | spéciale | le payeur seul | - |
 
 **Dans `data/reglages-compta.json`** :
 - le mode de remboursement : `direct` ou `minimum` ;
@@ -85,7 +85,7 @@
 <!-- Formules, répartitions, valeurs par défaut. -->
 - **Le mode par défaut est Direct** : c'est déjà comme ça que le groupe fonctionne. L'outil simplifie seulement le suivi.
 - **Changer le mode est possible à tout moment.** Un remboursement reste un simple transfert entre deux personnes, il marche dans les deux modes (voir [Mes comptes](../budget/mes-comptes.md)).
-- **NON GÉRÉ** est toujours présente, et ne peut être ni modifiée ni supprimée.
+- **Non géré** est toujours présente, et ne peut être ni modifiée ni supprimée.
 - **Changer une catégorie ne vaut que pour la suite.** Les parts des dépenses déjà validées sont figées (voir [Dépenses](../budget/depenses.md)).
 - **Une catégorie supprimée** :
   - n'est plus proposée dans les nouvelles dépenses ;
@@ -105,7 +105,7 @@
 <!-- Ce qui doit être refusé, et les cas bizarres. -->
 Sont refusés :
 - **supprimer une catégorie utilisée par une dépense en brouillon ou en attente** : la page dit lesquelles. Il faut d'abord qu'elles soient validées, ou modifiées ;
-- **modifier ou supprimer NON GÉRÉ** ;
+- **modifier ou supprimer Non géré** ;
 - **un nom vide, ou déjà pris**.
 
 - **Une catégorie facultative que personne n'a cochée** : acceptée ici. C'est l'envoi d'une dépense de cette catégorie qui sera refusé (voir [Ma fiche](../compte/ma-fiche.md)).

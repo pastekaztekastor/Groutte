@@ -129,7 +129,7 @@ Le thème et le mode sombre restent dans **Réglages**, comme dans le squelette,
 
 ## Cas limites
 <!-- Ce qui doit être refusé, et les cas bizarres. -->
-- **Une catégorie facultative cochée par personne** : une dépense de cette catégorie n'aurait aucun concerné. L'envoi de la dépense est refusé, avec un message qui propose « NON GÉRÉ » ou une autre catégorie (voir [Dépenses](../budget/depenses.md)).
+- **Une catégorie facultative cochée par personne** : une dépense de cette catégorie n'aurait aucun concerné. L'envoi de la dépense est refusé, avec un message qui propose « Non géré » ou une autre catégorie (voir [Dépenses](../budget/depenses.md)).
 - **Le staff supprime une catégorie** que des personnes avaient cochée : si au moins une dépense l'utilise, sa case reste dans la fiche, pour que chacun voie pourquoi il a payé. Sinon, elle disparaît. Les dépenses déjà validées ne changent pas (voir [Réglages compta](../staff/reglages-compta.md)).
 - **Le staff fait passer une catégorie de facultative à obligatoire** : tout le monde y participe à partir de ce moment.
 - **Un nombre de matelas ou de duvets négatif** est refusé.

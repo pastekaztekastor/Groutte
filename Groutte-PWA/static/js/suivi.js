@@ -30,11 +30,12 @@ function origine(l) {
   location.hash = "#gite-salle";
 }
 
-/* Toucher la ligne : Effacer la dette (seulement s'il reste quelque chose, et pas la part normale du gîte ou de la salle). */
+/* Toucher la ligne : Effacer la dette, s'il reste quelque chose. La part du gîte ou de la salle aussi, jusqu'à la clôture
+   (après, son reste est une ligne « manque »). */
 function effacer(l) {
   if (!l.action) {
     if (l.effacee) notifier(`Dette effacée par ${l.effacee.par}${l.effacee.message ? ` : ${l.effacee.message}` : ""}.`, true);
-    else if (l.origine === "gite" || l.origine === "salle") notifier("La part du gîte ou de la salle se règle dans Gîte et salle (exemption, report).", true);
+    else if (l.reste > 0 && (l.origine === "gite" || l.origine === "salle")) notifier("Après la clôture, efface plutôt la ligne « manque ».", true);
     return;
   }
   const message = el("input", { maxlength: 120, placeholder: "erreur de saisie, payé en espèces..." });

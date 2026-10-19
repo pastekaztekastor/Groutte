@@ -1,4 +1,4 @@
-import { app, el, icone, avatar, qui, compte, couleurTheme, envoyer, ouvrirFeuille, afficher, dateCourte, jourCourt, pluriel, lienContact } from "./commun.js";
+import { app, el, icone, avatar, qui, compte, couleurTheme, envoyer, ouvrirFeuille, afficher, dateCourte, jourCourt, pluriel, lienContact, iso } from "./commun.js";
 import { CRENEAUX, LIBELLES, creneauxDe, presenceDe, presentsA, venants } from "./sejour.js";
 
 /* #presence : Gîte > Présence. Mes dates (arrivée et départ, chacun date + créneau), l'emploi du temps du groupe, et
@@ -69,12 +69,18 @@ function resultat() {
     el("p", { class: "petit" }, el("a", { href: "#creances" }, "Ce que tu paies pour le gîte et la salle"))];
 }
 
+/* Inscription tardive : le bouton prévient l'hébergeur (ou le staff), puis passe au vert pour la journée. */
+function demandeTardive() {
+  const envoyee = app.etat.gite.demande_tardive.slice(0, 10) === iso(new Date());
+  return el("section", { class: "carte" },
+    el("p", {}, "Tu t'es inscrit après la date limite : l'hébergeur doit d'abord accepter ton inscription pour que tu puisses saisir tes dates."),
+    envoyee
+      ? el("button", { class: "btn large envoyee", type: "button", disabled: true }, icone("coche"), "Demande envoyée")
+      : el("button", { class: "btn principal large", type: "button", onclick: () => envoyer("gite/demander") }, "Demander à l'hébergeur"));
+}
+
 export function mesDates() {
-  if (app.etat.gite.tardif) {
-    return el("section", { class: "carte" },
-      el("p", {}, "Tu t'es inscrit après la date limite : l'hébergeur doit d'abord accepter ton inscription pour que tu puisses saisir tes dates."),
-      el("a", { class: "btn principal large", href: "#contact" }, "Demander à l'hébergeur"));
-  }
+  if (app.etat.gite.tardif) return demandeTardive();
   const moi = presenceDe(app.moi);
   saisieDates ??= { arrivee: moi?.arrivee || {}, depart: moi?.depart || {} };
   const inverse = saisieDates.arrivee.date && saisieDates.depart.date && saisieDates.arrivee.creneau && saisieDates.depart.creneau
@@ -102,7 +108,22 @@ function detailCreneau(jour, creneau) {
 
 /* L'emploi du temps du groupe : une colonne par personne (dans l'ordre d'arrivée), une ligne par créneau, et une
    bande de sa couleur de son arrivée à son départ. Le jour est écrit de haut en bas sur ses lignes ; toucher un
-   créneau donne la liste de ses présents. */
+   créneau donne la liste de ses présents. En défilant, les jours et les créneaux restent à gauche (CSS), les photos
+   sous la barre du haut (collerPhotos). */
+/* Le tableau défile de côté dans sa boîte : position: sticky ne peut donc pas coller ses photos en haut de la page.
+   On les décale à la main, à chaque défilement, juste sous la barre du haut et sans sortir du tableau. */
+function collerPhotos() {
+  const tete = document.querySelector(".tableau-bandes thead");
+  if (!tete) return;
+  const nav = document.getElementById("barre-nav");
+  const haut = nav && !nav.hidden ? nav.getBoundingClientRect().bottom : 0;
+  const table = tete.parentElement.getBoundingClientRect();
+  const decalage = Math.max(0, Math.min(haut - table.top, table.height - tete.offsetHeight));
+  for (const th of tete.querySelectorAll("th")) th.style.transform = decalage ? `translateY(${decalage}px)` : "";
+}
+addEventListener("scroll", collerPhotos, { passive: true });
+addEventListener("resize", collerPhotos);
+
 function emploiDuTemps() {
   const jours = app.etat.sejour.jours;
   const capacite = app.etat.gite.capacite;
@@ -129,6 +150,7 @@ function emploiDuTemps() {
     });
   });
   if (!gens.length) return el("p", { class: "doux" }, "Personne n'a encore donné ses dates.");
+  requestAnimationFrame(collerPhotos);   // la page vient d'être redessinée : on recale les photos
   return el("div", { class: "tableau-defile" }, el("table", { class: "tableau-bandes" },
     el("thead", {}, el("tr", {}, el("th", { colspan: 2 }, ""), gens.map(nom => el("th", { scope: "col" }, qui(nom, true))))),
     el("tbody", {}, lignes)));

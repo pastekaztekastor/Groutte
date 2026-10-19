@@ -71,6 +71,7 @@ button { cursor: pointer; }
 .btn.principal:hover { background: var(--c10); }
 .btn.choisi { background: var(--c9); color: var(--sur-c); }
 .btn.danger { background: var(--rouge-fond); color: var(--rouge-texte); }
+.btn.envoyee, .btn.envoyee:disabled { background: var(--vert-fond); color: var(--vert-texte); opacity: 1; }
 .btn.large { width: 100%; }
 .btn.occupe { opacity: .6; pointer-events: none; }
 .btn:disabled { opacity: .5; }
@@ -247,8 +248,11 @@ a.qui { color: inherit; text-decoration: none; }
 .choix-compte { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: var(--e6) var(--e3); width: 100%; max-width: 560px; }
 .choix-compte .choix {
   background: none; border: none; color: var(--texte); font-weight: 600; display: flex; flex-direction: column;
-  align-items: center; gap: var(--e3); padding: var(--e2); border-radius: var(--r-carte);
+  align-items: center; gap: var(--e3); padding: var(--e2); border-radius: var(--r-carte); min-width: 0;
 }
+/* Un nom long sans espace (30 caractères) : deux lignes au plus, coupé n'importe où, plutôt que de déborder sur le voisin. */
+.choix-compte .choix .rangee { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
+  max-width: 100%; overflow-wrap: anywhere; }
 .choix-compte .choix:hover { background: var(--surface); }
 .ecran { z-index: 40; gap: var(--e3); }
 .ecran h1 { margin: 0; }
@@ -347,8 +351,8 @@ body.sans-defilement { overflow: hidden; }
 .panneau-lateral.ouvert { transform: none; }
 .panneau-lateral h2:first-of-type { margin-top: var(--e5); }
 .panneau-compte { display: flex; align-items: center; gap: var(--e3); color: var(--texte); text-decoration: none; padding: var(--e2) var(--e1); }
-.panneau-compte strong { display: block; font-size: var(--t-titre); font-weight: 700; }
-.panneau-compte .ligne-texte { min-width: 0; white-space: normal; }
+.panneau-compte strong { display: block; font-size: var(--t-titre); font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.panneau-compte .ligne-texte { flex: 1 1 auto; min-width: 0; white-space: normal; }
 .panneau-compte .doux { display: block; }
 .panneau-lateral { overflow-x: hidden; scrollbar-width: thin; }
 .ligne.entree { min-height: 56px; }
@@ -536,6 +540,7 @@ main:has(> .composer.collant) > :nth-last-child(2) { margin-bottom: var(--e6); }
 
 /* --- Réglages : la photo de profil ------------------------------------------------------------------------------ */
 .photo-profil { display: grid; justify-items: center; gap: var(--e2); margin: var(--e2) 0 var(--e4); }
+.photo-profil strong { max-width: 100%; overflow-wrap: anywhere; text-align: center; }
 
 /* --- Connexion : créer un compte -------------------------------------------------------------------------------- */
 .creer-compte { margin-top: var(--e7); max-width: 320px; }
@@ -546,7 +551,7 @@ main:has(> .composer.collant) > :nth-last-child(2) { margin-bottom: var(--e6); }
 /* --- Fiche contact, façon Contacts de l'iPhone (Ma fiche, Carnet), reprise de NextSession ------------------------ */
 .contact-tete { display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--e1); margin: var(--e2) 0 var(--e4); }
 .contact-tete .avatar { margin-bottom: var(--e2); }
-.contact-tete h1 { font-size: var(--t-grand); font-weight: 700; letter-spacing: -.02em; margin: 0; line-height: 1.1; }
+.contact-tete h1 { font-size: var(--t-grand); font-weight: 700; letter-spacing: -.02em; margin: 0; line-height: 1.1; max-width: 100%; overflow-wrap: anywhere; }
 .contact-tete > p { margin: 0; }
 .contact-tete .rangee { justify-content: center; margin-top: var(--e1); }
 .photo-modifiable { cursor: pointer; }
@@ -667,12 +672,18 @@ label.ligne > .ligne-texte, .ligne:has(> select) > .ligne-texte { flex: 1 1 auto
 
 /* Présence : une colonne par personne, sa bande de couleur de son arrivée à son départ, le jour écrit de haut en bas. */
 .tableau-bandes { border-spacing: 2px 0 !important; margin: 0 auto; }
-.tableau-bandes thead th { padding: 0 1px var(--e2); }
+/* Les photos descendent avec la page sous la barre du haut (presence.js, collerPhotos) : les bandes passent dessous. */
+.tableau-bandes thead th { padding: 0 1px var(--e2); position: relative; z-index: 2; background: var(--fond); }
+/* Le coin collé lui aussi : les photos passent dessous en défilant de côté, comme les bandes sous les créneaux. */
+.tableau-bandes thead th:first-child { position: sticky; left: 0; z-index: 3; }
+/* Safari colle la colonne après la marge du tableau : l'ombre couvre cette marge, sinon les bandes y défilent. */
+.tableau-bandes thead th:first-child, .tableau-bandes th.jour-vertical { box-shadow: calc(-1 * var(--e4)) 0 0 var(--fond); }
 .tableau-bandes tr.debut-jour > th { border-top: 1px solid var(--separateur); }
 .tableau-bandes tbody tr:first-child > th { border-top: none; }
 .tableau-bandes td { padding: 0; height: 24px; min-width: 28px; }
-.tableau-bandes th.jour-vertical { width: 20px; padding: var(--e1) 0; text-align: center; vertical-align: middle; }
-.tableau-bandes th.jour-vertical span { writing-mode: vertical-rl; transform: rotate(180deg); }
+.tableau-bandes th.jour-vertical { width: 20px; min-width: 20px; box-sizing: border-box; padding: var(--e1) 0; text-align: center; vertical-align: middle; }
+/* Largeur imposée par le texte : sinon Safari réduit la colonne (rowspan, texte vertical) à 1 px et les bandes passent à côté. */
+.tableau-bandes th.jour-vertical span { display: inline-block; width: 20px; writing-mode: vertical-rl; transform: rotate(180deg); }
 .tableau-bandes th.creneau { left: 20px; padding: 0 var(--e1) 0 0; }
 .case-creneau { display: flex; align-items: center; justify-content: space-between; gap: var(--e2); width: 100%; min-width: 64px;
   height: 22px; padding: 0 var(--e2); border: none; border-radius: var(--r-petit); background: none; color: inherit; font: inherit; }
@@ -687,7 +698,8 @@ label.ligne > .ligne-texte, .ligne:has(> select) > .ligne-texte { flex: 1 1 auto
 .tableau-lits .case.mienne { background: var(--c9); color: var(--sur-c); font-weight: 700; }
 .tableau-lits .case.pleine { background: var(--surface-2); color: var(--texte-doux); }
 .tableau-lits .case.absente:not(.mienne) { opacity: .45; }
-.tableau-lits tr.absent th { color: var(--texte-pale); }
+.tableau-lits th.absent { color: var(--texte-pale); }
+.tableau-lits tr.debut-totaux > * { padding-top: var(--e2); }
 .tableau-lits .libres { font-weight: 700; color: var(--texte); }
 .tableau-lits .libres.aucun { color: var(--rouge-texte); }
 .entete-lit { display: inline-flex; gap: 2px; align-items: baseline; min-height: 32px; padding: 0 var(--e2); border: none;

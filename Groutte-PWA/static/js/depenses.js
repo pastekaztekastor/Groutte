@@ -237,7 +237,7 @@ export function vueSaisie(d, pourStaff = false) {
     mode,
     f.mode === "egales" && [el("p", { class: "doux petit note" }, `Le montant est divisé entre les personnes concernées. Les centimes en trop sont pour ${pourStaff ? d.auteur : "toi"}.`), choixPersonnes(f)],
     f.mode === "exacts" && [el("p", { class: "doux petit note" }, "Une ligne par personne, avec ce qu'elle a pris."), choixPersonnes(f), lignesExactes(f)],
-    f.mode === "communaute" && [el("p", { class: "doux petit note" }, "Le montant est découpé par catégories, chacune réparti selon sa règle. NON GÉRÉ met de côté un achat perso : il reste pour toi."),
+    f.mode === "communaute" && [el("p", { class: "doux petit note" }, "Le montant est découpé par catégories, chacune réparti selon sa règle. Non géré met de côté un achat perso : il reste pour toi."),
       lignesCategories(f)],
     f.mode !== "egales" && el("p", { class: "note", id: "reste-depense", "aria-live": "polite" }, texteTotal(f)),
     pourStaff ? el("div", { class: "actions" },

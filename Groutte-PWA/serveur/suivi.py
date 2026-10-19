@@ -7,7 +7,9 @@ casser (zone dangereuse) : effacer une dette, en créer une à la main.
   dettes effacées d'abord sur leur ligne). En mode minimum de virements, une ligne est aussi réglée dès que son débiteur
   est quitte.
 - Effacer une dette : une grâce faite par le staff au nom du créancier (data/remboursements.json, avec « par_staff »,
-  « message » et « ligne »). Créer une dette manuelle : data/dettes-manuelles.json,
+  « message » et « ligne »). Pour la part du gîte ou de la salle, avant la clôture : un paiement confirmé marqué « grace »
+  dans data/creances.json, que l'hébergeur absorbe (après la clôture, le reste est une ligne « manque » qui s'efface
+  comme les autres). Créer une dette manuelle : data/dettes-manuelles.json,
   {"dettes": [{"id", "de", "a", "montant", "message", "par", "quand"}]}, qui entre dans le grand livre comme une dépense
   validée, libellée « Staff · <message> ».
 - Tout est définitif, confirmé en retapant le montant, inscrit au journal du staff, et les deux personnes sont prévenues
@@ -15,12 +17,13 @@ casser (zone dangereuse) : effacer une dette, en créer une à la main.
 """
 import comptes_donnees as cd
 import compta
+import creances
 import mes_comptes
 from euros import centimes, euros
 from notifications import notifier
 from requetes import Refus, texte
 from routes import route
-from stockage import DETTES_MANUELLES, REMBOURSEMENTS, ecrire_json, lire_json, maintenant, nouvel_id
+from stockage import CREANCES, DETTES_MANUELLES, REMBOURSEMENTS, ecrire_json, lire_json, maintenant, nouvel_id
 
 ORIGINES = {"depense": "dépense", "report": "report", "avoir": "avoir", "manque": "manque", "retard": "retardataire",
             "manuelle": "dette manuelle", "gite": "gîte", "salle": "salle"}
@@ -45,7 +48,7 @@ def lignes(c):
             resultat.append({"de": de, "a": a, "montant": e["montant"], "reste": reste, "origine": e["type"], "cle": e["cle"],
                              "ref": e["ref"], "date": e["date"], "libelle": e["libelle"], "declare": 0, "action": reste > 0,
                              "par": e.get("par", ""), "effacee": effacees.get((e["de"], e["a"], e["cle"]))})
-    # La part normale du gîte et de la salle, pas encore payée : elle se règle dans Gîte et salle, pas ici.
+    # La part normale du gîte et de la salle, payée dans Gîte et salle. Son reste s'efface ici jusqu'à la clôture.
     for quoi in LIEU:
         if not c.ouvert(quoi):
             continue
@@ -55,9 +58,11 @@ def lignes(c):
                 continue
             reste = max(0, c.reste(nom, quoi))
             declare = sum(p["montant"] for p in c.cr["paiements"] if p["nom"] == nom and p["quoi"] == quoi and p["etat"] == "declare")
+            grace = next((p for p in reversed(c.cr["paiements"]) if p["nom"] == nom and p["quoi"] == quoi and p.get("grace")), None)
             resultat.append({"de": nom, "a": heb, "montant": part, "reste": reste, "origine": quoi, "cle": f"{quoi}:{nom}",
                              "ref": quoi, "date": c.gs[quoi]["ouverture"], "libelle": f"Part {'du gîte' if quoi == 'gite' else 'de la salle'}",
-                             "declare": declare, "action": False, "par": "", "effacee": None})
+                             "declare": declare, "action": reste > 0 and not c.cloture(), "par": "",
+                             "effacee": grace and {"par": grace["par"], "message": grace.get("message", "")}})
     return sorted(resultat, key=lambda l: l["date"], reverse=True)
 
 
@@ -94,9 +99,15 @@ def effacer(d):
     if not l["action"]:
         if l["effacee"]:
             raise Refus(f"cette dette vient d'être effacée par {l['effacee']['par']}")
-        raise Refus("cette dette est déjà réglée" if l["reste"] <= 0 else "cette dette se règle dans Gîte et salle")
+        raise Refus("cette dette est déjà réglée" if l["reste"] <= 0 else "après la clôture, efface plutôt la ligne « manque »")
     confirmation(d, l["reste"])
-    effacer_grace(d.config, de, a, l["reste"], d.nom, message, cle)
+    if l["origine"] in LIEU:
+        donnees = creances.lire()
+        donnees["paiements"].append({"id": nouvel_id(), "nom": de, "quoi": l["origine"], "montant": l["reste"], "quand": maintenant(),
+                                     "etat": "confirme", "par": d.nom, "le": maintenant(), "grace": True, "message": message})
+        ecrire_json(CREANCES, donnees)
+    else:
+        effacer_grace(d.config, de, a, l["reste"], d.nom, message, cle)
     staff.noter(d, "suivi-effacer", de, f"{l['libelle']} : {euros(l['reste'])} envers {a}{' · ' + message if message else ''}")
     texte_notif = f"{d.nom} (staff) a effacé la part de {de} dans « {l['libelle']} » ({euros(l['reste'])}){' : ' + message if message else ''}."
     notifier(d.config, None, "Dette effacée", texte_notif, "#comptes", destinataires={de, a}, sauf=d.nom)

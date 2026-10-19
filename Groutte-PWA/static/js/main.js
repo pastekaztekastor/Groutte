@@ -19,9 +19,11 @@ telephone.addEventListener("change", () => afficher());
 
 let versionChargee = null;   // version du site au moment où cette page a été ouverte
 $("mettre-a-jour").addEventListener("click", () => location.reload());
-$("retour").addEventListener("click", ev => {
+// Gardé ici : la barre du haut d'une rubrique (téléphone) le retire de la page, l'écran poussé suivant le remet.
+const retour = $("retour");
+retour.addEventListener("click", ev => {
   // Sans adresse de retour : on revient d'où l'on vient.
-  if (!$("retour").dataset.lien) { ev.preventDefault(); history.length > 1 ? history.back() : (location.hash = "#"); }
+  if (!retour.dataset.lien) { ev.preventDefault(); history.length > 1 ? history.back() : (location.hash = "#"); }
 });
 
 /* Une clé de nouveautés (« notes/<id> », « notes ») a-t-elle du nouveau ? */
@@ -76,14 +78,14 @@ function dessiner() {
   document.body.classList.toggle("avec-envoi", Boolean(e.avecEnvoi));
   if (pousse) {
     const [lien, libelle] = e.retour;
-    $("retour").href = lien || "#";
-    $("retour").dataset.lien = lien || "";
+    retour.href = lien || "#";
+    retour.dataset.lien = lien || "";
     // Le burger reste à gauche du retour, pour aller ailleurs sans revenir en arrière.
-    $("gauche-nav").replaceChildren(...(avecMenu ? [boutonMenu()] : []), $("retour"));
+    $("gauche-nav").replaceChildren(...(avecMenu ? [boutonMenu()] : []), retour);
     // « Annuler » : en toutes lettres, sans flèche (comme sur iPhone). Sinon flèche + nom de l'écran parent,
     // nom caché sur téléphone (la place va au burger et au titre).
-    $("retour").replaceChildren(...(libelle === "Annuler" ? [libelle] : [icone("chevron-gauche"), el("span", { class: "libelle-retour" }, libelle)]));
-    $("retour").setAttribute("aria-label", libelle === "Annuler" ? "Annuler" : `Retour : ${libelle}`);
+    retour.replaceChildren(...(libelle === "Annuler" ? [libelle] : [icone("chevron-gauche"), el("span", { class: "libelle-retour" }, libelle)]));
+    retour.setAttribute("aria-label", libelle === "Annuler" ? "Annuler" : `Retour : ${libelle}`);
     $("titre-nav").textContent = e.titre;
   } else if (barreHaut) {
     $("gauche-nav").replaceChildren(boutonMenu());

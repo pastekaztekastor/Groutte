@@ -169,6 +169,7 @@ class Compta:
         return repartir(self.gs[quoi]["montant"], poids, self.hebergeur(quoi))
 
     def paye(self, nom, quoi):
+        """Les paiements confirmés, et les restes effacés par le staff (l'hébergeur les absorbe)."""
         return sum(p["montant"] for p in self.cr["paiements"] if p["nom"] == nom and p["quoi"] == quoi and p["etat"] == "confirme")
 
     def reporte(self, nom, quoi):
@@ -254,7 +255,7 @@ class Compta:
                     raise Refus(f"la catégorie {l.get('nom_categorie', '?')} n'existe plus")
                 ligne = repartir(l["montant"], self.participants(cat), payeur)
                 if not ligne and l["montant"]:
-                    raise Refus(f"personne n'est concerné par la catégorie {cat['nom']} : choisis NON GÉRÉ ou une autre catégorie")
+                    raise Refus(f"personne n'est concerné par la catégorie {cat['nom']} : choisis Non géré ou une autre catégorie")
                 for n, m in ligne.items():
                     parts[n] += m
         parts = {n: m for n, m in parts.items() if m > 0}

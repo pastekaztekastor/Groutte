@@ -1,7 +1,7 @@
 """Repas > Mes repas : les repas que je prends sur la réserve communautaire (les courses du groupe).
 
 Seuls les repas gérés par la communauté comptent (Réglages compta, reglages_compta.regle_repas) : un repas géré suit le
-défaut de son créneau (coché ou non) tant que je n'ai rien choisi ; un repas non géré ne compte jamais.
+défaut de son créneau (coché ou non) tant que je n'ai rien choisi ; un repas Non géré ne compte jamais.
 
 data/repas.json : {"choix": [{"nom", "date", "creneau", "pris": bool, "quand"}]} : les repas que j'ai cochés ou décochés
 moi-même. (L'ancien format, {"decoches": [...]}, est relu comme des choix « pris : false ».) Un repas se modifie jusqu'à

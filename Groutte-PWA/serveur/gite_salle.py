@@ -9,7 +9,8 @@ data/gite-salle.json : {
     "salle": {... la même chose},
     "exemptions": {nom: {"gite": bool, "salle": bool, "communaute": bool}},
     "lits": [{"lettre", "description", "places", "complet"}], "salle_couchage": bool, "plan": média ou "",
-    "literie": {"matelas": n, "duvets": n}}
+    "literie": {"matelas": n, "duvets": n},
+    "demandes": {nom: horodatage de sa dernière demande d'inscription tardive}}
 
 « complet » : le lit a sa couette (vrai par défaut) ; sinon celui qui y dort a besoin d'un duvet (Lits). « literie » : les
 matelas d'appoint et les duvets fournis par le gîte, en plus des lits, valables pour toutes les nuits.
@@ -57,6 +58,7 @@ def lire():
     literie = donnees.setdefault("literie", {})
     literie.setdefault("matelas", 0)
     literie.setdefault("duvets", 0)
+    donnees.setdefault("demandes", {})
     return donnees
 
 
@@ -88,6 +90,10 @@ def prevenir_inscription(config, nom):
     """Appelé à l'inscription (acces.py) : une inscription tardive est à accepter par l'hébergeur (ou un staff)."""
     if not est_tardif(config, nom):
         return
+    prevenir_hebergeurs(config, nom)
+
+
+def prevenir_hebergeurs(config, nom):
     cibles = set(hebergeurs().values()) or set(cd.staffs_actifs(cd.lire_comptes(config)))
     notifier(config, None, "Inscription tardive", f"Inscription tardive de {nom}, à accepter.", "#gite-salle",
              destinataires=cibles, sauf=nom)
@@ -390,6 +396,19 @@ def accepter_inscription(d):
              "#presence", destinataires={qui}, sauf=d.nom)
 
 
+@route("/api/gite/demander")
+def demander_inscription(d):
+    """Le compte en retard demande (ou redemande) à l'hébergeur d'accepter son inscription. Une fois par jour."""
+    donnees = lire()
+    if not est_tardif(d.config, d.nom, donnees=donnees):
+        raise Refus("ton inscription n'a pas besoin d'être acceptée")
+    if donnees["demandes"].get(d.nom, "")[:10] == maintenant()[:10]:
+        raise Refus("ta demande est déjà partie aujourd'hui")
+    donnees["demandes"][d.nom] = maintenant()
+    ecrire_json(GITE_SALLE, donnees)
+    prevenir_hebergeurs(d.config, d.nom)
+
+
 @cd.renommage
 def renommer(ancien, nouveau):
     donnees = cd.renommer_dans(lire(), ancien, nouveau, {"hebergeur"})
@@ -410,6 +429,7 @@ def vue(c, nom, staff):
         "plan": donnees["plan"],
         "literie": donnees["literie"],
         "tardif": est_tardif(c.config, nom, c.comptes, donnees),
+        "demande_tardive": donnees["demandes"].get(nom, ""),
         "nb_exemptes": {quoi: sum(1 for e in donnees["exemptions"].values() if e.get(quoi)) for quoi in EXEMPTIONS},
         "exempte_communaute": bool(donnees["exemptions"].get(nom, {}).get("communaute")),
     }

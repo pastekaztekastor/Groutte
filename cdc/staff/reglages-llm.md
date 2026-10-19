@@ -84,7 +84,7 @@ Réglages LLM
 - **Un échec du fournisseur** (injoignable, clé refusée) ne compte pas : on peut réessayer.
 
 **Ce qu'on demande au LLM**
-- Le serveur envoie la photo avec une consigne claire : rendre la date, le total, et les lignes du ticket, chacune avec son montant et une catégorie choisie parmi celles de [Réglages compta](reglages-compta.md) (NON GÉRÉ compris), dans un format JSON fixé.
+- Le serveur envoie la photo avec une consigne claire : rendre la date, le total, et les lignes du ticket, chacune avec son montant et une catégorie choisie parmi celles de [Réglages compta](reglages-compta.md) (Non géré compris), dans un format JSON fixé.
 - **Si la réponse est lisible mais ne tombe pas juste** (la somme des lignes n'est pas le total) : la dépense est préremplie, et l'écart est affiché à l'auteur.
 - **Si la réponse est illisible** (pas au bon format, catégorie inconnue, pas de montant) : « La lecture a échoué, saisis la dépense à la main ». La lecture compte quand même.
 - Dans tous les cas, ce n'est qu'un préremplissage : l'auteur vérifie avant d'envoyer.

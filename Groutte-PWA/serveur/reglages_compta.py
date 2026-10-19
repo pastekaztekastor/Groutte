@@ -7,12 +7,12 @@ data/reglages-compta.json : {"mode": "direct" | "minimum", "cloture": horodatage
                              "repas": {"matin" | "midi" | "soir": {"gere": bool, "defaut": bool}},
                              "repas_historique": [{"depuis": horodatage, "repas": {...}}]}
 
-Les repas gérés : un repas géré se coche dans Mes repas et compte dans les repas pris ; un repas non géré ne compte
+Les repas gérés : un repas géré se coche dans Mes repas et compte dans les repas pris ; un repas Non géré ne compte
 jamais. « defaut » : coché tant que la personne n'a rien choisi. Par défaut, seul le soir est géré, et coché.
 Un changement ne vaut que pour les repas pas encore commencés : chaque réglage est daté (« repas_historique »), et un
 repas suit le réglage en vigueur à l'heure où il commence (regle_repas).
 
-Sans fichier, les catégories de base (Alimentaire, Monster, Alcool). « NON GÉRÉ » n'est pas dans le fichier : elle est
+Sans fichier, les catégories de base (Alimentaire, Monster, Alcool). « Non géré » n'est pas dans le fichier : elle est
 toujours là, ne se modifie pas, et reste à la charge du payeur. Changer une catégorie ne vaut que pour les dépenses
 validées ensuite : leurs parts sont figées à la validation (depenses.py).
 La page Dépenses est cachée tant que le staff ne l'a pas ouverte (en général à l'arrivée au gîte) : sans elle, pas de
@@ -26,7 +26,7 @@ from requetes import Refus, texte
 from routes import route
 from stockage import CATEGORIES, PROFILS, REGLAGES_COMPTA, ecrire_json, lire_json, maintenant, nouvel_id, sans_accent
 
-NON_GERE = {"id": "non-gere", "nom": "NON GÉRÉ", "type": "speciale", "regle": "payeur", "sam": False, "supprimee": ""}
+NON_GERE = {"id": "non-gere", "nom": "Non géré", "type": "speciale", "regle": "payeur", "sam": False, "supprimee": ""}
 DE_BASE = [
     {"id": "alimentaire", "nom": "Alimentaire", "type": "obligatoire", "regle": "repas", "sam": False, "supprimee": ""},
     {"id": "monster", "nom": "Monster", "type": "facultative", "regle": "nuits", "sam": False, "supprimee": ""},
@@ -178,7 +178,7 @@ def regler_categorie(d):
     if ident and not cat:
         raise Refus("catégorie introuvable")
     if cat is NON_GERE:
-        raise Refus("NON GÉRÉ ne se modifie pas")
+        raise Refus("Non géré ne se modifie pas")
     nom = texte(d.corps, "libelle", 30, requis=True)   # pas « nom » : c'est toujours le compte qui agit
     genre, regle = d.corps.get("type"), d.corps.get("regle")
     if genre not in TYPES or regle not in REGLES:
@@ -208,7 +208,7 @@ def supprimer_categorie(d):
     if not cat or cat["supprimee"]:
         raise Refus("catégorie introuvable")
     if cat is NON_GERE:
-        raise Refus("NON GÉRÉ ne se supprime pas")
+        raise Refus("Non géré ne se supprime pas")
     utilisee = [dep for dep in depenses.lire()["depenses"]
                 if dep["mode"] == "communaute" and any(l.get("categorie") == cat["id"] for l in dep["lignes"])]
     en_cours = [dep for dep in utilisee if dep["etat"] != "validee"]
@@ -231,7 +231,7 @@ def supprimer_categorie(d):
 
 
 def vue(utilisees, reglages):
-    """Pour l'état : les catégories proposées (NON GÉRÉ en dernier), les supprimées encore utilisées, et le réglage
+    """Pour l'état : les catégories proposées (Non géré en dernier), les supprimées encore utilisées, et le réglage
     actuel des repas gérés. `utilisees` : les identifiants utilisés par au moins une dépense."""
     toutes = lire_categories()["categories"]
     return {

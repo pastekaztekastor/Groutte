@@ -3,7 +3,7 @@ import { app, el, icone, envoyer, ouvrirModale, fermerModale, notifier, ilYa } f
 /* #reglages-compta : Staff > Réglages compta. Le mode de remboursement (Direct ou Minimum de virements), la page
    Dépenses visible ou non (cachée jusqu'à l'arrivée au gîte ; le staff la voit toujours), la
    répartition du gîte et de la salle (au prorata des nuits ou à parts égales ; le reste est dans Gîte et salle), les
-   catégories de dépenses (type, règle de répartition, repère SAM ; NON GÉRÉ toujours en bas, sans modification), les
+   catégories de dépenses (type, règle de répartition, repère SAM ; Non géré toujours en bas, sans modification), les
    repas gérés par la communauté (Mes repas, Menu), et la clôture des comptes, irréversible. */
 
 export const MODES = { direct: "Direct", minimum: "Minimum de virements" };
@@ -124,7 +124,7 @@ export function vueReglagesCompta() {
         el("span", { class: "ligne-texte" }, c.nom, el("span", { class: "doux petit" }, `${TYPES[c.type]} · ${REGLES[c.regle]} · supprimée`)))))),
     el("h2", {}, "Repas gérés par la communauté"),
     repasGeres(clos),
-    el("p", { class: "doux petit note" }, "Un repas géré se coche dans Mes repas, et le Menu peut le viser. Un repas non géré ne compte jamais : chacun se débrouille. Un changement ne vaut que pour les repas pas encore commencés."),
+    el("p", { class: "doux petit note" }, "Un repas géré se coche dans Mes repas, et le Menu peut le viser. Un repas Non géré ne compte jamais : chacun se débrouille. Un changement ne vaut que pour les repas pas encore commencés."),
     el("h2", {}, "Clôture des comptes"),
     el("div", { class: "liste-groupee" }, el("div", { class: "ligne" }, clos
       ? el("span", { class: "ligne-texte" }, `Comptes clôturés ${ilYa(app.etat.compta.cloture)}.`)

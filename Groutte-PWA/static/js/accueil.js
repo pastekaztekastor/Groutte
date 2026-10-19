@@ -33,12 +33,14 @@ function compteARebours() {
   return el("a", { class: "widget large widget-hero", href: "#presence" }, el("span", { class: "hero-chiffre" }, grand), sous(texte));
 }
 
+/* Cinq ronds au plus (le « +N » compte pour un) : c'est ce qui tient dans un widget étroit, sur téléphone. */
 function quiVient() {
   const noms = venants().sort((a, b) => a.localeCompare(b, "fr"));
+  const montres = noms.length > 5 ? 4 : 5;
   return widget("#presence", "fa-presence", "Qui vient", [
     chiffre(noms.length, noms.length > 1 ? "ploucs" : "plouc"),
-    noms.length > 0 && el("span", { class: "pile-avatars" }, noms.slice(0, 7).map(n => avatar(n, 28)),
-      noms.length > 7 && el("span", { class: "pile-plus" }, `+${noms.length - 7}`)),
+    noms.length > 0 && el("span", { class: "pile-avatars" }, noms.slice(0, montres).map(n => avatar(n, 28)),
+      noms.length > montres && el("span", { class: "pile-plus" }, `+${noms.length - montres}`)),
   ]);
 }
 

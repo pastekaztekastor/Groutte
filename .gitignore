@@ -1,5 +1,6 @@
 # Données de l'appli (comptes, médias, clés des notifications) : jamais dans git
 data/
+Backup/
 
 # Clés d'API des LLM (Staff > Réglages LLM) : jamais dans git, ni dans les sauvegardes de data/
 secrets/
@@ -16,3 +17,5 @@ __pycache__/
 TODO.md
 discussion jalon.md
 cléeia.txt
+Code
+Messages.txt
